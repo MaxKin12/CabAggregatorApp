@@ -21,4 +21,6 @@ public class Passenger {
     private String email;
     @Column(name="phone", unique = true, length = 20, nullable = false)
     private String phone;
+    @Column(name="password", nullable = false)
+    private String password;
 }
