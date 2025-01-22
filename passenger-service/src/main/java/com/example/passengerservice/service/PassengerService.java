@@ -1,6 +1,7 @@
 package com.example.passengerservice.service;
 
 import com.example.passengerservice.dto.PassengerDto;
+import com.example.passengerservice.exception.ResourceNotFoundException;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
 import jakarta.validation.constraints.Positive;
@@ -17,7 +18,8 @@ public class PassengerService {
     private final PassengerMapper passengerMapper;
 
     public PassengerDto findById(@Positive(message = "id must be a positive number") Long id) {
-        Passenger passenger = passengerRepository.findById(id).orElseThrow();
+        Passenger passenger = passengerRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(
+                "Passenger with id \"" + id + "\" not found"));
         return passengerMapper.toDto(passenger);
     }
 }
