@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record PassengerDto (
-        Long id,
+public record PassengerRequestDto(
         @NotBlank(message = "Name is a necessary field")
         @Size(max = 50, message = "Name is to long")
         String name,
