@@ -15,7 +15,7 @@
             <column name="email" type="varchar(50)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="phone" type="varchar(20)">
+            <column name="phone" type="varchar(13)">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="deleted_at" type="timestamp"/>

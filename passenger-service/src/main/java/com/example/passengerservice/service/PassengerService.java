@@ -17,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
+import static com.example.passengerservice.constant.ExceptionConstantMessages.*;
+
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -24,9 +26,9 @@ public class PassengerService {
     private final PassengerRepository passengerRepository;
     private final PassengerMapper passengerMapper;
 
-    public PassengerResponseDto findById(@Positive(message = "id must be a positive number") Long id) {
+    public PassengerResponseDto findById(@Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
         Passenger passenger = passengerRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(
-                "Passenger with id \"" + id + "\" not found"));
+                String.format(PASSENGER_NOT_FOUND_MESSAGE, id)));
         return passengerMapper.toResponseDto(passenger);
     }
 
@@ -40,31 +42,33 @@ public class PassengerService {
             Passenger passenger = passengerRepository.save(passengerMapper.toRequestModel(passengerRequestDto));
             return passengerMapper.toResponseDto(passenger);
         } catch (Exception e) {
-            throw new DBException(e);
+            throw new DBException(String.format(INVALID_ATTEMPT_MESSAGE, "create" ,e.getMessage()));
         }
     }
 
     @Transactional
     public PassengerResponseDto update(@Valid PassengerRequestDto passengerRequestDto,
-                          @Positive(message = "id must be non-negative number") Long id) {
+                          @Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
         Passenger passenger = passengerRepository.findById(id).orElseThrow(
-                ()-> new ResourceNotFoundException("Passenger with id \"" + id + "\" not found"));
+                ()-> new ResourceNotFoundException(String.format(PASSENGER_NOT_FOUND_MESSAGE, id)));
         try {
             Passenger editedPassenger = passengerMapper.toRequestModel(passengerRequestDto);
             passenger.setName(editedPassenger.getName());
             passenger.setEmail(editedPassenger.getEmail());
             passenger.setPhone(editedPassenger.getPhone());
-            return passengerMapper.toResponseDto(passenger);
+            PassengerResponseDto passengerResponseDto = passengerMapper.toResponseDto(passenger);
+            passengerRepository.flush();
+            return passengerResponseDto;
         } catch (Exception e) {
-            throw new DBException("Invalid attempt to update passenger: " + e.getMessage());
+            throw new DBException(String.format(INVALID_ATTEMPT_MESSAGE, "update" ,e.getMessage()));
         }
     }
 
-    public void delete(@Positive(message = "id must be positive number") Long id) {
+    public void delete(@Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
         try {
             passengerRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DBException("Invalid attempt to delete passenger: " + e.getMessage());
+            throw new DBException(String.format(INVALID_ATTEMPT_MESSAGE, "delete" ,e.getMessage()));
         }
     }
 }
