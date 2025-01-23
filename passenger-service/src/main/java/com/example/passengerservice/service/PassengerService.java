@@ -54,7 +54,6 @@ public class PassengerService {
             passenger.setName(editedPassenger.getName());
             passenger.setEmail(editedPassenger.getEmail());
             passenger.setPhone(editedPassenger.getPhone());
-            passenger.setPassword(editedPassenger.getPassword());
             return passengerMapper.toResponseDto(passenger);
         } catch (Exception e) {
             throw new DBException("Invalid attempt to update passenger: " + e.getMessage());

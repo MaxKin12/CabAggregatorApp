@@ -15,7 +15,5 @@ public record PassengerRequestDto(
         String email,
         @NotBlank(message = "Phone is a necessary field")
         @Size(max = 20, message = "Phone number is to long")
-        String phone,
-        @NotNull(message = "Password is a necessary field")
-        String password
+        String phone
 ) {}

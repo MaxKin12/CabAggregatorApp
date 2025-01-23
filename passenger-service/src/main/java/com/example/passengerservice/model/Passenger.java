@@ -29,6 +29,4 @@ public class Passenger {
     private String phone;
     @Column(name="deleted_at")
     private LocalDateTime deleteAt;
-    @Column(name="password", nullable = false)
-    private String password;
 }
