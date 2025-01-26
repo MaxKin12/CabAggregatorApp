@@ -1,8 +1,9 @@
 package com.example.passengerservice.constant;
 
-import lombok.experimental.UtilityClass;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-@UtilityClass
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RegularExpressionsConstants {
     public static final String PHONE_NUMBER_CHECK = "^\\+375(24|25|29|33|44)\\d{7}$";
 }

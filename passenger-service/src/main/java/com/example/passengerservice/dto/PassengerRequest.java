@@ -1,10 +1,13 @@
 package com.example.passengerservice.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import static com.example.passengerservice.constant.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
 
-public record PassengerRequestDto(
+public record PassengerRequest(
         @NotBlank(message = "Name is a necessary field")
         @Size(max = 50, message = "Name is too long")
         String name,

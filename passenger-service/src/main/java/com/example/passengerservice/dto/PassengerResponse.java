@@ -1,6 +1,6 @@
 package com.example.passengerservice.dto;
 
-public record PassengerResponseDto(
+public record PassengerResponse(
         Long id,
         String name,
         String email,

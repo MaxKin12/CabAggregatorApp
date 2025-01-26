@@ -1,9 +1,9 @@
 package com.example.passengerservice.service.impl;
 
-import com.example.passengerservice.dto.PassengerListDto;
-import com.example.passengerservice.dto.PassengerRequestDto;
-import com.example.passengerservice.dto.PassengerResponseDto;
-import com.example.passengerservice.exception.DBException;
+import com.example.passengerservice.dto.PassengerList;
+import com.example.passengerservice.dto.PassengerRequest;
+import com.example.passengerservice.dto.PassengerResponse;
+import com.example.passengerservice.exception.DBModificationAttemptException;
 import com.example.passengerservice.exception.ResourceNotFoundException;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
@@ -18,7 +18,9 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
-import static com.example.passengerservice.constant.ExceptionConstantMessages.*;
+import static com.example.passengerservice.constant.ExceptionMessagesConstants.INVALID_ATTEMPT_MESSAGE;
+import static com.example.passengerservice.constant.ExceptionMessagesConstants.NEGATIVE_ID_MESSAGE;
+import static com.example.passengerservice.constant.ExceptionMessagesConstants.PASSENGER_NOT_FOUND_MESSAGE;
 
 @Service
 @Validated
@@ -27,42 +29,42 @@ public class PassengerServiceImpl implements PassengerService {
     private final PassengerRepository passengerRepository;
     private final PassengerMapper passengerMapper;
 
-    public PassengerResponseDto findById(@Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
-        Passenger passenger = passengerRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(
-                String.format(PASSENGER_NOT_FOUND_MESSAGE, id)));
-        return passengerMapper.toResponseDto(passenger);
+    public PassengerResponse findById(@Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
+        Passenger passenger = passengerRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(PASSENGER_NOT_FOUND_MESSAGE.formatted(id)));
+        return passengerMapper.toResponse(passenger);
     }
 
-    public PassengerListDto findAll() {
+    public PassengerList findAll() {
         List<Passenger> passengers = passengerRepository.findAll();
-        return passengerMapper.toPassengerListDto(passengers);
+        return passengerMapper.toPassengerList(passengers);
     }
 
     @Transactional
-    public PassengerResponseDto create(@Valid PassengerRequestDto passengerRequestDto) {
+    public PassengerResponse create(@Valid PassengerRequest passengerRequest) {
         try {
-            Passenger passenger = passengerRepository.save(passengerMapper.toRequestModel(passengerRequestDto));
-            return passengerMapper.toResponseDto(passenger);
+            Passenger passenger = passengerRepository.save(passengerMapper.toPassenger(passengerRequest));
+            return passengerMapper.toResponse(passenger);
         } catch (Exception e) {
-            throw new DBException(String.format(INVALID_ATTEMPT_MESSAGE, "create", e.getMessage()));
+            throw new DBModificationAttemptException(INVALID_ATTEMPT_MESSAGE.formatted("create", e.getMessage()));
         }
     }
 
     @Transactional
-    public PassengerResponseDto update(@Valid PassengerRequestDto passengerRequestDto,
-                          @Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
+    public PassengerResponse update(@Valid PassengerRequest passengerRequest,
+                                    @Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
         Passenger passenger = passengerRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(String.format(PASSENGER_NOT_FOUND_MESSAGE, id)));
+                .orElseThrow(()-> new ResourceNotFoundException(PASSENGER_NOT_FOUND_MESSAGE.formatted(id)));
         try {
-            Passenger editedPassenger = passengerMapper.toRequestModel(passengerRequestDto);
+            Passenger editedPassenger = passengerMapper.toPassenger(passengerRequest);
             passenger.setName(editedPassenger.getName());
             passenger.setEmail(editedPassenger.getEmail());
             passenger.setPhone(editedPassenger.getPhone());
-            PassengerResponseDto passengerResponseDto = passengerMapper.toResponseDto(passenger);
+            PassengerResponse passengerResponse = passengerMapper.toResponse(passenger);
             passengerRepository.flush();
-            return passengerResponseDto;
+            return passengerResponse;
         } catch (Exception e) {
-            throw new DBException(String.format(INVALID_ATTEMPT_MESSAGE, "update", e.getMessage()));
+            throw new DBModificationAttemptException(INVALID_ATTEMPT_MESSAGE.formatted("update", e.getMessage()));
         }
     }
 
@@ -71,7 +73,7 @@ public class PassengerServiceImpl implements PassengerService {
         try {
             passengerRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DBException(String.format(INVALID_ATTEMPT_MESSAGE, "delete", e.getMessage()));
+            throw new DBModificationAttemptException(INVALID_ATTEMPT_MESSAGE.formatted("delete", e.getMessage()));
         }
     }
 }
