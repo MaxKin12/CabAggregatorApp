@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-initial-passengers-data" author="MaxKin12">
+        <insert tableName="passengers">
+            <column name="id" value="1"/>
+            <column name="name" value="alice"/>
+            <column name="email" value="some@email1.com"/>
+            <column name="phone" value="+375291110001"/>
+        </insert>
+        <insert tableName="passengers">
+            <column name="id" value="5"/>
+            <column name="name" value="bob"/>
+            <column name="email" value="some@email2.com"/>
+            <column name="phone" value="+375291110002"/>
+        </insert>
+        <insert tableName="passengers">
+            <column name="id" value="15"/>
+            <column name="name" value="charlie"/>
+            <column name="email" value="some@email3.com"/>
+            <column name="phone" value="+375441110003"/>
+        </insert>
+        <insert tableName="passengers">
+            <column name="id" value="18"/>
+            <column name="name" value="joey"/>
+            <column name="email" value="some@email4.com"/>
+            <column name="phone" value="+375331110004"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
