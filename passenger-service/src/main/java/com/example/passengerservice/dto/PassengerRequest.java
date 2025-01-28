@@ -9,14 +9,14 @@ import static com.example.passengerservice.constant.RegularExpressionsConstants.
 
 public record PassengerRequest(
         @NotBlank(message = "{validate.blank.field}")
-        @Size(max = 50, message = "{validate.field.name.too.long}")
+        @Size(max = 50, message = "{validate.field.name.too-long}")
         String name,
         @NotBlank(message = "{validate.blank.phone.field}")
-        @Size(max = 100, message = "{validate.field.email.too.long}")
+        @Size(max = 100, message = "{validate.field.email.too-long}")
         @Email(message = "{validate.field.email.invalid.pattern}")
         String email,
         @NotBlank(message = "{validate.blank.phone.field}")
-        @Size(max = 13, message = "{validate.field.phone.too.long}")
+        @Size(max = 13, message = "{validate.field.phone.too-long}")
         @Pattern(regexp = PHONE_NUMBER_CHECK, message = "{validate.field.phone.invalid.pattern")
         String phone
 ) {}
