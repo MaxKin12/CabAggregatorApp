@@ -3,7 +3,7 @@ package com.example.passengerservice.service.impl;
 import com.example.passengerservice.dto.PassengerResponseList;
 import com.example.passengerservice.dto.PassengerRequest;
 import com.example.passengerservice.dto.PassengerResponse;
-import com.example.passengerservice.exception.DBModificationAttemptException;
+import com.example.passengerservice.exception.DbModificationAttemptException;
 import com.example.passengerservice.exception.ResourceNotFoundException;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
@@ -13,14 +13,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import com.example.passengerservice.mapper.PassengerMapper;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-
-import static com.example.passengerservice.constant.ExceptionMessagesConstants.INVALID_ATTEMPT_MESSAGE;
-import static com.example.passengerservice.constant.ExceptionMessagesConstants.NEGATIVE_ID_MESSAGE;
-import static com.example.passengerservice.constant.ExceptionMessagesConstants.PASSENGER_NOT_FOUND_MESSAGE;
 
 @Service
 @Validated
@@ -28,32 +26,43 @@ import static com.example.passengerservice.constant.ExceptionMessagesConstants.P
 public class PassengerServiceImpl implements PassengerService {
     private final PassengerRepository passengerRepository;
     private final PassengerMapper passengerMapper;
+    private final MessageSource messageSource;
 
-    public PassengerResponse findById(@Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
+    @Override
+    public PassengerResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Passenger passenger = passengerRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(PASSENGER_NOT_FOUND_MESSAGE.formatted(id)));
+                .orElseThrow(()-> new ResourceNotFoundException(messageSource
+                        .getMessage("exception.passenger.not.found",
+                                new Object[] {id}, LocaleContextHolder.getLocale())));
         return passengerMapper.toResponse(passenger);
     }
 
+    @Override
     public PassengerResponseList findAll() {
         List<Passenger> passengers = passengerRepository.findAll();
         return passengerMapper.toResponseList(passengers);
     }
 
+    @Override
     public PassengerResponse create(@Valid PassengerRequest passengerRequest) {
         try {
             Passenger passenger = passengerRepository.save(passengerMapper.toPassenger(passengerRequest));
             return passengerMapper.toResponse(passenger);
         } catch (Exception e) {
-            throw new DBModificationAttemptException(INVALID_ATTEMPT_MESSAGE.formatted("create", e.getMessage()));
+            throw new DbModificationAttemptException(messageSource
+                    .getMessage("exception.invalid.attempt.change.entity",
+                            new Object[] {"create", e.getMessage()}, LocaleContextHolder.getLocale()));
         }
     }
 
+    @Override
     @Transactional
     public PassengerResponse update(@Valid PassengerRequest passengerRequest,
-                                    @Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
+                                    @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Passenger passenger = passengerRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(PASSENGER_NOT_FOUND_MESSAGE.formatted(id)));
+                .orElseThrow(()-> new ResourceNotFoundException(messageSource
+                        .getMessage("validate.exception.passenger.not.found",
+                                new Object[] {id}, LocaleContextHolder.getLocale())));
         try {
             Passenger editedPassenger = passengerMapper.toPassenger(passengerRequest);
             passenger.setName(editedPassenger.getName());
@@ -63,15 +72,20 @@ public class PassengerServiceImpl implements PassengerService {
             passengerRepository.flush();
             return passengerResponse;
         } catch (Exception e) {
-            throw new DBModificationAttemptException(INVALID_ATTEMPT_MESSAGE.formatted("update", e.getMessage()));
+            throw new DbModificationAttemptException(messageSource
+                    .getMessage("exception.invalid.attempt.change.entity",
+                            new Object[] {"update", e.getMessage()}, LocaleContextHolder.getLocale()));
         }
     }
 
-    public void delete(@Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
+    @Override
+    public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         try {
             passengerRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DBModificationAttemptException(INVALID_ATTEMPT_MESSAGE.formatted("delete", e.getMessage()));
+            throw new DbModificationAttemptException(messageSource
+                    .getMessage("exception.invalid.attempt.change.entity",
+                            new Object[] {"delete", e.getMessage()}, LocaleContextHolder.getLocale()));
         }
     }
 }

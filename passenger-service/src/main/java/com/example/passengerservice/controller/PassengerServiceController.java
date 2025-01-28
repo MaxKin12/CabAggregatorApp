@@ -28,13 +28,13 @@ public class PassengerServiceController {
         return ResponseEntity.status(HttpStatus.OK).body(passengerResponse);
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<PassengerResponseList> getAllPassengers() {
         PassengerResponseList passengerResponseList = passengerService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(passengerResponseList);
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<PassengerResponse> createPassenger(@RequestBody PassengerRequest passengerRequest) {
         PassengerResponse passengerResponse = passengerService.create(passengerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(passengerResponse);

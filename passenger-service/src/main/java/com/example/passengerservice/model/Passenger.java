@@ -6,13 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
-
-import static com.example.passengerservice.constant.SqlConstants.SQL_DELETE_REPLACEMENT;
 
 @Entity
 @Table(name = "passengers")
@@ -20,7 +21,7 @@ import static com.example.passengerservice.constant.SqlConstants.SQL_DELETE_REPL
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = SQL_DELETE_REPLACEMENT)
+@SQLDelete(sql = "update passengers set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
 public class Passenger {
     @Id

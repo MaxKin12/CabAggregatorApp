@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new PassengerException(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(DBModificationAttemptException.class)
+    @ExceptionHandler(DbModificationAttemptException.class)
     public ResponseEntity<PassengerException> handleDBException(Exception e) {
         return new ResponseEntity<>(new PassengerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
                 HttpStatus.BAD_REQUEST);
