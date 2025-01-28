@@ -2,6 +2,6 @@ package com.example.passengerservice.dto;
 
 import java.util.List;
 
-public record PassengerList(
+public record PassengerResponseList(
         List<PassengerResponse> passengerList
 ) {}

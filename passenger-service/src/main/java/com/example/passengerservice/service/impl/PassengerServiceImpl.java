@@ -1,6 +1,6 @@
 package com.example.passengerservice.service.impl;
 
-import com.example.passengerservice.dto.PassengerList;
+import com.example.passengerservice.dto.PassengerResponseList;
 import com.example.passengerservice.dto.PassengerRequest;
 import com.example.passengerservice.dto.PassengerResponse;
 import com.example.passengerservice.exception.DBModificationAttemptException;
@@ -35,12 +35,11 @@ public class PassengerServiceImpl implements PassengerService {
         return passengerMapper.toResponse(passenger);
     }
 
-    public PassengerList findAll() {
+    public PassengerResponseList findAll() {
         List<Passenger> passengers = passengerRepository.findAll();
-        return passengerMapper.toPassengerList(passengers);
+        return passengerMapper.toResponseList(passengers);
     }
 
-    @Transactional
     public PassengerResponse create(@Valid PassengerRequest passengerRequest) {
         try {
             Passenger passenger = passengerRepository.save(passengerMapper.toPassenger(passengerRequest));
@@ -68,7 +67,6 @@ public class PassengerServiceImpl implements PassengerService {
         }
     }
 
-    @Transactional
     public void delete(@Positive(message = NEGATIVE_ID_MESSAGE) Long id) {
         try {
             passengerRepository.deleteById(id);

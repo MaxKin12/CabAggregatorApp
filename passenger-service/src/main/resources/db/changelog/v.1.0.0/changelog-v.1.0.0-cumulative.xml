@@ -8,7 +8,7 @@
         <tagDatabase tag="v.1.0.0"/>
     </changeSet>
 
-    <include file="2025-01-23-create-table-passenger.xml" relativeToChangelogFile="true"/>
+    <include file="2025-01-23-create-table-passengers.xml" relativeToChangelogFile="true"/>
     <include file="2025-01-23-insert-initial-passengers-data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import static com.example.passengerservice.constant.SqlConstants.SQL_DELETE_REPLACEMENT;
 
 @Entity
-@Table(name = "passenger")
+@Table(name = "passengers")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,7 +31,7 @@ public class Passenger {
     private String name;
     @Column(name = "email", unique = true, length = 100, nullable = false)
     private String email;
-    @Column(name = "phone", unique = true, length = 20, nullable = false)
+    @Column(name = "phone", unique = true, length = 13, nullable = false)
     private String phone;
     @Column(name = "deleted_at")
     private LocalDateTime deleteAt;

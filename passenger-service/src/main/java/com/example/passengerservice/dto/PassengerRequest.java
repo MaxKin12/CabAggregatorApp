@@ -16,7 +16,7 @@ public record PassengerRequest(
         @Email(message = "Invalid email entered")
         String email,
         @NotBlank(message = "Phone is a necessary field")
-        @Size(max = 20, message = "Phone number is to long")
+        @Size(max = 13, message = "Phone number is to long")
         @Pattern(regexp = PHONE_NUMBER_CHECK, message = "Entered phone number format doesn't supported")
         String phone
 ) {}

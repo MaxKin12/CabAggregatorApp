@@ -1,6 +1,6 @@
 package com.example.passengerservice.controller;
 
-import com.example.passengerservice.dto.PassengerList;
+import com.example.passengerservice.dto.PassengerResponseList;
 import com.example.passengerservice.dto.PassengerRequest;
 import com.example.passengerservice.dto.PassengerResponse;
 import com.example.passengerservice.service.PassengerService;
@@ -29,9 +29,9 @@ public class PassengerServiceController {
     }
 
     @GetMapping("")
-    public ResponseEntity<PassengerList> getAllPassengers() {
-        PassengerList passengerList = passengerService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(passengerList);
+    public ResponseEntity<PassengerResponseList> getAllPassengers() {
+        PassengerResponseList passengerResponseList = passengerService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(passengerResponseList);
     }
 
     @PostMapping("")
@@ -48,7 +48,7 @@ public class PassengerServiceController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable("id") Long passengerId) {
+    public ResponseEntity<Void> deletePassenger(@PathVariable("id") Long passengerId) {
         passengerService.delete(passengerId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
