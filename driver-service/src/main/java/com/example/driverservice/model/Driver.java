@@ -1,6 +1,6 @@
 package com.example.driverservice.model;
 
-import com.example.driverservice.model.enums.Sex;
+import com.example.driverservice.enums.Sex;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,26 +21,24 @@ import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
-import static com.example.driverservice.constant.SqlConstants.SQL_DELETE_DRIVER_REPLACEMENT;
-
 @Entity
 @Table(name = "drivers")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = SQL_DELETE_DRIVER_REPLACEMENT)
+@SQLDelete(sql = "update drivers set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", length = 50, nullable = false)
     private String name;
-    @Column(name = "email", unique = true, length = 100, nullable = false)
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
-    @Column(name = "phone", unique = true, length = 13, nullable = false)
+    @Column(name = "phone", length = 13, nullable = false, unique = true)
     private String phone;
     @Column(name = "sex", nullable = false)
     @Enumerated(EnumType.ORDINAL)

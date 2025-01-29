@@ -18,24 +18,22 @@ import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
-import static com.example.driverservice.constant.SqlConstants.SQL_DELETE_CAR_REPLACEMENT;
-
 @Entity
 @Table(name = "cars")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = SQL_DELETE_CAR_REPLACEMENT)
+@SQLDelete(sql = "update cars set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "brand", nullable = false, length = 30)
+    @Column(name = "brand", length = 30, nullable = false)
     private String brand;
-    @Column(name = "number", unique = true, length = 8, nullable = false)
+    @Column(name = "number", length = 8, nullable = false, unique = true)
     private String number;
     @Column(name = "color", length = 20, nullable = false)
     private String color;

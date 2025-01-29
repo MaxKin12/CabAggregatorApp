@@ -1,12 +1,14 @@
 package com.example.driverservice.dto.driver;
 
-import com.example.driverservice.model.enums.Sex;
+import com.example.driverservice.enums.Sex;
+
+import java.util.List;
 
 public record DriverResponse(
         Long id,
         String name,
         String email,
         String phone,
-        Sex sex,
-        Long carId
+        String sex,
+        List<Long> carIds
 ) {}

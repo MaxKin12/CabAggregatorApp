@@ -16,40 +16,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/api/v1/passengers")
+@RequestMapping("/api/v1/drivers")
 @RestController
 @RequiredArgsConstructor
 public class DriverController {
     private final DriverService driverService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<DriverResponse> getDriver(@PathVariable("id") Long passengerId) {
-        DriverResponse passengerResponse = driverService.findById(passengerId);
-        return ResponseEntity.status(HttpStatus.OK).body(passengerResponse);
+    public ResponseEntity<DriverResponse> getDriver(@PathVariable("id") Long driverId) {
+        DriverResponse driverResponse = driverService.findById(driverId);
+        return ResponseEntity.status(HttpStatus.OK).body(driverResponse);
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<DriverResponseList> getAllDrivers() {
-        DriverResponseList passengerList = driverService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(passengerList);
+        DriverResponseList driverResponseList = driverService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(driverResponseList);
     }
 
-    @PostMapping("")
-    public ResponseEntity<DriverResponse> createDriver(@RequestBody DriverRequest passengerRequest) {
-        DriverResponse passengerResponse = driverService.create(passengerRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(passengerResponse);
+    @PostMapping
+    public ResponseEntity<DriverResponse> createDriver(@RequestBody DriverRequest driverRequest) {
+        DriverResponse driverResponse = driverService.create(driverRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(driverResponse);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<DriverResponse> updateDriver(@RequestBody DriverRequest passengerRequest,
-                                                             @PathVariable("id") Long passengerId) {
-        DriverResponse passengerResponse = driverService.update(passengerRequest, passengerId);
-        return ResponseEntity.status(HttpStatus.OK).body(passengerResponse);
+    public ResponseEntity<DriverResponse> updateDriver(@RequestBody DriverRequest driverRequest,
+                                                       @PathVariable("id") Long driverId) {
+        DriverResponse driverResponse = driverService.update(driverRequest, driverId);
+        return ResponseEntity.status(HttpStatus.OK).body(driverResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDriver(@PathVariable("id") Long passengerId) {
-        driverService.delete(passengerId);
+    public ResponseEntity<Void> deleteDriver(@PathVariable("id") Long driverId) {
+        driverService.delete(driverId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
