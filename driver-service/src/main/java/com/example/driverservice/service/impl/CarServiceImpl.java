@@ -29,6 +29,7 @@ public class CarServiceImpl implements CarService {
     private final MessageSource messageSource;
 
     @Override
+    @Transactional
     public CarResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Car car = carRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
                 .getMessage("exception.car.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
@@ -36,12 +37,14 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Transactional
     public CarResponseList findAll() {
         List<Car> cars = carRepository.findAll();
         return carMapper.toResponseList(cars);
     }
 
     @Override
+    @Transactional
     public CarResponse create(@Valid CarRequest carRequest) {
         try {
             Car car = carRepository.save(carMapper.toCar(carRequest));
@@ -62,9 +65,8 @@ public class CarServiceImpl implements CarService {
         try {
             Car editedCar = carMapper.toCar(carRequest);
             car.setBrand(editedCar.getBrand());
-            car.setNumber(editedCar.getBrand());
+            car.setNumber(editedCar.getNumber());
             car.setColor(editedCar.getColor());
-            car.setDriver(editedCar.getDriver());
             CarResponse carResponse = carMapper.toResponse(car);
             carRepository.flush();
             return carResponse;
@@ -76,6 +78,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Transactional
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         try {
             carRepository.deleteById(id);

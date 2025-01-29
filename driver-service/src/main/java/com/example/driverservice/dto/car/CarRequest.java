@@ -2,6 +2,7 @@ package com.example.driverservice.dto.car;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import static com.example.driverservice.constant.RegularExpressionsConstants.CAR_NUMBER_CHECK;
@@ -16,5 +17,7 @@ public record CarRequest(
         String number,
         @NotBlank(message = "{validate.field.color.blank}")
         @Size(max = 20, message = "{validate.field.color.too-long}")
-        String color
+        String color,
+        @Positive(message = "{validate.field.driver-id.negative}")
+        Long driverId
 ) {}

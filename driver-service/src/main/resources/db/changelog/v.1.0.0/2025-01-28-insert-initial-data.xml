@@ -78,6 +78,41 @@
             <column name="color" value="pink"/>
             <column name="driver_id" value="11"/>
         </insert>
+        <insert tableName="cars">
+            <column name="id" value="6"/>
+            <column name="brand" value="volvo"/>
+            <column name="number" value="1005AB-7"/>
+            <column name="color" value="red"/>
+            <column name="driver_id" value="1"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="7"/>
+            <column name="brand" value="bmw"/>
+            <column name="number" value="1006AB-7"/>
+            <column name="color" value="yellow"/>
+            <column name="driver_id" value="1"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="8"/>
+            <column name="brand" value="mazda"/>
+            <column name="number" value="1007AB-7"/>
+            <column name="color" value="black"/>
+            <column name="driver_id" value="1"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="9"/>
+            <column name="brand" value="mercedes"/>
+            <column name="number" value="1008AB-7"/>
+            <column name="color" value="blue"/>
+            <column name="driver_id" value="2"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="10"/>
+            <column name="brand" value="subaru"/>
+            <column name="number" value="1009AB-7"/>
+            <column name="color" value="grey"/>
+            <column name="driver_id" value="10"/>
+        </insert>
 
     </changeSet>
 

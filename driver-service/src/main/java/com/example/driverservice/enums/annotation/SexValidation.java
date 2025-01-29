@@ -2,6 +2,7 @@ package com.example.driverservice.enums.annotation;
 
 import com.example.driverservice.enums.validator.SexTypeValidator;
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -19,4 +20,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface SexValidation {
     Class<? extends Enum<?>> enumClass();
     String message() default "Invalid sex type entered";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }

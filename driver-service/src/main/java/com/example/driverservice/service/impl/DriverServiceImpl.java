@@ -29,6 +29,7 @@ public class DriverServiceImpl implements DriverService {
     private final MessageSource messageSource;
 
     @Override
+    @Transactional
     public DriverResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Driver driver = driverRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
                 .getMessage("exception.driver.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
@@ -36,12 +37,14 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    @Transactional
     public DriverResponseList findAll() {
         List<Driver> drivers = driverRepository.findAll();
         return driverMapper.toResponseList(drivers);
     }
 
     @Override
+    @Transactional
     public DriverResponse create(@Valid DriverRequest driverRequest) {
         try {
             Driver driver = driverRepository.save(driverMapper.toDriver(driverRequest));
@@ -64,7 +67,6 @@ public class DriverServiceImpl implements DriverService {
             driver.setName(editedDriver.getName());
             driver.setEmail(editedDriver.getEmail());
             driver.setPhone(editedDriver.getPhone());
-            driver.setCar(editedDriver.getCar());
             DriverResponse driverResponse = driverMapper.toResponse(driver);
             driverRepository.flush();
             return driverResponse;
@@ -76,6 +78,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    @Transactional
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         try {
             driverRepository.deleteById(id);

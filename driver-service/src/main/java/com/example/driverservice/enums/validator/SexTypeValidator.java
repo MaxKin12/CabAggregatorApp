@@ -14,8 +14,7 @@ public class SexTypeValidator implements ConstraintValidator<SexValidation, Stri
     @Override
     public void initialize(SexValidation annotation) {
         acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
-                .map(Enum::name)
-                .collect(Collectors.toList());
+                .map(Enum::name).collect(Collectors.toList());
     }
 
     @Override
