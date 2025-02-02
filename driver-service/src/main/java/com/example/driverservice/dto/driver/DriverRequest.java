@@ -22,6 +22,6 @@ public record DriverRequest(
         @Pattern(regexp = PHONE_NUMBER_CHECK, message = "{validate.field.phone.invalid.pattern")
         String phone,
         @NotBlank(message = "{validate.field.sex.blank}")
-        @SexValidation(enumClass = Sex.class)
+        @SexValidation(enumClass = Sex.class, message = "{validate.field.sex.invalid.pattern}")
         String sex
 ) {}

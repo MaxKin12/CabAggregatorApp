@@ -3,6 +3,7 @@ package com.example.driverservice.service.impl;
 import com.example.driverservice.dto.driver.DriverPageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
+import com.example.driverservice.enums.Sex;
 import com.example.driverservice.exception.DbModificationAttemptException;
 import com.example.driverservice.exception.ResourceNotFoundException;
 import com.example.driverservice.mapper.DriverMapper;

@@ -5,7 +5,6 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SexTypeValidator implements ConstraintValidator<SexValidation, String> {
@@ -14,7 +13,9 @@ public class SexTypeValidator implements ConstraintValidator<SexValidation, Stri
     @Override
     public void initialize(SexValidation annotation) {
         acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
-                .map(Enum::name).collect(Collectors.toList());
+                .map(Enum::name)
+                .map(String::toLowerCase)
+                .toList();
     }
 
     @Override

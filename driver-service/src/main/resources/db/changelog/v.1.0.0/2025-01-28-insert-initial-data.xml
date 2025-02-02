@@ -10,35 +10,35 @@
             <column name="name" value="ivan"/>
             <column name="email" value="driver@email1.com"/>
             <column name="phone" value="+375292110001"/>
-            <column name="sex" value="0"/>
+            <column name="sex" value="1"/>
         </insert>
         <insert tableName="drivers">
             <column name="id" value="2"/>
             <column name="name" value="dmitry"/>
             <column name="email" value="driver@email2.com"/>
             <column name="phone" value="+375292110002"/>
-            <column name="sex" value="0"/>
+            <column name="sex" value="1"/>
         </insert>
         <insert tableName="drivers">
             <column name="id" value="5"/>
             <column name="name" value="anna"/>
             <column name="email" value="driver@email3.com"/>
             <column name="phone" value="+375292110003"/>
-            <column name="sex" value="1"/>
+            <column name="sex" value="2"/>
         </insert>
         <insert tableName="drivers">
             <column name="id" value="10"/>
             <column name="name" value="svetlana"/>
             <column name="email" value="driver@email4.com"/>
             <column name="phone" value="+375292110004"/>
-            <column name="sex" value="1"/>
+            <column name="sex" value="2"/>
         </insert>
         <insert tableName="drivers">
             <column name="id" value="11"/>
             <column name="name" value="ahmed"/>
             <column name="email" value="driver@email5.com"/>
             <column name="phone" value="+375292110005"/>
-            <column name="sex" value="0"/>
+            <column name="sex" value="1"/>
         </insert>
     </changeSet>
 
