@@ -3,7 +3,6 @@ package com.example.driverservice.service.impl;
 import com.example.driverservice.dto.driver.DriverPageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
-import com.example.driverservice.enums.Sex;
 import com.example.driverservice.exception.DbModificationAttemptException;
 import com.example.driverservice.exception.ResourceNotFoundException;
 import com.example.driverservice.mapper.DriverMapper;
@@ -66,10 +65,7 @@ public class DriverServiceImpl implements DriverService {
         Driver driver = driverRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
                 .getMessage("exception.driver.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
         try {
-            Driver editedDriver = driverMapper.toDriver(driverRequest);
-            driver.setName(editedDriver.getName());
-            driver.setEmail(editedDriver.getEmail());
-            driver.setPhone(editedDriver.getPhone());
+            driverMapper.updateDriverFromDto(driverRequest, driver);
             DriverResponse driverResponse = driverMapper.toResponse(driver);
             driverRepository.flush();
             return driverResponse;

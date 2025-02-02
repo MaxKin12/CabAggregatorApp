@@ -7,6 +7,7 @@ import com.example.driverservice.model.Car;
 import com.example.driverservice.model.Driver;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,8 @@ public interface CarMapper {
     @Mapping(target = "totalPages", source = "carPage.totalPages")
     @Mapping(target = "totalElements", source = "carPage.totalElements")
     CarPageResponse toResponsePage(Page<Car> carPage, int offset, int limit);
+
+    void updateCarFromDto(CarRequest carRequest, @MappingTarget Car car);
 
     @Named("carPageToCarResponseList")
     List<CarResponse> carPageToCarResponseList(Page<Car> carList);

@@ -8,6 +8,7 @@ import com.example.driverservice.model.Car;
 import com.example.driverservice.model.Driver;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
@@ -23,8 +24,8 @@ public interface DriverMapper {
     @Mapping(target = "sex", expression = "java(driver.getSex().name().toLowerCase())")
     DriverResponse toResponse(Driver driver);
 
-    @Mapping(target = "sex", expression = "java(Sex.valueOf(passengerRequest.sex().toUpperCase()))")
-    Driver toDriver(DriverRequest passengerRequest);
+    @Mapping(target = "sex", expression = "java(Sex.valueOf(driverRequest.sex().toUpperCase()))")
+    Driver toDriver(DriverRequest driverRequest);
 
     @Mapping(target = "driverList", source = "driverPage", qualifiedByName = "driverPageToDriverResponseList")
     @Mapping(target = "currentPageNumber", source = "offset")
@@ -32,6 +33,9 @@ public interface DriverMapper {
     @Mapping(target = "totalPages", source = "driverPage.totalPages")
     @Mapping(target = "totalElements", source = "driverPage.totalElements")
     DriverPageResponse toResponsePage(Page<Driver> driverPage, int offset, int limit);
+
+    @Mapping(target = "sex", expression = "java(Sex.valueOf(driverRequest.sex().toUpperCase()))")
+    void updateDriverFromDto(DriverRequest driverRequest, @MappingTarget Driver driver);
 
     @Named("driverPageToDriverResponseList")
     List<DriverResponse> driverPageToDriverResponseList(Page<Driver> driverList);

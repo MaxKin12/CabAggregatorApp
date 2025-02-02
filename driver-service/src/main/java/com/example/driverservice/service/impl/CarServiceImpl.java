@@ -62,10 +62,7 @@ public class CarServiceImpl implements CarService {
         Car car = carRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
                 .getMessage("exception.car.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
         try {
-            Car editedCar = carMapper.toCar(carRequest);
-            car.setBrand(editedCar.getBrand());
-            car.setNumber(editedCar.getNumber());
-            car.setColor(editedCar.getColor());
+            carMapper.updateCarFromDto(carRequest, car);
             CarResponse carResponse = carMapper.toResponse(car);
             carRepository.flush();
             return carResponse;
