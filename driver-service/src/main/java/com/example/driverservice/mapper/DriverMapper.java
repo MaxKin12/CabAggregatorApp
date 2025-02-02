@@ -1,6 +1,6 @@
 package com.example.driverservice.mapper;
 
-import com.example.driverservice.dto.driver.DriverResponseList;
+import com.example.driverservice.dto.driver.DriverPageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.model.Car;
@@ -8,31 +8,33 @@ import com.example.driverservice.model.Driver;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public abstract class DriverMapper {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface DriverMapper {
     @Mapping(target = "carIds", source = "cars", qualifiedByName = "carsToCarIds")
-    public abstract DriverResponse toResponse(Driver driver);
+    DriverResponse toResponse(Driver driver);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "cars", ignore = true)
-    @Mapping(target = "deleteAt", ignore = true)
-    public abstract Driver toDriver(DriverRequest passengerRequest);
+    Driver toDriver(DriverRequest passengerRequest);
 
-    public DriverResponseList toResponseList(List<Driver> driverList) {
-        return new DriverResponseList(toList(driverList));
-    }
+    @Mapping(target = "driverList", source = "driverPage", qualifiedByName = "driverPageToDriverResponseList")
+    @Mapping(target = "currentPageNumber", source = "offset")
+    @Mapping(target = "pageLimit", source = "limit")
+    @Mapping(target = "totalPages", source = "driverPage.totalPages")
+    @Mapping(target = "totalElements", source = "driverPage.totalElements")
+    DriverPageResponse toResponsePage(Page<Driver> driverPage, int offset, int limit);
+
+    @Named("driverPageToDriverResponseList")
+    List<DriverResponse> driverPageToDriverResponseList(Page<Driver> driverList);
 
     @Named("carsToCarIds")
-    protected List<Long> carsToCarIds(List<Car> cars) {
+    default List<Long> carsToCarIds(List<Car> cars) {
         if (cars == null)
             return new ArrayList<>();
-        return cars.stream().map(Car::getId).collect(Collectors.toList());
+        return cars.stream().map(Car::getId).toList();
     }
-
-    protected abstract List<DriverResponse> toList(List<Driver> driverList);
 }

@@ -1,6 +1,6 @@
 package com.example.driverservice.controller;
 
-import com.example.driverservice.dto.driver.DriverResponseList;
+import com.example.driverservice.dto.driver.DriverPageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.service.DriverService;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/drivers")
@@ -29,9 +30,12 @@ public class DriverController {
     }
 
     @GetMapping
-    public ResponseEntity<DriverResponseList> getAllDrivers() {
-        DriverResponseList driverResponseList = driverService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(driverResponseList);
+    public ResponseEntity<DriverPageResponse> getAllDrivers(
+            @RequestParam(name = "offset", defaultValue = "0") Integer offset,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
+    ) {
+        DriverPageResponse driverPageResponse = driverService.findAll(offset, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(driverPageResponse);
     }
 
     @PostMapping

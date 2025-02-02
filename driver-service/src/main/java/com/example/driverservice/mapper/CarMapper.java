@@ -2,43 +2,40 @@ package com.example.driverservice.mapper;
 
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
-import com.example.driverservice.dto.car.CarResponseList;
+import com.example.driverservice.dto.car.CarPageResponse;
 import com.example.driverservice.model.Car;
 import com.example.driverservice.model.Driver;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
-public abstract class CarMapper {
-    @Mapping(target = "driverId", source = "driver", qualifiedByName = "driverToDriverId")
-    public abstract CarResponse toResponse(Car car);
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface CarMapper {
+    @Mapping(target = "driverId", source = "driver.id")
+    CarResponse toResponse(Car car);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "deleteAt", ignore = true)
     @Mapping(target = "driver", source = "driverId", qualifiedByName = "driverIdToDriver")
-    public abstract Car toCar(CarRequest passengerRequest);
+    Car toCar(CarRequest passengerRequest);
 
-    public CarResponseList toResponseList(List<Car> carList) {
-        return new CarResponseList(toList(carList));
-    }
+    @Mapping(target = "carList", source = "carPage", qualifiedByName = "carPageToCarResponseList")
+    @Mapping(target = "currentPageNumber", source = "offset")
+    @Mapping(target = "pageLimit", source = "limit")
+    @Mapping(target = "totalPages", source = "carPage.totalPages")
+    @Mapping(target = "totalElements", source = "carPage.totalElements")
+    CarPageResponse toResponsePage(Page<Car> carPage, int offset, int limit);
 
-    @Named("driverToDriverId")
-    protected Long driverToDriverId(Driver driver) {
-        if (driver == null)
-            return null;
-        return driver.getId();
-    }
+    @Named("carPageToCarResponseList")
+    List<CarResponse> carPageToCarResponseList(Page<Car> carList);
 
     @Named("driverIdToDriver")
-    protected Driver driverIdToDriver(Long id) {
+    default Driver driverIdToDriver(Long id) {
         Driver driver = new Driver();
         driver.setId(id);
         return driver;
     }
-
-    protected abstract List<CarResponse> toList(List<Car> carList);
 }
 

@@ -1,6 +1,6 @@
 package com.example.driverservice.service.impl;
 
-import com.example.driverservice.dto.driver.DriverResponseList;
+import com.example.driverservice.dto.driver.DriverPageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.exception.DbModificationAttemptException;
@@ -11,14 +11,16 @@ import com.example.driverservice.repository.DriverRepository;
 import com.example.driverservice.service.DriverService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-
-import java.util.List;
 
 @Service
 @Validated
@@ -38,9 +40,9 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public DriverResponseList findAll() {
-        List<Driver> drivers = driverRepository.findAll();
-        return driverMapper.toResponseList(drivers);
+    public DriverPageResponse findAll(@Min(0) Integer offset, @Min(1) @Max(50) Integer limit) {
+        Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(offset, limit));
+        return driverMapper.toResponsePage(driverPage, offset, limit);
     }
 
     @Override
