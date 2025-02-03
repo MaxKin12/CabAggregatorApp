@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-initial-rides-data" author="MaxKin12">
+        <insert tableName="rides">
+            <column name="id" value="1"/>
+            <column name="passenger_id" value="1"/>
+            <column name="driver_id" value="1"/>
+            <column name="car_id" value="1"/>
+            <column name="pickup_address" value="Minsk, Nezavisimosty 25"/>
+            <column name="destination_address" value="Minsk, Nezavisimosty 165"/>
+            <column name="status" value="5"/>
+            <column name="order_time" value="2025-02-02 15:00:00"/>
+            <column name="price" value="20.5"/>
+        </insert>
+        <insert tableName="rides">
+            <column name="id" value="2"/>
+            <column name="passenger_id" value="2"/>
+            <column name="driver_id" value="2"/>
+            <column name="car_id" value="3"/>
+            <column name="pickup_address" value="Minsk, Nezavisimosty 37"/>
+            <column name="destination_address" value="Minsk, Nezavisimosty 165"/>
+            <column name="status" value="6"/>
+            <column name="order_time" value="2025-02-02 16:00:00"/>
+            <column name="price" value="15"/>
+        </insert>
+        <insert tableName="rides">
+            <column name="id" value="3"/>
+            <column name="passenger_id" value="5"/>
+            <column name="driver_id" value="null"/>
+            <column name="car_id" value="null"/>
+            <column name="pickup_address" value="Minsk, Nezavisimosty 5"/>
+            <column name="destination_address" value="Minsk, Nezavisimosty 155"/>
+            <column name="status" value="1"/>
+            <column name="order_time" value="2025-02-02 17:00:00"/>
+            <column name="price" value="9.4"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
