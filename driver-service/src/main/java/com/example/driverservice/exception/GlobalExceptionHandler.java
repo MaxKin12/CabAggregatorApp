@@ -13,6 +13,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new DriverServiceException(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(IllegalEnumArgumentException.class)
+    public ResponseEntity<DriverServiceException> handleEnumException(Exception e) {
+        return new ResponseEntity<>(new DriverServiceException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(DbModificationAttemptException.class)
     public ResponseEntity<DriverServiceException> handleDBException(Exception e) {
         return new ResponseEntity<>(new DriverServiceException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
