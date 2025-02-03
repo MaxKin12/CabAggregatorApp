@@ -32,7 +32,7 @@ public interface CarMapper {
     void updateCarFromDto(CarRequest carRequest, @MappingTarget Car car);
 
     @Named("carPageToCarResponseList")
-    List<CarResponse> carPageToCarResponseList(Page<Car> carList);
+    List<CarResponse> carPageToCarResponseList(Page<Car> carPage);
 
     @Named("driverIdToDriver")
     default Driver driverIdToDriver(Long id) {

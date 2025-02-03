@@ -38,12 +38,12 @@ public interface DriverMapper {
     void updateDriverFromDto(DriverRequest driverRequest, @MappingTarget Driver driver);
 
     @Named("driverPageToDriverResponseList")
-    List<DriverResponse> driverPageToDriverResponseList(Page<Driver> driverList);
+    List<DriverResponse> driverPageToDriverResponseList(Page<Driver> driverPage);
 
     @Named("carsToCarIds")
-    default List<Long> carsToCarIds(List<Car> cars) {
-        if (cars == null)
+    default List<Long> carsToCarIds(List<Car> carList) {
+        if (carList == null)
             return new ArrayList<>();
-        return cars.stream().map(Car::getId).toList();
+        return carList.stream().map(Car::getId).toList();
     }
 }

@@ -19,7 +19,7 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="sex" type="tinyint">
-                <constraints nullable="false" checkConstraint="CHECK (sex IN(0,1))"/>
+                <constraints nullable="false" checkConstraint="check sex between 0 and 2"/>
             </column>
             <column name="deleted_at" type="timestamp"/>
         </createTable>
