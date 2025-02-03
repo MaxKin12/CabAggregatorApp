@@ -13,6 +13,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new RideException(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(IllegalEnumArgumentException.class)
+    public ResponseEntity<RideException> handleEnumException(Exception e) {
+        return new ResponseEntity<>(new RideException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(DbModificationAttemptException.class)
     public ResponseEntity<RideException> handleDBException(Exception e) {
         return new ResponseEntity<>(new RideException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
