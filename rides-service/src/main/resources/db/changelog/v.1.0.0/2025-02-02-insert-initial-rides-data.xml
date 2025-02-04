@@ -10,33 +10,33 @@
             <column name="passenger_id" value="1"/>
             <column name="driver_id" value="1"/>
             <column name="car_id" value="1"/>
-            <column name="pickup_address" value="Minsk, Nezavisimosty 25"/>
-            <column name="destination_address" value="Minsk, Nezavisimosty 165"/>
+            <column name="pickup_address" value="Независимости 4, Минск"/>
+            <column name="destination_address" value="Гикало 9, Минск"/>
             <column name="status" value="5"/>
             <column name="order_time" value="2025-02-02 15:00:00"/>
-            <column name="price" value="20.5"/>
+            <column name="price" value="17.5"/>
         </insert>
         <insert tableName="rides">
             <column name="id" value="2"/>
             <column name="passenger_id" value="2"/>
             <column name="driver_id" value="2"/>
             <column name="car_id" value="3"/>
-            <column name="pickup_address" value="Minsk, Nezavisimosty 37"/>
-            <column name="destination_address" value="Minsk, Nezavisimosty 165"/>
+            <column name="pickup_address" value="Притыцкого 132, Барановичи"/>
+            <column name="destination_address" value="Новаторов 120, Барановичи"/>
             <column name="status" value="6"/>
             <column name="order_time" value="2025-02-02 16:00:00"/>
-            <column name="price" value="15"/>
+            <column name="price" value="28"/>
         </insert>
         <insert tableName="rides">
             <column name="id" value="3"/>
             <column name="passenger_id" value="5"/>
             <column name="driver_id" value="null"/>
             <column name="car_id" value="null"/>
-            <column name="pickup_address" value="Minsk, Nezavisimosty 5"/>
-            <column name="destination_address" value="Minsk, Nezavisimosty 155"/>
+            <column name="pickup_address" value="Гоголя 9, Брест"/>
+            <column name="destination_address" value="Машерова 15, Брест"/>
             <column name="status" value="1"/>
             <column name="order_time" value="2025-02-02 17:00:00"/>
-            <column name="price" value="9.4"/>
+            <column name="price" value="9"/>
         </insert>
     </changeSet>
 

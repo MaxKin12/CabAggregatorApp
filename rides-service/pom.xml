@@ -20,6 +20,7 @@
         <java.version>17</java.version>
         <mapstruct.version>1.6.2</mapstruct.version>
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
+        <traveltime-sdk-version>2.0.0</traveltime-sdk-version>
     </properties>
 
     <dependencies>
@@ -64,6 +65,12 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.traveltime</groupId>
+            <artifactId>traveltime-sdk-java</artifactId>
+            <version>${traveltime-sdk-version}</version>
         </dependency>
     </dependencies>
 

@@ -5,6 +5,7 @@ import com.example.ridesservice.dto.RideRequest;
 import com.example.ridesservice.dto.RideResponse;
 import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.model.Ride;
+import com.example.ridesservice.utility.pricecounter.PriceCounter;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +15,6 @@ import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public interface RideMapper {
     RideResponse toResponse(Ride ride);
 
     @Mapping(target = "status", ignore = true)
-    Ride toRide(RideRequest rideRequest);
+    Ride toRide(RideRequest rideRequest, PriceCounter priceCounter);
 
     @Mapping(target = "rideList", source = "ridePage", qualifiedByName = "ridePageToRideResponseList")
     @Mapping(target = "currentPageNumber", source = "offset")
@@ -41,10 +41,11 @@ public interface RideMapper {
     List<RideResponse> ridePageToRideResponseList(Page<Ride> ridePage);
 
     @AfterMapping
-    default void setStatusField(RideRequest rideRequest, @MappingTarget Ride ride) {
+    default void setStatusField(RideRequest rideRequest, PriceCounter priceCounter, @MappingTarget Ride ride) {
         ride.setStatus(RideStatus.valueOf(rideRequest.status().toUpperCase()));
-        if (ride.getPrice() == null)
-            ride.setPrice(BigDecimal.TEN);
+        if (ride.getPrice() == null) {
+            ride.setPrice(priceCounter.count(rideRequest.pickupAddress(), rideRequest.destinationAddress()));
+        }
         if (ride.getOrderTime() == null)
             ride.setOrderTime(LocalDateTime.now());
     }

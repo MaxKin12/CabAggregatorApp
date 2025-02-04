@@ -9,6 +9,7 @@ import com.example.ridesservice.mapper.RideMapper;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.RideRepository;
 import com.example.ridesservice.service.RideService;
+import com.example.ridesservice.utility.pricecounter.PriceCounter;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -28,6 +29,7 @@ import org.springframework.validation.annotation.Validated;
 public class RideServiceImpl implements RideService {
     private final RideRepository rideRepository;
     private final RideMapper rideMapper;
+    private final PriceCounter priceCounter;
     private final MessageSource messageSource;
 
     @Override
@@ -46,7 +48,8 @@ public class RideServiceImpl implements RideService {
     @Override
     public RideResponse create(@Valid RideRequest rideRequest) {
         try {
-            Ride ride = rideRepository.save(rideMapper.toRide(rideRequest));
+            Ride saveRide = rideMapper.toRide(rideRequest, priceCounter);
+            Ride ride = rideRepository.save(saveRide);
             return rideMapper.toResponse(ride);
         } catch (Exception e) {
             throw new DbModificationAttemptException(messageSource
