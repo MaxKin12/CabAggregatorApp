@@ -17,6 +17,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
+        <checkstyle.version>10.14.1</checkstyle.version>
     </properties>
 
     <build>
@@ -29,7 +30,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>10.14.1</version>
+                        <version>${checkstyle.version}</version>
                     </dependency>
                 </dependencies>
                 <configuration>
