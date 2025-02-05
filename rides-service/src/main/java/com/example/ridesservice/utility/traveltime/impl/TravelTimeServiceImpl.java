@@ -1,6 +1,6 @@
 package com.example.ridesservice.utility.traveltime.impl;
 
-import com.example.ridesservice.exception.TimetravelRequestException;
+import com.example.ridesservice.exception.custom.TimetravelRequestException;
 import com.example.ridesservice.utility.traveltime.TravelTimeService;
 import com.traveltime.sdk.TravelTimeSDK;
 import com.traveltime.sdk.auth.TravelTimeCredentials;
@@ -27,6 +27,9 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.ADDRESS_NOT_FOUND;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.TIMETRAVEL_REQUEST_EXCEPTION;
 
 @Component
 @RequiredArgsConstructor
@@ -73,9 +76,7 @@ public class TravelTimeServiceImpl implements TravelTimeService {
         Either<TravelTimeError, TimeFilterResponse> response = sdk.send(request);
 
         if (!response.isRight())
-            throw new TimetravelRequestException(messageSource
-                    .getMessage("exception.timetravel.request", new Object[] {response.getLeft().getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new TimetravelRequestException(getTimetravelRequestExceptionMessage(response.getLeft().getMessage()));
         return response.get().getResults().get(0).getLocations().get(0).getProperties().get(0).getDistance();
     }
 
@@ -89,15 +90,23 @@ public class TravelTimeServiceImpl implements TravelTimeService {
         Either<TravelTimeError, GeocodingResponse> response = sdk.send(request);
 
         if (!response.isRight())
-            throw new TimetravelRequestException(messageSource
-                    .getMessage("exception.timetravel.request", new Object[] {response.getLeft().getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new TimetravelRequestException(getTimetravelRequestExceptionMessage(response.getLeft().getMessage()));
         if (response.get().getFeatures().isEmpty())
-            throw new TimetravelRequestException(messageSource
-                    .getMessage("exception.address.not.found", new Object[] {address},
-                            LocaleContextHolder.getLocale()));
+            throw new TimetravelRequestException(getAddressNotFoundExceptionMessage(response.getLeft().getMessage()));
 
         LngLatAlt lngLatAlt = response.get().getFeatures().get(0).getGeometry().getCoordinates();
         return new Coordinates(lngLatAlt.getLatitude(), lngLatAlt.getLongitude());
+    }
+
+    private String getTimetravelRequestExceptionMessage(String exceptionMessage) {
+        return messageSource
+                .getMessage(TIMETRAVEL_REQUEST_EXCEPTION, new Object[] {exceptionMessage},
+                        LocaleContextHolder.getLocale());
+    }
+
+    private String getAddressNotFoundExceptionMessage(String address) {
+        return messageSource
+                .getMessage(ADDRESS_NOT_FOUND, new Object[] {address},
+                        LocaleContextHolder.getLocale());
     }
 }

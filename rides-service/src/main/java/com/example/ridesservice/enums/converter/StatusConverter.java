@@ -1,12 +1,14 @@
 package com.example.ridesservice.enums.converter;
 
 import com.example.ridesservice.enums.RideStatus;
-import com.example.ridesservice.exception.IllegalEnumArgumentException;
+import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ENUM_ARGUMENT;
 
 @Converter
 @RequiredArgsConstructor
@@ -26,6 +28,6 @@ public class StatusConverter implements AttributeConverter<RideStatus, Integer> 
 
     private String getExceptionMessage(Integer code) {
         return messageSource
-                .getMessage("exception.invalid.enum.argument", new Object[] {code}, LocaleContextHolder.getLocale());
+                .getMessage(INVALID_ENUM_ARGUMENT, new Object[] {code}, LocaleContextHolder.getLocale());
     }
 }

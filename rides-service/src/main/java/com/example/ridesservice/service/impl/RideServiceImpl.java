@@ -3,8 +3,8 @@ package com.example.ridesservice.service.impl;
 import com.example.ridesservice.dto.RidePageResponse;
 import com.example.ridesservice.dto.RideRequest;
 import com.example.ridesservice.dto.RideResponse;
-import com.example.ridesservice.exception.DbModificationAttemptException;
-import com.example.ridesservice.exception.ResourceNotFoundException;
+import com.example.ridesservice.exception.custom.DbModificationAttemptException;
+import com.example.ridesservice.exception.custom.ResourceNotFoundException;
 import com.example.ridesservice.mapper.RideMapper;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.RideRepository;
@@ -22,6 +22,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RIDE;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
 
 @Service
 @Validated
@@ -83,12 +86,12 @@ public class RideServiceImpl implements RideService {
 
     private String getRideNotFoundExceptionMessage(Long id) {
         return messageSource
-                .getMessage("exception.ride.not.found", new Object[] {id}, LocaleContextHolder.getLocale());
+                .getMessage(RIDE_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
     }
 
     private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
         return messageSource
-                .getMessage("exception.invalid.attempt.change.ride", new Object[] {methodName, exceptionMessage},
+                .getMessage(INVALID_ATTEMPT_CHANGE_RIDE, new Object[] {methodName, exceptionMessage},
                         LocaleContextHolder.getLocale());
     }
 }

@@ -21,10 +21,10 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RideMapper {
-    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "status", source = "status", qualifiedByName = "statusToLowerCaseString")
     RideResponse toResponse(Ride ride);
 
-    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "status", source = "rideRequest.status", qualifiedByName = "stringToUpperCaseStatus")
     Ride toRide(RideRequest rideRequest, PriceCounter priceCounter);
 
     @Mapping(target = "rideList", source = "ridePage", qualifiedByName = "ridePageToRideResponseList")
@@ -34,24 +34,28 @@ public interface RideMapper {
     @Mapping(target = "totalElements", source = "ridePage.totalElements")
     RidePageResponse toResponsePage(Page<Ride> ridePage, int offset, int limit);
 
-    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "status", source = "status", qualifiedByName = "stringToUpperCaseStatus")
     void updateRideFromDto(RideRequest rideRequest, @MappingTarget Ride ride);
 
     @Named("ridePageToRideResponseList")
     List<RideResponse> ridePageToRideResponseList(Page<Ride> ridePage);
 
+    @Named("statusToLowerCaseString")
+    default String statusToLowerCaseString(RideStatus rideStatus) {
+        return rideStatus.name().toLowerCase();
+    }
+
+    @Named("stringToUpperCaseStatus")
+    default RideStatus stringToUpperCaseStatus(String status) {
+        return RideStatus.valueOf(status.toUpperCase());
+    }
+
     @AfterMapping
     default void setStatusField(RideRequest rideRequest, PriceCounter priceCounter, @MappingTarget Ride ride) {
-        ride.setStatus(RideStatus.valueOf(rideRequest.status().toUpperCase()));
         if (ride.getPrice() == null) {
             ride.setPrice(priceCounter.count(rideRequest.pickupAddress(), rideRequest.destinationAddress()));
         }
         if (ride.getOrderTime() == null)
             ride.setOrderTime(LocalDateTime.now());
-    }
-
-    @AfterMapping
-    default void setStatusField(Ride ride, @MappingTarget RideResponse.RideResponseBuilder rideResponse) {
-        rideResponse.status(ride.getStatus().name().toLowerCase());
     }
 }

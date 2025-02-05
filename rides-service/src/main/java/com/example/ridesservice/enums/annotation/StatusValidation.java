@@ -19,7 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = StatusTypeValidator.class)
 public @interface StatusValidation {
     Class<? extends Enum<?>> enumClass();
-    String message() default "Invalid status entered";
+    String message() default "{}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
