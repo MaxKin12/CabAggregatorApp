@@ -6,6 +6,8 @@ import com.example.ridesservice.dto.RideResponse;
 import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.utility.pricecounter.PriceCounter;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,9 +16,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -55,7 +54,8 @@ public interface RideMapper {
         if (ride.getPrice() == null) {
             ride.setPrice(priceCounter.count(rideRequest.pickupAddress(), rideRequest.destinationAddress()));
         }
-        if (ride.getOrderTime() == null)
+        if (ride.getOrderTime() == null) {
             ride.setOrderTime(LocalDateTime.now());
+        }
     }
 }

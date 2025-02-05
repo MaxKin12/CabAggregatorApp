@@ -3,7 +3,6 @@ package com.example.ridesservice.enums.validator;
 import com.example.ridesservice.enums.annotation.StatusValidation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
 import java.util.List;
 import java.util.stream.Stream;
 

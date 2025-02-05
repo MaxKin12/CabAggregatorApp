@@ -1,5 +1,8 @@
 package com.example.ridesservice.service.impl;
 
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RIDE;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
+
 import com.example.ridesservice.dto.RidePageResponse;
 import com.example.ridesservice.dto.RideRequest;
 import com.example.ridesservice.dto.RideResponse;
@@ -23,9 +26,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RIDE;
-import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
-
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class RideServiceImpl implements RideService {
     @Override
     public RideResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = rideRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(getRideNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(getRideNotFoundExceptionMessage(id)));
         return rideMapper.toResponse(ride);
     }
 
@@ -64,7 +64,7 @@ public class RideServiceImpl implements RideService {
     public RideResponse update(@Valid RideRequest rideRequest,
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = rideRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(getRideNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(getRideNotFoundExceptionMessage(id)));
         try {
             rideMapper.updateRideFromDto(rideRequest, ride);
             RideResponse rideResponse = rideMapper.toResponse(ride);

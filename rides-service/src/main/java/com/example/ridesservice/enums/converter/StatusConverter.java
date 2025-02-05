@@ -1,5 +1,7 @@
 package com.example.ridesservice.enums.converter;
 
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ENUM_ARGUMENT;
+
 import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
 import jakarta.persistence.AttributeConverter;
@@ -7,8 +9,6 @@ import jakarta.persistence.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-
-import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ENUM_ARGUMENT;
 
 @Converter
 @RequiredArgsConstructor
