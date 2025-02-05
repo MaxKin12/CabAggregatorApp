@@ -1,13 +1,15 @@
-package com.example.passengerservice.dto;
+package com.example.driverservice.dto.driver;
 
-import static com.example.passengerservice.constant.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
+import static com.example.driverservice.utility.constants.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
 
+import com.example.driverservice.enums.UserGender;
+import com.example.driverservice.enums.annotation.UserGenderValidation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record PassengerRequest(
+public record DriverRequest(
         @NotBlank(message = "{validate.field.name.blank}")
         @Size(max = 50, message = "{validate.field.name.too-long}")
         String name,
@@ -17,6 +19,9 @@ public record PassengerRequest(
         String email,
         @NotBlank(message = "{validate.field.phone.blank}")
         @Size(max = 13, message = "{validate.field.phone.too-long}")
-        @Pattern(regexp = PHONE_NUMBER_CHECK, message = "{validate.field.phone.invalid.pattern")
-        String phone
+        @Pattern(regexp = PHONE_NUMBER_CHECK, message = "{validate.field.phone.invalid.pattern}")
+        String phone,
+        @NotBlank(message = "{validate.field.gender.blank}")
+        @UserGenderValidation(enumClass = UserGender.class, message = "{validate.field.gender.invalid.pattern}")
+        String gender
 ) {}

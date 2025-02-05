@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-initial-drivers-data" author="MaxKin12">
+        <insert tableName="drivers">
+            <column name="id" value="1"/>
+            <column name="name" value="ivan"/>
+            <column name="email" value="driver@email1.com"/>
+            <column name="phone" value="+375292110001"/>
+            <column name="sex" value="1"/>
+        </insert>
+        <insert tableName="drivers">
+            <column name="id" value="2"/>
+            <column name="name" value="dmitry"/>
+            <column name="email" value="driver@email2.com"/>
+            <column name="phone" value="+375292110002"/>
+            <column name="sex" value="1"/>
+        </insert>
+        <insert tableName="drivers">
+            <column name="id" value="5"/>
+            <column name="name" value="anna"/>
+            <column name="email" value="driver@email3.com"/>
+            <column name="phone" value="+375292110003"/>
+            <column name="sex" value="2"/>
+        </insert>
+        <insert tableName="drivers">
+            <column name="id" value="10"/>
+            <column name="name" value="svetlana"/>
+            <column name="email" value="driver@email4.com"/>
+            <column name="phone" value="+375292110004"/>
+            <column name="sex" value="2"/>
+        </insert>
+        <insert tableName="drivers">
+            <column name="id" value="11"/>
+            <column name="name" value="ahmed"/>
+            <column name="email" value="driver@email5.com"/>
+            <column name="phone" value="+375292110005"/>
+            <column name="sex" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert-initial-cars-data" author="MaxKin12">
+        <insert tableName="cars">
+            <column name="id" value="1"/>
+            <column name="brand" value="volkswagen"/>
+            <column name="number" value="1001TP-7"/>
+            <column name="color" value="grey"/>
+            <column name="driver_id" value="1"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="2"/>
+            <column name="brand" value="toyota"/>
+            <column name="number" value="1002TA-7"/>
+            <column name="color" value="grey"/>
+            <column name="driver_id" value="10"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="3"/>
+            <column name="brand" value="volkswagen"/>
+            <column name="number" value="1003KP-5"/>
+            <column name="color" value="white"/>
+            <column name="driver_id" value="2"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="4"/>
+            <column name="brand" value="audi"/>
+            <column name="number" value="1004EX-4"/>
+            <column name="color" value="black"/>
+            <column name="driver_id" value="5"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="5"/>
+            <column name="brand" value="lada"/>
+            <column name="number" value="1004AB-7"/>
+            <column name="color" value="pink"/>
+            <column name="driver_id" value="11"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="6"/>
+            <column name="brand" value="volvo"/>
+            <column name="number" value="1005AB-7"/>
+            <column name="color" value="red"/>
+            <column name="driver_id" value="1"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="7"/>
+            <column name="brand" value="bmw"/>
+            <column name="number" value="1006AB-7"/>
+            <column name="color" value="yellow"/>
+            <column name="driver_id" value="1"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="8"/>
+            <column name="brand" value="mazda"/>
+            <column name="number" value="1007AB-7"/>
+            <column name="color" value="black"/>
+            <column name="driver_id" value="1"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="9"/>
+            <column name="brand" value="mercedes"/>
+            <column name="number" value="1008AB-7"/>
+            <column name="color" value="blue"/>
+            <column name="driver_id" value="2"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="10"/>
+            <column name="brand" value="subaru"/>
+            <column name="number" value="1009AB-7"/>
+            <column name="color" value="grey"/>
+            <column name="driver_id" value="10"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

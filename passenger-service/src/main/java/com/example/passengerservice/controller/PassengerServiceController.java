@@ -1,8 +1,8 @@
 package com.example.passengerservice.controller;
 
-import com.example.passengerservice.dto.PassengerResponseList;
 import com.example.passengerservice.dto.PassengerRequest;
 import com.example.passengerservice.dto.PassengerResponse;
+import com.example.passengerservice.dto.PassengerResponseList;
 import com.example.passengerservice.service.PassengerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
