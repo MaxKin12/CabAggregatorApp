@@ -1,10 +1,13 @@
-package com.example.passengerservice.model;
+package com.example.driverservice.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -15,24 +18,27 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Table(name = "passengers")
+@Table(name = "cars")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "update passengers set deleted_at=current_timestamp() where id=?")
+@SQLDelete(sql = "update cars set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
-public class Passenger {
+public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name", nullable = false, length = 50)
-    private String name;
-    @Column(name = "email", unique = true, length = 100, nullable = false)
-    private String email;
-    @Column(name = "phone", unique = true, length = 13, nullable = false)
-    private String phone;
+    @Column(name = "brand", length = 30, nullable = false)
+    private String brand;
+    @Column(name = "number", length = 8, nullable = false, unique = true)
+    private String number;
+    @Column(name = "color", length = 20, nullable = false)
+    private String color;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "driver_id", updatable = false)
+    private Driver driver;
     @Column(name = "deleted_at")
     private LocalDateTime deleteAt;
 }
