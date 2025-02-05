@@ -1,12 +1,14 @@
 package com.example.driverservice.enums.converter;
 
 import com.example.driverservice.enums.UserGender;
-import com.example.driverservice.exception.IllegalEnumArgumentException;
+import com.example.driverservice.exception.custom.IllegalEnumArgumentException;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ENUM_ARGUMENT;
 
 @Converter
 @RequiredArgsConstructor
@@ -26,6 +28,6 @@ public class UserGenderConverter implements AttributeConverter<UserGender, Integ
 
     private String getExceptionMessage(Integer code) {
         return messageSource
-                .getMessage("exception.invalid.enum.argument", new Object[] {code}, LocaleContextHolder.getLocale());
+                .getMessage(INVALID_ENUM_ARGUMENT, new Object[] {code}, LocaleContextHolder.getLocale());
     }
 }

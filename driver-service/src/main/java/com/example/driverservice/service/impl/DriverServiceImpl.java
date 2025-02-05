@@ -3,8 +3,8 @@ package com.example.driverservice.service.impl;
 import com.example.driverservice.dto.driver.DriverPageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
-import com.example.driverservice.exception.DbModificationAttemptException;
-import com.example.driverservice.exception.ResourceNotFoundException;
+import com.example.driverservice.exception.custom.DbModificationAttemptException;
+import com.example.driverservice.exception.custom.ResourceNotFoundException;
 import com.example.driverservice.mapper.DriverMapper;
 import com.example.driverservice.model.Driver;
 import com.example.driverservice.repository.DriverRepository;
@@ -21,6 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.DRIVER_NOT_FOUND;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
 
 @Service
 @Validated
@@ -84,12 +87,12 @@ public class DriverServiceImpl implements DriverService {
 
     private String getDriverNotFoundExceptionMessage(Long id) {
         return messageSource
-                .getMessage("exception.driver.not.found", new Object[] {id}, LocaleContextHolder.getLocale());
+                .getMessage(DRIVER_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
     }
 
     private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
         return messageSource
-                .getMessage("exception.invalid.attempt.change.driver", new Object[] {methodName, exceptionMessage},
+                .getMessage(INVALID_ATTEMPT_CHANGE_DRIVER, new Object[] {methodName, exceptionMessage},
                         LocaleContextHolder.getLocale());
     }
 }

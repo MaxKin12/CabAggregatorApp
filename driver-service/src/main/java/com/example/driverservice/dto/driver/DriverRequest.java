@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import static com.example.driverservice.constant.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
+import static com.example.driverservice.utility.constants.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
 
 public record DriverRequest(
         @NotBlank(message = "{validate.field.name.blank}")

@@ -3,8 +3,8 @@ package com.example.driverservice.service.impl;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.dto.car.CarPageResponse;
-import com.example.driverservice.exception.DbModificationAttemptException;
-import com.example.driverservice.exception.ResourceNotFoundException;
+import com.example.driverservice.exception.custom.DbModificationAttemptException;
+import com.example.driverservice.exception.custom.ResourceNotFoundException;
 import com.example.driverservice.mapper.CarMapper;
 import com.example.driverservice.model.Car;
 import com.example.driverservice.repository.CarRepository;
@@ -21,6 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.CAR_NOT_FOUND;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
 
 @Service
 @Validated
@@ -80,12 +83,12 @@ public class CarServiceImpl implements CarService {
 
     private String getCarNotFoundExceptionMessage(Long id) {
         return messageSource
-                .getMessage("exception.car.not.found", new Object[] {id}, LocaleContextHolder.getLocale());
+                .getMessage(CAR_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
     }
 
     private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
         return messageSource
-                .getMessage("exception.invalid.attempt.change.car", new Object[] {methodName, exceptionMessage},
+                .getMessage(INVALID_ATTEMPT_CHANGE_CAR, new Object[] {methodName, exceptionMessage},
                         LocaleContextHolder.getLocale());
     }
 }

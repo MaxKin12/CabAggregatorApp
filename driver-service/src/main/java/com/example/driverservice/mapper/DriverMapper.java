@@ -6,7 +6,6 @@ import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.enums.UserGender;
 import com.example.driverservice.model.Car;
 import com.example.driverservice.model.Driver;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -21,10 +20,10 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DriverMapper {
     @Mapping(target = "carIds", source = "cars", qualifiedByName = "carsToCarIds")
-    @Mapping(target = "gender", ignore = true)
+    @Mapping(target = "gender", source = "gender", qualifiedByName = "genderToLowerCaseString")
     DriverResponse toResponse(Driver driver);
 
-    @Mapping(target = "gender", ignore = true)
+    @Mapping(target = "gender", source = "gender", qualifiedByName = "stringToUpperCaseGender")
     Driver toDriver(DriverRequest driverRequest);
 
     @Mapping(target = "driverList", source = "driverPage", qualifiedByName = "driverPageToDriverResponseList")
@@ -34,7 +33,7 @@ public interface DriverMapper {
     @Mapping(target = "totalElements", source = "driverPage.totalElements")
     DriverPageResponse toResponsePage(Page<Driver> driverPage, int offset, int limit);
 
-    @Mapping(target = "gender", ignore = true)
+    @Mapping(target = "gender", source = "gender", qualifiedByName = "stringToUpperCaseGender")
     void updateDriverFromDto(DriverRequest driverRequest, @MappingTarget Driver driver);
 
     @Named("driverPageToDriverResponseList")
@@ -47,13 +46,13 @@ public interface DriverMapper {
         return carList.stream().map(Car::getId).toList();
     }
 
-    @AfterMapping
-    default void setGenderField(DriverRequest driverRequest, @MappingTarget Driver driver) {
-        driver.setGender(UserGender.valueOf(driverRequest.gender().toUpperCase()));
+    @Named("genderToLowerCaseString")
+    default String genderToLowerCaseString(UserGender userGender) {
+        return userGender.name().toLowerCase();
     }
 
-    @AfterMapping
-    default void setGenderField(Driver driver, @MappingTarget DriverResponse.DriverResponseBuilder driverResponse) {
-        driverResponse.gender(driver.getGender().name().toLowerCase());
+    @Named("stringToUpperCaseGender")
+    default UserGender stringToUpperCaseGender(String gender) {
+        return UserGender.valueOf(gender.toUpperCase());
     }
 }

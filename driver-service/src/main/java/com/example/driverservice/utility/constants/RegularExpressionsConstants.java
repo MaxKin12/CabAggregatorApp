@@ -1,4 +1,4 @@
-package com.example.driverservice.constant;
+package com.example.driverservice.utility.constants;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

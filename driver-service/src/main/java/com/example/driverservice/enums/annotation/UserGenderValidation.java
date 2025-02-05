@@ -19,7 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = UserGenderTypeValidator.class)
 public @interface UserGenderValidation {
     Class<? extends Enum<?>> enumClass();
-    String message() default "Invalid sex type entered";
+    String message() default "{}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
