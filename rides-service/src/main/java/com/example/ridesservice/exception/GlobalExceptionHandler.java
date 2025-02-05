@@ -9,33 +9,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<RideException> handleResourceNotFoundException(Exception e) {
-        return new ResponseEntity<>(new RideException(HttpStatus.NOT_FOUND.value(), e.getMessage()),
+    public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(TimetravelRequestException.class)
-    public ResponseEntity<RideException> timetravelRequestException(Exception e) {
-        return new ResponseEntity<>(new RideException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+
+    @ExceptionHandler({
+            TimetravelRequestException.class,
+            IllegalEnumArgumentException.class,
+            DbModificationAttemptException.class,
+            ConstraintViolationException.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
                 HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(IllegalEnumArgumentException.class)
-    public ResponseEntity<RideException> handleEnumException(Exception e) {
-        return new ResponseEntity<>(new RideException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler(DbModificationAttemptException.class)
-    public ResponseEntity<RideException> handleDBException(Exception e) {
-        return new ResponseEntity<>(new RideException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<RideException> handleValidationException(Exception e) {
-        return new ResponseEntity<>(new RideException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
-    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<RideException> handleOtherExceptions(Exception e) {
-        return new ResponseEntity<>(new RideException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+    public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Unknown internal server error: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

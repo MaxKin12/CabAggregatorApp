@@ -20,7 +20,7 @@
             <column name="destination_address" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="tinyint">
+            <column name="status" type="int">
                 <constraints nullable="false" checkConstraint="check status between 0 and 6"/>
             </column>
             <column name="order_time" type="timestamp">

@@ -3,16 +3,25 @@ package com.example.ridesservice.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Getter
 public enum RideStatus {
-    UNKNOWN((byte) 0),
-    CREATED((byte) 1),
-    ACCEPTED((byte) 2),
-    TAKING((byte) 3),
-    DELIVERING((byte) 4),
-    COMPLETED((byte) 5),
-    CANCELLED((byte) 6);
+    UNKNOWN(0),
+    CREATED(1),
+    ACCEPTED(2),
+    TAKING(3),
+    DELIVERING(4),
+    COMPLETED(5),
+    CANCELLED(6);
 
-    private final byte code;
+    private final int code;
+
+    public static Optional<RideStatus> codeToRideStatus(Integer code) {
+        return Arrays.stream(RideStatus.values())
+                .filter(p -> p.getCode() == code)
+                .findAny();
+    }
 }

@@ -34,8 +34,8 @@ public class RideServiceImpl implements RideService {
 
     @Override
     public RideResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Ride ride = rideRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
-                .getMessage("exception.ride.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
+        Ride ride = rideRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(getRideNotFoundExceptionMessage(id)));
         return rideMapper.toResponse(ride);
     }
 
@@ -52,9 +52,7 @@ public class RideServiceImpl implements RideService {
             Ride ride = rideRepository.save(saveRide);
             return rideMapper.toResponse(ride);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.ride", new Object[] {"create", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("create", e.getMessage()));
         }
     }
 
@@ -62,17 +60,15 @@ public class RideServiceImpl implements RideService {
     @Transactional
     public RideResponse update(@Valid RideRequest rideRequest,
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Ride ride = rideRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
-                .getMessage("exception.ride.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
+        Ride ride = rideRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(getRideNotFoundExceptionMessage(id)));
         try {
             rideMapper.updateRideFromDto(rideRequest, ride);
             RideResponse rideResponse = rideMapper.toResponse(ride);
             rideRepository.flush();
             return rideResponse;
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.ride", new Object[] {"update", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("update", e.getMessage()));
         }
     }
 
@@ -81,9 +77,18 @@ public class RideServiceImpl implements RideService {
         try {
             rideRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.ride", new Object[] {"delete", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
         }
+    }
+
+    private String getRideNotFoundExceptionMessage(Long id) {
+        return messageSource
+                .getMessage("exception.ride.not.found", new Object[] {id}, LocaleContextHolder.getLocale());
+    }
+
+    private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
+        return messageSource
+                .getMessage("exception.invalid.attempt.change.ride", new Object[] {methodName, exceptionMessage},
+                        LocaleContextHolder.getLocale());
     }
 }
