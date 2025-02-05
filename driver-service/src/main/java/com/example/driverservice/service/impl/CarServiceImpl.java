@@ -32,8 +32,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Car car = carRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
-                .getMessage("exception.car.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
+        Car car = carRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
         return carMapper.toResponse(car);
     }
 
@@ -49,9 +49,7 @@ public class CarServiceImpl implements CarService {
             Car car = carRepository.save(carMapper.toCar(carRequest));
             return carMapper.toResponse(car);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.car", new Object[] {"create", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("create", e.getMessage()));
         }
     }
 
@@ -59,17 +57,15 @@ public class CarServiceImpl implements CarService {
     @Transactional
     public CarResponse update(@Valid CarRequest carRequest,
                               @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Car car = carRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
-                .getMessage("exception.car.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
+        Car car = carRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
         try {
             carMapper.updateCarFromDto(carRequest, car);
             CarResponse carResponse = carMapper.toResponse(car);
             carRepository.flush();
             return carResponse;
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.car", new Object[] {"update", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("update", e.getMessage()));
         }
     }
 
@@ -78,9 +74,18 @@ public class CarServiceImpl implements CarService {
         try {
             carRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.car", new Object[] {"delete", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
         }
+    }
+
+    private String getCarNotFoundExceptionMessage(Long id) {
+        return messageSource
+                .getMessage("exception.car.not.found", new Object[] {id}, LocaleContextHolder.getLocale());
+    }
+
+    private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
+        return messageSource
+                .getMessage("exception.invalid.attempt.change.car", new Object[] {methodName, exceptionMessage},
+                        LocaleContextHolder.getLocale());
     }
 }

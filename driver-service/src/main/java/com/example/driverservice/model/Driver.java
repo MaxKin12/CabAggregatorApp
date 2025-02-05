@@ -1,7 +1,7 @@
 package com.example.driverservice.model;
 
-import com.example.driverservice.enums.Sex;
-import com.example.driverservice.enums.converter.SexConverter;
+import com.example.driverservice.enums.UserGender;
+import com.example.driverservice.enums.converter.UserGenderConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -42,8 +42,8 @@ public class Driver {
     @Column(name = "phone", length = 13, nullable = false, unique = true)
     private String phone;
     @Column(name = "sex", nullable = false)
-    @Convert(converter = SexConverter.class)
-    private Sex sex;
+    @Convert(converter = UserGenderConverter.class)
+    private UserGender gender;
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Car> cars;
     @Column(name = "deleted_at")

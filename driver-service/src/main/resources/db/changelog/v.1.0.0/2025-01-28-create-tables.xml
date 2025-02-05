@@ -18,7 +18,7 @@
             <column name="phone" type="varchar(13)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="sex" type="tinyint">
+            <column name="sex" type="int">
                 <constraints nullable="false" checkConstraint="check sex between 0 and 2"/>
             </column>
             <column name="deleted_at" type="timestamp"/>

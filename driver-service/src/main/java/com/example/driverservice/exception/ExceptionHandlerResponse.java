@@ -1,6 +1,6 @@
 package com.example.driverservice.exception;
 
-public record DriverServiceException (
+public record ExceptionHandlerResponse(
         int statusCode,
         String message
 ) {}

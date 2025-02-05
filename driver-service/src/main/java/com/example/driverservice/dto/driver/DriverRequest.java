@@ -1,7 +1,7 @@
 package com.example.driverservice.dto.driver;
 
-import com.example.driverservice.enums.Sex;
-import com.example.driverservice.enums.annotation.SexValidation;
+import com.example.driverservice.enums.UserGender;
+import com.example.driverservice.enums.annotation.UserGenderValidation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -19,9 +19,9 @@ public record DriverRequest(
         String email,
         @NotBlank(message = "{validate.field.phone.blank}")
         @Size(max = 13, message = "{validate.field.phone.too-long}")
-        @Pattern(regexp = PHONE_NUMBER_CHECK, message = "{validate.field.phone.invalid.pattern")
+        @Pattern(regexp = PHONE_NUMBER_CHECK, message = "{validate.field.phone.invalid.pattern}")
         String phone,
-        @NotBlank(message = "{validate.field.sex.blank}")
-        @SexValidation(enumClass = Sex.class, message = "{validate.field.sex.invalid.pattern}")
-        String sex
+        @NotBlank(message = "{validate.field.gender.blank}")
+        @UserGenderValidation(enumClass = UserGender.class, message = "{validate.field.gender.invalid.pattern}")
+        String gender
 ) {}

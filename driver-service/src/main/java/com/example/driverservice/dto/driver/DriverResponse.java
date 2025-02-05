@@ -10,6 +10,6 @@ public record DriverResponse(
         String name,
         String email,
         String phone,
-        String sex,
+        String gender,
         List<Long> carIds
 ) {}

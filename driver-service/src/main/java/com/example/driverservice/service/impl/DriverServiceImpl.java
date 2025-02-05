@@ -33,8 +33,8 @@ public class DriverServiceImpl implements DriverService {
     @Override
     @Transactional
     public DriverResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Driver driver = driverRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
-                .getMessage("exception.driver.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
         return driverMapper.toResponse(driver);
     }
 
@@ -52,9 +52,7 @@ public class DriverServiceImpl implements DriverService {
             Driver driver = driverRepository.save(driverMapper.toDriver(driverRequest));
             return driverMapper.toResponse(driver);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.driver", new Object[] {"create", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("create", e.getMessage()));
         }
     }
 
@@ -62,17 +60,15 @@ public class DriverServiceImpl implements DriverService {
     @Transactional
     public DriverResponse update(@Valid DriverRequest driverRequest,
                                  @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Driver driver = driverRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(messageSource
-                .getMessage("exception.driver.not.found", new Object[] {id}, LocaleContextHolder.getLocale())));
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
         try {
             driverMapper.updateDriverFromDto(driverRequest, driver);
             DriverResponse driverResponse = driverMapper.toResponse(driver);
             driverRepository.flush();
             return driverResponse;
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.driver", new Object[] {"update", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("update", e.getMessage()));
         }
     }
 
@@ -82,9 +78,18 @@ public class DriverServiceImpl implements DriverService {
         try {
             driverRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(messageSource
-                    .getMessage("exception.invalid.attempt.change.driver", new Object[] {"delete", e.getMessage()},
-                            LocaleContextHolder.getLocale()));
+            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
         }
+    }
+
+    private String getDriverNotFoundExceptionMessage(Long id) {
+        return messageSource
+                .getMessage("exception.driver.not.found", new Object[] {id}, LocaleContextHolder.getLocale());
+    }
+
+    private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
+        return messageSource
+                .getMessage("exception.invalid.attempt.change.driver", new Object[] {methodName, exceptionMessage},
+                        LocaleContextHolder.getLocale());
     }
 }

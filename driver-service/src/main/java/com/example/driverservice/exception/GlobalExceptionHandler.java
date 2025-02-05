@@ -9,28 +9,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<DriverServiceException> handleResourceNotFoundException(Exception e) {
-        return new ResponseEntity<>(new DriverServiceException(HttpStatus.NOT_FOUND.value(), e.getMessage()),
+    public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(IllegalEnumArgumentException.class)
-    public ResponseEntity<DriverServiceException> handleEnumException(Exception e) {
-        return new ResponseEntity<>(new DriverServiceException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+
+    @ExceptionHandler({
+            IllegalEnumArgumentException.class,
+            DbModificationAttemptException.class,
+            ConstraintViolationException.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
                 HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(DbModificationAttemptException.class)
-    public ResponseEntity<DriverServiceException> handleDBException(Exception e) {
-        return new ResponseEntity<>(new DriverServiceException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<DriverServiceException> handleValidationException(Exception e) {
-        return new ResponseEntity<>(new DriverServiceException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
-    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<DriverServiceException> handleOtherExceptions(Exception e) {
-        return new ResponseEntity<>(new DriverServiceException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+    public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Unknown internal server error: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
