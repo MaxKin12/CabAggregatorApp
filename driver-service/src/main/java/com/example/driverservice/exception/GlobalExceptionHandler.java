@@ -1,5 +1,7 @@
 package com.example.driverservice.exception;
 
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
+
 import com.example.driverservice.exception.custom.DbModificationAttemptException;
 import com.example.driverservice.exception.custom.IllegalEnumArgumentException;
 import com.example.driverservice.exception.custom.ResourceNotFoundException;
@@ -11,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -26,9 +26,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            IllegalEnumArgumentException.class,
-            DbModificationAttemptException.class,
-            ConstraintViolationException.class
+        IllegalEnumArgumentException.class,
+        DbModificationAttemptException.class,
+        ConstraintViolationException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),

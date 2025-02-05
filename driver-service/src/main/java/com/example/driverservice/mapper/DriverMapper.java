@@ -6,6 +6,8 @@ import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.enums.UserGender;
 import com.example.driverservice.model.Car;
 import com.example.driverservice.model.Driver;
+import java.util.ArrayList;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -13,9 +15,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DriverMapper {
@@ -41,8 +40,9 @@ public interface DriverMapper {
 
     @Named("carsToCarIds")
     default List<Long> carsToCarIds(List<Car> carList) {
-        if (carList == null)
+        if (carList == null) {
             return new ArrayList<>();
+        }
         return carList.stream().map(Car::getId).toList();
     }
 

@@ -1,8 +1,8 @@
 package com.example.driverservice.controller;
 
+import com.example.driverservice.dto.car.CarPageResponse;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
-import com.example.driverservice.dto.car.CarPageResponse;
 import com.example.driverservice.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,8 +30,10 @@ public class CarController {
     }
 
     @GetMapping
-    public ResponseEntity<CarPageResponse> getAllCars(@RequestParam(name = "offset", defaultValue = "0") Integer offset,
-                                                      @RequestParam(name = "limit", defaultValue = "10") Integer limit) {
+    public ResponseEntity<CarPageResponse> getAllCars(
+            @RequestParam(name = "offset", defaultValue = "0") Integer offset,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
+    ) {
         CarPageResponse carPageResponse = carService.findAll(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(carPageResponse);
     }

@@ -3,7 +3,6 @@ package com.example.driverservice.enums.validator;
 import com.example.driverservice.enums.annotation.UserGenderValidation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
 import java.util.List;
 import java.util.stream.Stream;
 

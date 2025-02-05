@@ -13,16 +13,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new PassengerException(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(DbModificationAttemptException.class)
-    public ResponseEntity<PassengerException> handleDBException(Exception e) {
+    public ResponseEntity<PassengerException> handleDbException(Exception e) {
         return new ResponseEntity<>(new PassengerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
                 HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<PassengerException> handleValidationException(Exception e) {
         return new ResponseEntity<>(new PassengerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
                 HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<PassengerException> handleOtherExceptions(Exception e) {
         return new ResponseEntity<>(new PassengerException(HttpStatus.INTERNAL_SERVER_ERROR.value(),

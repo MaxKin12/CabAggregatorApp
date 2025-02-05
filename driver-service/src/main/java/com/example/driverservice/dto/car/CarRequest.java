@@ -1,11 +1,11 @@
 package com.example.driverservice.dto.car;
 
+import static com.example.driverservice.utility.constants.RegularExpressionsConstants.CAR_NUMBER_CHECK;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-
-import static com.example.driverservice.utility.constants.RegularExpressionsConstants.CAR_NUMBER_CHECK;
 
 public record CarRequest(
         @NotBlank(message = "{validate.field.brand.blank}")

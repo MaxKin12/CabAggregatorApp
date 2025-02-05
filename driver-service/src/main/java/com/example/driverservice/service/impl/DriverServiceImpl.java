@@ -1,5 +1,8 @@
 package com.example.driverservice.service.impl;
 
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.DRIVER_NOT_FOUND;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
+
 import com.example.driverservice.dto.driver.DriverPageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
@@ -22,9 +25,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.DRIVER_NOT_FOUND;
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
-
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -37,7 +37,7 @@ public class DriverServiceImpl implements DriverService {
     @Transactional
     public DriverResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Driver driver = driverRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
         return driverMapper.toResponse(driver);
     }
 
@@ -64,7 +64,7 @@ public class DriverServiceImpl implements DriverService {
     public DriverResponse update(@Valid DriverRequest driverRequest,
                                  @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Driver driver = driverRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
         try {
             driverMapper.updateDriverFromDto(driverRequest, driver);
             DriverResponse driverResponse = driverMapper.toResponse(driver);

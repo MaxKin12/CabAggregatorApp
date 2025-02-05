@@ -1,8 +1,11 @@
 package com.example.driverservice.service.impl;
 
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.CAR_NOT_FOUND;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
+
+import com.example.driverservice.dto.car.CarPageResponse;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
-import com.example.driverservice.dto.car.CarPageResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;
 import com.example.driverservice.exception.custom.ResourceNotFoundException;
 import com.example.driverservice.mapper.CarMapper;
@@ -22,9 +25,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.CAR_NOT_FOUND;
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
-
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Car car = carRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
         return carMapper.toResponse(car);
     }
 
@@ -61,7 +61,7 @@ public class CarServiceImpl implements CarService {
     public CarResponse update(@Valid CarRequest carRequest,
                               @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Car car = carRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
         try {
             carMapper.updateCarFromDto(carRequest, car);
             CarResponse carResponse = carMapper.toResponse(car);

@@ -10,9 +10,13 @@ import jakarta.validation.constraints.Positive;
 
 public interface DriverService {
     DriverResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id);
+
     DriverPageResponse findAll(@Min(0) Integer offset, @Min(1) @Max(50) Integer limit);
+
     DriverResponse create(@Valid DriverRequest driverRequest);
+
     DriverResponse update(@Valid DriverRequest driverRequest,
                           @Positive(message = "{validate.method.parameter.id.negative}") Long id);
+
     void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id);
 }

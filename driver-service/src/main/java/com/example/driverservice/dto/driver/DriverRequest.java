@@ -1,13 +1,13 @@
 package com.example.driverservice.dto.driver;
 
+import static com.example.driverservice.utility.constants.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
+
 import com.example.driverservice.enums.UserGender;
 import com.example.driverservice.enums.annotation.UserGenderValidation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import static com.example.driverservice.utility.constants.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
 
 public record DriverRequest(
         @NotBlank(message = "{validate.field.name.blank}")

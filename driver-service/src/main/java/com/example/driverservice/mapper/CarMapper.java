@@ -1,10 +1,11 @@
 package com.example.driverservice.mapper;
 
+import com.example.driverservice.dto.car.CarPageResponse;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
-import com.example.driverservice.dto.car.CarPageResponse;
 import com.example.driverservice.model.Car;
 import com.example.driverservice.model.Driver;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -12,8 +13,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CarMapper {
