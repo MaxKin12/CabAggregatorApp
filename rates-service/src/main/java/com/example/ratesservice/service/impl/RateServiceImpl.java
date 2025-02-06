@@ -1,12 +1,14 @@
 package com.example.ratesservice.service.impl;
 
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RATE;
+import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_ALREADY_EXISTS;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_NOT_FOUND;
 
 import com.example.ratesservice.dto.RatePageResponse;
 import com.example.ratesservice.dto.RateRequest;
 import com.example.ratesservice.dto.RateResponse;
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
+import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
 import com.example.ratesservice.exception.custom.RateNotFoundException;
 import com.example.ratesservice.mapper.RateMapper;
 import com.example.ratesservice.model.Rate;
@@ -50,8 +52,9 @@ public class RateServiceImpl implements RateService {
 
     @Override
     public RateResponse create(@Valid RateRequest rateRequest) {
+        Rate saveRate = rateMapper.toRate(rateRequest);
+        ifRateAlreadyExistsThrow(saveRate);
         try {
-            Rate saveRate = rateMapper.toRate(rateRequest);
             Rate rate = rateRepository.save(saveRate);
             return rateMapper.toResponse(rate);
         } catch (Exception e) {
@@ -89,6 +92,14 @@ public class RateServiceImpl implements RateService {
                 .orElseThrow(() -> new RateNotFoundException(getRateNotFoundExceptionMessage(id)));
     }
 
+    private void ifRateAlreadyExistsThrow(Rate rate) {
+        if (rateRepository.existsRateByPassengerIdAndDriverIdAndAuthor(
+                rate.getPassengerId(), rate.getDriverId(), rate.getAuthor()
+        )) {
+            throw new RateAlreadyExistsException(getRateAlreadyExistsExceptionMessage());
+        }
+    }
+
     private String getRateNotFoundExceptionMessage(Long id) {
         return messageSource
                 .getMessage(RATE_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
@@ -98,6 +109,11 @@ public class RateServiceImpl implements RateService {
         return messageSource
                 .getMessage(INVALID_ATTEMPT_CHANGE_RATE, new Object[] {methodName, exceptionMessage},
                         LocaleContextHolder.getLocale());
+    }
+
+    private String getRateAlreadyExistsExceptionMessage() {
+        return messageSource
+                .getMessage(RATE_ALREADY_EXISTS, new Object[] {}, LocaleContextHolder.getLocale());
     }
 
 }
