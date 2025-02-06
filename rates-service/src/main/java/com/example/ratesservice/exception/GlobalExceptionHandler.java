@@ -1,10 +1,10 @@
-package com.example.driverservice.exception;
+package com.example.ratesservice.exception;
 
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
+import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
 
-import com.example.driverservice.exception.custom.DbModificationAttemptException;
-import com.example.driverservice.exception.custom.IllegalEnumArgumentException;
-import com.example.driverservice.exception.custom.ResourceNotFoundException;
+import com.example.ratesservice.exception.custom.DbModificationAttemptException;
+import com.example.ratesservice.exception.custom.IllegalEnumArgumentException;
+import com.example.ratesservice.exception.custom.RateNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
     private final MessageSource messageSource;
 
     @ExceptionHandler({
-            ResourceNotFoundException.class
+            RateNotFoundException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
@@ -49,4 +50,5 @@ public class GlobalExceptionHandler {
         return messageSource
                 .getMessage(INTERNAL_SERVICE_ERROR, new Object[] {exceptionMessage}, LocaleContextHolder.getLocale());
     }
+
 }

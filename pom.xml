@@ -21,6 +21,7 @@
         <module>passenger-service</module>
         <module>driver-service</module>
         <module>rides-service</module>
+        <module>rates-service</module>
     </modules>
 
     <properties>
