@@ -13,6 +13,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 @Converter
 @RequiredArgsConstructor
 public class StatusConverter implements AttributeConverter<RideStatus, Integer> {
+
     private final MessageSource messageSource;
 
     @Override
@@ -30,4 +31,5 @@ public class StatusConverter implements AttributeConverter<RideStatus, Integer> 
         return messageSource
                 .getMessage(INVALID_ENUM_ARGUMENT, new Object[] {code}, LocaleContextHolder.getLocale());
     }
+
 }

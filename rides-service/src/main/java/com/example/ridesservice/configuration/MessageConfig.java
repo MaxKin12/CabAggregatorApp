@@ -7,6 +7,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 
 @Configuration
 public class MessageConfig {
+
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -15,4 +16,5 @@ public class MessageConfig {
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
     }
+
 }

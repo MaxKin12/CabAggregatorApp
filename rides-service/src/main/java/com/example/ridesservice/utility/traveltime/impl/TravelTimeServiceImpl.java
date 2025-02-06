@@ -3,6 +3,7 @@ package com.example.ridesservice.utility.traveltime.impl;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.ADDRESS_NOT_FOUND;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.TIMETRAVEL_REQUEST_EXCEPTION;
 
+import com.example.ridesservice.configuration.TimetravelRouteProperties;
 import com.example.ridesservice.exception.custom.TimetravelRequestException;
 import com.example.ridesservice.utility.traveltime.TravelTimeService;
 import com.traveltime.sdk.TravelTimeSDK;
@@ -25,28 +26,26 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.geojson.LngLatAlt;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@EnableConfigurationProperties(TimetravelRouteProperties.class)
 public class TravelTimeServiceImpl implements TravelTimeService {
-    private final MessageSource messageSource;
 
-    @Value("${timetravel.appid}")
-    private String timetravelApiId;
-    @Value("${timetravel.apikey}")
-    private String timetravelApiKey;
-    @Value("${timetravel.country.code}")
-    private String countryCode;
+    private final TimetravelRouteProperties timetravelRouteProperties;
+
+    private final MessageSource messageSource;
 
     private TravelTimeSDK sdk;
 
     @PostConstruct
     public void initSdk() {
-        TravelTimeCredentials credentials = new TravelTimeCredentials(timetravelApiId, timetravelApiKey);
+        TravelTimeCredentials credentials =
+                new TravelTimeCredentials(timetravelRouteProperties.appId(), timetravelRouteProperties.apiKey());
         sdk = new TravelTimeSDK(credentials);
     }
 
@@ -84,7 +83,7 @@ public class TravelTimeServiceImpl implements TravelTimeService {
         GeocodingRequest request = GeocodingRequest
                 .builder()
                 .query(address)
-                .withinCountry(countryCode)
+                .withinCountry(timetravelRouteProperties.countryCode())
                 .limit(1)
                 .build();
         Either<TravelTimeError, GeocodingResponse> response = sdk.send(request);
@@ -111,4 +110,5 @@ public class TravelTimeServiceImpl implements TravelTimeService {
                 .getMessage(ADDRESS_NOT_FOUND, new Object[] {address},
                         LocaleContextHolder.getLocale());
     }
+
 }

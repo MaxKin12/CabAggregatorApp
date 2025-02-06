@@ -7,7 +7,7 @@ import com.example.ridesservice.dto.RidePageResponse;
 import com.example.ridesservice.dto.RideRequest;
 import com.example.ridesservice.dto.RideResponse;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
-import com.example.ridesservice.exception.custom.ResourceNotFoundException;
+import com.example.ridesservice.exception.custom.RideNotFoundException;
 import com.example.ridesservice.mapper.RideMapper;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.RideRepository;
@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,15 +31,19 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @RequiredArgsConstructor
 public class RideServiceImpl implements RideService {
+
     private final RideRepository rideRepository;
+
     private final RideMapper rideMapper;
+
     private final PriceCounter priceCounter;
+
     private final MessageSource messageSource;
 
     @Override
     public RideResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = rideRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getRideNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new RideNotFoundException(getRideNotFoundExceptionMessage(id)));
         return rideMapper.toResponse(ride);
     }
 
@@ -51,7 +56,8 @@ public class RideServiceImpl implements RideService {
     @Override
     public RideResponse create(@Valid RideRequest rideRequest) {
         try {
-            Ride saveRide = rideMapper.toRide(rideRequest, priceCounter);
+            BigDecimal price = priceCounter.count(rideRequest.pickUpAddress(), rideRequest.destinationAddress());
+            Ride saveRide = rideMapper.toRide(rideRequest, price);
             Ride ride = rideRepository.save(saveRide);
             return rideMapper.toResponse(ride);
         } catch (Exception e) {
@@ -64,7 +70,7 @@ public class RideServiceImpl implements RideService {
     public RideResponse update(@Valid RideRequest rideRequest,
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = rideRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getRideNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new RideNotFoundException(getRideNotFoundExceptionMessage(id)));
         try {
             rideMapper.updateRideFromDto(rideRequest, ride);
             RideResponse rideResponse = rideMapper.toResponse(ride);
@@ -77,6 +83,8 @@ public class RideServiceImpl implements RideService {
 
     @Override
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
+        rideRepository.findById(id)
+                .orElseThrow(() -> new RideNotFoundException(getRideNotFoundExceptionMessage(id)));
         try {
             rideRepository.deleteById(id);
         } catch (Exception e) {
@@ -94,4 +102,5 @@ public class RideServiceImpl implements RideService {
                 .getMessage(INVALID_ATTEMPT_CHANGE_RIDE, new Object[] {methodName, exceptionMessage},
                         LocaleContextHolder.getLocale());
     }
+
 }

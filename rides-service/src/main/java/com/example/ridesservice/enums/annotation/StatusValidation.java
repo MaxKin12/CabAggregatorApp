@@ -17,8 +17,13 @@ import java.lang.annotation.Target;
 @Documented
 @Constraint(validatedBy = StatusTypeValidator.class)
 public @interface StatusValidation {
+
     Class<? extends Enum<?>> enumClass();
+
     String message() default "{}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
+
 }

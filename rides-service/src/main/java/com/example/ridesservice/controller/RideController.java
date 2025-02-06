@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class RideController {
+
     private final RideService rideService;
 
     @GetMapping("/{id}")
@@ -56,4 +57,5 @@ public class RideController {
         rideService.delete(rideId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

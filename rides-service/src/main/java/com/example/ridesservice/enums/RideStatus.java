@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum RideStatus {
+
     UNKNOWN(0),
-    CREATED(1),
-    ACCEPTED(2),
-    TAKING(3),
-    DELIVERING(4),
-    COMPLETED(5),
-    CANCELLED(6);
+    CREATED(100),
+    ACCEPTED(200),
+    TAKING(300),
+    DELIVERING(400),
+    COMPLETED(500),
+    CANCELLED(600);
 
     private final int code;
 
@@ -23,4 +24,5 @@ public enum RideStatus {
                 .filter(p -> p.getCode() == code)
                 .findAny();
     }
+
 }

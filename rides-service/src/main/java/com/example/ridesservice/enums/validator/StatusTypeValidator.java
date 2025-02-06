@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class StatusTypeValidator implements ConstraintValidator<StatusValidation, String> {
+
     private List<String> acceptedValues;
 
     @Override
@@ -24,4 +25,5 @@ public class StatusTypeValidator implements ConstraintValidator<StatusValidation
         }
         return acceptedValues.contains(value);
     }
+
 }

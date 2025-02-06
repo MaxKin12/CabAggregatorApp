@@ -74,6 +74,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
+        carRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
         try {
             carRepository.deleteById(id);
         } catch (Exception e) {

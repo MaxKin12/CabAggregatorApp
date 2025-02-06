@@ -4,7 +4,7 @@ import static com.example.ridesservice.utility.constants.InternationalizationExc
 
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
-import com.example.ridesservice.exception.custom.ResourceNotFoundException;
+import com.example.ridesservice.exception.custom.RideNotFoundException;
 import com.example.ridesservice.exception.custom.TimetravelRequestException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
     private final MessageSource messageSource;
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(RideNotFoundException.class)
     public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
@@ -47,4 +48,5 @@ public class GlobalExceptionHandler {
         return messageSource
                 .getMessage(INTERNAL_SERVICE_ERROR, new Object[] {exceptionMessage}, LocaleContextHolder.getLocale());
     }
+
 }
