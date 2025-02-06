@@ -78,6 +78,8 @@ public class DriverServiceImpl implements DriverService {
     @Override
     @Transactional
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
+        driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
         try {
             driverRepository.deleteById(id);
         } catch (Exception e) {

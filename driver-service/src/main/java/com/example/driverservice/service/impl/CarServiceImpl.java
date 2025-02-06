@@ -35,8 +35,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Car car = carRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
+        Car car = findByIdOrThrow(id);
         return carMapper.toResponse(car);
     }
 
@@ -60,8 +59,7 @@ public class CarServiceImpl implements CarService {
     @Transactional
     public CarResponse update(@Valid CarRequest carRequest,
                               @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Car car = carRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
+        Car car = findByIdOrThrow(id);
         try {
             carMapper.updateCarFromDto(carRequest, car);
             CarResponse carResponse = carMapper.toResponse(car);
@@ -74,11 +72,17 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
+        findByIdOrThrow(id);
         try {
             carRepository.deleteById(id);
         } catch (Exception e) {
             throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
         }
+    }
+
+    private Car findByIdOrThrow(Long id) {
+        return carRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
     }
 
     private String getCarNotFoundExceptionMessage(Long id) {
