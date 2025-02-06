@@ -42,8 +42,7 @@ public class RideServiceImpl implements RideService {
 
     @Override
     public RideResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Ride ride = rideRepository.findById(id)
-                .orElseThrow(() -> new RideNotFoundException(getRideNotFoundExceptionMessage(id)));
+        Ride ride = findByIdOrThrow(id);
         return rideMapper.toResponse(ride);
     }
 
@@ -69,8 +68,7 @@ public class RideServiceImpl implements RideService {
     @Transactional
     public RideResponse update(@Valid RideRequest rideRequest,
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Ride ride = rideRepository.findById(id)
-                .orElseThrow(() -> new RideNotFoundException(getRideNotFoundExceptionMessage(id)));
+        Ride ride = findByIdOrThrow(id);
         try {
             rideMapper.updateRideFromDto(rideRequest, ride);
             RideResponse rideResponse = rideMapper.toResponse(ride);
@@ -83,13 +81,17 @@ public class RideServiceImpl implements RideService {
 
     @Override
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        rideRepository.findById(id)
-                .orElseThrow(() -> new RideNotFoundException(getRideNotFoundExceptionMessage(id)));
+        findByIdOrThrow(id);
         try {
             rideRepository.deleteById(id);
         } catch (Exception e) {
             throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
         }
+    }
+
+    private Ride findByIdOrThrow(Long id) {
+        return rideRepository.findById(id)
+                .orElseThrow(() -> new RideNotFoundException(getRideNotFoundExceptionMessage(id)));
     }
 
     private String getRideNotFoundExceptionMessage(Long id) {
