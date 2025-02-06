@@ -7,6 +7,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 
 @Configuration
 public class MassageConfig {
+
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -15,4 +16,5 @@ public class MassageConfig {
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
     }
+
 }

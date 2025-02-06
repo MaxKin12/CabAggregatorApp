@@ -1,6 +1,10 @@
 package com.example.passengerservice.exception;
 
-public record PassengerException(
+public record ExceptionHandlerResponse(
+
     int statusCode,
+
     String message
-) {}
+
+) {
+}

@@ -1,8 +1,8 @@
 package com.example.passengerservice.controller;
 
+import com.example.passengerservice.dto.PassengerPageResponse;
 import com.example.passengerservice.dto.PassengerRequest;
 import com.example.passengerservice.dto.PassengerResponse;
-import com.example.passengerservice.dto.PassengerResponseList;
 import com.example.passengerservice.service.PassengerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/passengers")
 @RestController
 @RequiredArgsConstructor
 public class PassengerServiceController {
+
     private final PassengerService passengerService;
 
     @GetMapping("/{id}")
@@ -29,9 +31,12 @@ public class PassengerServiceController {
     }
 
     @GetMapping
-    public ResponseEntity<PassengerResponseList> getAllPassengers() {
-        PassengerResponseList passengerResponseList = passengerService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(passengerResponseList);
+    public ResponseEntity<PassengerPageResponse> getAllPassengers(
+            @RequestParam(name = "offset", defaultValue = "0") Integer offset,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
+    ) {
+        PassengerPageResponse passengerPageResponse = passengerService.findAll(offset, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(passengerPageResponse);
     }
 
     @PostMapping
@@ -52,4 +57,5 @@ public class PassengerServiceController {
         passengerService.delete(passengerId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

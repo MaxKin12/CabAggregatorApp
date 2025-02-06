@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     private final MessageSource messageSource;
 
     @ExceptionHandler({
-            RideNotFoundException.class
+        RideNotFoundException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            Exception.class
+        Exception.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
