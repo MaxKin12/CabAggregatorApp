@@ -1,10 +1,12 @@
 package com.example.ratesservice.mapper;
 
+import com.example.ratesservice.dto.RateAverageResponse;
 import com.example.ratesservice.dto.RatePageResponse;
 import com.example.ratesservice.dto.RateRequest;
 import com.example.ratesservice.dto.RateResponse;
 import com.example.ratesservice.enums.AuthorType;
 import com.example.ratesservice.model.Rate;
+import java.math.BigDecimal;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,6 +32,8 @@ public interface RateMapper {
     @Mapping(target = "totalPages", source = "ratePage.totalPages")
     @Mapping(target = "totalElements", source = "ratePage.totalElements")
     RatePageResponse toResponsePage(Page<Rate> ratePage, int offset, int limit);
+
+    RateAverageResponse toRateAverageResponse(Long personId, BigDecimal averageValue);
 
     @Mapping(target = "author", source = "author", qualifiedByName = "stringToUpperCaseAuthor")
     void updateRateFromDto(RateRequest rateRequest, @MappingTarget Rate rate);

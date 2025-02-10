@@ -1,5 +1,6 @@
 package com.example.ratesservice.controller;
 
+import com.example.ratesservice.dto.RateAverageResponse;
 import com.example.ratesservice.dto.RatePageResponse;
 import com.example.ratesservice.dto.RateRequest;
 import com.example.ratesservice.dto.RateResponse;
@@ -37,6 +38,18 @@ public class RateController {
     ) {
         RatePageResponse ratePageResponse = rateService.findAll(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(ratePageResponse);
+    }
+
+    @GetMapping("/passengers/{id}")
+    public ResponseEntity<RateAverageResponse> getAveragePassengersRate(@PathVariable("id") Long passengerId) {
+        RateAverageResponse rateAverageResponse = rateService.findAveragePassengerRate(passengerId);
+        return ResponseEntity.status(HttpStatus.OK).body(rateAverageResponse);
+    }
+
+    @GetMapping("/drivers/{id}")
+    public ResponseEntity<RateAverageResponse> getAverageDriverRate(@PathVariable("id") Long driverId) {
+        RateAverageResponse rateAverageResponse = rateService.findAverageDriverRate(driverId);
+        return ResponseEntity.status(HttpStatus.OK).body(rateAverageResponse);
     }
 
     @PostMapping

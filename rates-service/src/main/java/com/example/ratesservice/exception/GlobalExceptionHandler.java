@@ -5,6 +5,7 @@ import static com.example.ratesservice.utility.constants.InternationalizationExc
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
 import com.example.ratesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
+import com.example.ratesservice.exception.custom.RateListIsEmptyException;
 import com.example.ratesservice.exception.custom.RateNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,8 @@ public class GlobalExceptionHandler {
         IllegalEnumArgumentException.class,
         DbModificationAttemptException.class,
         ConstraintViolationException.class,
-        RateAlreadyExistsException.class
+        RateAlreadyExistsException.class,
+        RateListIsEmptyException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),

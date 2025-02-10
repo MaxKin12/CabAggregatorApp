@@ -16,6 +16,8 @@ public final class InternationalizationExceptionVariablesConstants {
 
     public static final String ADDRESS_NOT_FOUND = "exception.address.not.found";
 
+    public static final String ADDRESS_TOO_FAR = "exception.address.too.far";
+
     public static final String INTERNAL_SERVICE_ERROR = "exception.internal.server.error";
 
 }
