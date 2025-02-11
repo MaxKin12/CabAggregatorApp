@@ -13,7 +13,6 @@ import com.example.passengerservice.mapper.PassengerPageMapper;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
 import com.example.passengerservice.service.PassengerService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
@@ -23,6 +22,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
@@ -39,12 +39,14 @@ public class PassengerServiceImpl implements PassengerService {
     private final MessageSource messageSource;
 
     @Override
+    @Transactional(readOnly = true)
     public PassengerResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Passenger passenger = findByIdOrThrow(id);
         return passengerMapper.toResponse(passenger);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PassengerPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
         limit = limit < 50 ? limit : 50;
         Page<Passenger> passengerPage = passengerRepository.findAll(PageRequest.of(offset, limit));
@@ -52,6 +54,7 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
+    @Transactional
     public PassengerResponse create(@Valid PassengerRequest passengerRequest) {
         try {
             Passenger savePassenger = passengerMapper.toPassenger(passengerRequest);
@@ -78,6 +81,7 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
+    @Transactional
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         findByIdOrThrow(id);
         try {

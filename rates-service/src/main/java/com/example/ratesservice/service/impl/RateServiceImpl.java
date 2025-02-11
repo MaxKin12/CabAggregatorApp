@@ -22,7 +22,6 @@ import com.example.ratesservice.mapper.RatePageMapper;
 import com.example.ratesservice.model.Rate;
 import com.example.ratesservice.repository.RateRepository;
 import com.example.ratesservice.service.RateService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
@@ -37,6 +36,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
@@ -58,12 +58,14 @@ public class RateServiceImpl implements RateService {
     private final MessageSource messageSource;
 
     @Override
+    @Transactional(readOnly = true)
     public RateResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Rate rate = findByIdOrThrow(id);
         return rateMapper.toResponse(rate);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RatePageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
         limit = limit < 50 ? limit : 50;
         Page<Rate> ratePage = rateRepository.findAll(PageRequest.of(offset, limit));
@@ -71,6 +73,7 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RateAverageResponse findAveragePassengerRate(
             @Positive(message = "{validate.method.parameter.id.negative}") Long passengerId
     ) {
@@ -89,6 +92,7 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RateAverageResponse findAverageDriverRate(
             @Positive(message = "{validate.method.parameter.id.negative}") Long driverId
     ) {
@@ -107,6 +111,7 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
+    @Transactional
     public RateResponse create(@Valid RateRequest rateRequest) {
         Rate saveRate = rateMapper.toRate(rateRequest);
         ifRateAlreadyExistsThrow(saveRate);
@@ -134,6 +139,7 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
+    @Transactional
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         findByIdOrThrow(id);
         try {

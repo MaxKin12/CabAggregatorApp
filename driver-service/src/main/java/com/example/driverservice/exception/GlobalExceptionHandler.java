@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
     private final MessageSource messageSource;
 
     @ExceptionHandler({
@@ -49,4 +50,5 @@ public class GlobalExceptionHandler {
         return messageSource
                 .getMessage(INTERNAL_SERVICE_ERROR, new Object[] {exceptionMessage}, LocaleContextHolder.getLocale());
     }
+
 }

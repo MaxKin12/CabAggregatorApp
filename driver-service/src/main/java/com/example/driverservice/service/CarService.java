@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 public interface CarService {
+
     CarResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id);
 
     CarPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit);
@@ -18,4 +19,5 @@ public interface CarService {
                        @Positive(message = "{validate.method.parameter.id.negative}") Long id);
 
     void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id);
+
 }

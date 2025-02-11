@@ -13,7 +13,6 @@ import com.example.driverservice.mapper.DriverPageMapper;
 import com.example.driverservice.model.Driver;
 import com.example.driverservice.repository.DriverRepository;
 import com.example.driverservice.service.DriverService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
@@ -23,12 +22,14 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
 @Validated
 @RequiredArgsConstructor
 public class DriverServiceImpl implements DriverService {
+
     private final DriverRepository driverRepository;
     private final DriverMapper driverMapper;
 
@@ -36,7 +37,7 @@ public class DriverServiceImpl implements DriverService {
     private final MessageSource messageSource;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public DriverResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Driver driver = driverRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
@@ -44,7 +45,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public DriverPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
         limit = limit < 50 ? limit : 50;
         Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(offset, limit));
@@ -100,4 +101,5 @@ public class DriverServiceImpl implements DriverService {
                 .getMessage(INVALID_ATTEMPT_CHANGE_DRIVER, new Object[] {methodName, exceptionMessage},
                         LocaleContextHolder.getLocale());
     }
+
 }

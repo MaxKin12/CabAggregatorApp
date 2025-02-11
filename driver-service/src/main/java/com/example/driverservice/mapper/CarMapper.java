@@ -16,6 +16,7 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface CarMapper {
+
     @Mapping(target = "driverId", source = "driver.id")
     CarResponse toResponse(Car car);
 
@@ -30,5 +31,6 @@ public interface CarMapper {
         driver.setId(id);
         return driver;
     }
+
 }
 
