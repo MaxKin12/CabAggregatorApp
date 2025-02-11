@@ -9,12 +9,12 @@ import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;
 import com.example.driverservice.exception.custom.ResourceNotFoundException;
 import com.example.driverservice.mapper.DriverMapper;
+import com.example.driverservice.mapper.DriverPageMapper;
 import com.example.driverservice.model.Driver;
 import com.example.driverservice.repository.DriverRepository;
 import com.example.driverservice.service.DriverService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,8 @@ import org.springframework.validation.annotation.Validated;
 public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
     private final DriverMapper driverMapper;
+
+    private final DriverPageMapper driverPageMapper;
     private final MessageSource messageSource;
 
     @Override
@@ -43,9 +45,10 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public DriverPageResponse findAll(@Min(0) Integer offset, @Min(1) @Max(50) Integer limit) {
+    public DriverPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+        limit = limit < 50 ? limit : 50;
         Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(offset, limit));
-        return driverMapper.toResponsePage(driverPage, offset, limit);
+        return driverPageMapper.toResponsePage(driverPage, offset, limit);
     }
 
     @Override

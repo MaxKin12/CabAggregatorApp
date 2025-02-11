@@ -9,12 +9,12 @@ import com.example.passengerservice.dto.PassengerResponse;
 import com.example.passengerservice.exception.custom.DbModificationAttemptException;
 import com.example.passengerservice.exception.custom.PassengerNotFoundException;
 import com.example.passengerservice.mapper.PassengerMapper;
+import com.example.passengerservice.mapper.PassengerPageMapper;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
 import com.example.passengerservice.service.PassengerService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,8 @@ public class PassengerServiceImpl implements PassengerService {
 
     private final PassengerMapper passengerMapper;
 
+    private final PassengerPageMapper passengerPageMapper;
+
     private final MessageSource messageSource;
 
     @Override
@@ -43,9 +45,10 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public PassengerPageResponse findAll(@Min(0) Integer offset, @Min(1) @Max(50) Integer limit) {
+    public PassengerPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+        limit = limit < 50 ? limit : 50;
         Page<Passenger> passengerPage = passengerRepository.findAll(PageRequest.of(offset, limit));
-        return passengerMapper.toResponsePage(passengerPage, offset, limit);
+        return passengerPageMapper.toResponsePage(passengerPage, offset, limit);
     }
 
     @Override

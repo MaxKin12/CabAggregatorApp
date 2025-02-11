@@ -7,6 +7,8 @@ public record RateResponse(
 
         Long id,
 
+        Long rideId,
+
         Long passengerId,
 
         Long driverId,

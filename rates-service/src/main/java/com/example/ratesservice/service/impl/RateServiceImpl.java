@@ -16,13 +16,14 @@ import com.example.ratesservice.exception.custom.DbModificationAttemptException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
 import com.example.ratesservice.exception.custom.RateListIsEmptyException;
 import com.example.ratesservice.exception.custom.RateNotFoundException;
+import com.example.ratesservice.mapper.RateAverageMapper;
 import com.example.ratesservice.mapper.RateMapper;
+import com.example.ratesservice.mapper.RatePageMapper;
 import com.example.ratesservice.model.Rate;
 import com.example.ratesservice.repository.RateRepository;
 import com.example.ratesservice.service.RateService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -50,6 +51,10 @@ public class RateServiceImpl implements RateService {
 
     private final RateMapper rateMapper;
 
+    private final RatePageMapper ratePageMapper;
+
+    private final RateAverageMapper rateAverageMapper;
+
     private final MessageSource messageSource;
 
     @Override
@@ -59,9 +64,10 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
-    public RatePageResponse findAll(@Min(0) Integer offset, @Min(1) @Max(50) Integer limit) {
+    public RatePageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+        limit = limit < 50 ? limit : 50;
         Page<Rate> ratePage = rateRepository.findAll(PageRequest.of(offset, limit));
-        return rateMapper.toResponsePage(ratePage, offset, limit);
+        return ratePageMapper.toResponsePage(ratePage, offset, limit);
     }
 
     @Override
@@ -79,7 +85,7 @@ public class RateServiceImpl implements RateService {
                 .orElseThrow(() -> new RateListIsEmptyException(
                         getRateListIsEmptyExceptionMessage(RATE_PASSENGER_LIST_IS_EMPTY, passengerId)));
         BigDecimal averageDecimal = BigDecimal.valueOf(average).setScale(2, RoundingMode.CEILING);
-        return rateMapper.toRateAverageResponse(passengerId, averageDecimal);
+        return rateAverageMapper.toRateAverageResponse(passengerId, averageDecimal);
     }
 
     @Override
@@ -97,7 +103,7 @@ public class RateServiceImpl implements RateService {
                 .orElseThrow(() -> new RateListIsEmptyException(
                         getRateListIsEmptyExceptionMessage(RATE_DRIVER_LIST_IS_EMPTY, driverId)));
         BigDecimal averageDecimal = BigDecimal.valueOf(average).setScale(2, RoundingMode.CEILING);
-        return rateMapper.toRateAverageResponse(driverId, averageDecimal);
+        return rateAverageMapper.toRateAverageResponse(driverId, averageDecimal);
     }
 
     @Override
@@ -143,8 +149,8 @@ public class RateServiceImpl implements RateService {
     }
 
     private void ifRateAlreadyExistsThrow(Rate rate) {
-        if (rateRepository.existsRateByPassengerIdAndDriverIdAndAuthor(
-                rate.getPassengerId(), rate.getDriverId(), rate.getAuthor()
+        if (rateRepository.existsRateByRideIdAndAuthor(
+                rate.getRideId(), rate.getAuthor()
         )) {
             throw new RateAlreadyExistsException(getRateAlreadyExistsExceptionMessage());
         }

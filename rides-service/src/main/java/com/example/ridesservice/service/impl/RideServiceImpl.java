@@ -9,13 +9,13 @@ import com.example.ridesservice.dto.RideResponse;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.RideNotFoundException;
 import com.example.ridesservice.mapper.RideMapper;
+import com.example.ridesservice.mapper.RidePageMapper;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.RideRepository;
 import com.example.ridesservice.service.RideService;
 import com.example.ridesservice.utility.pricecounter.PriceCounter;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -36,6 +36,8 @@ public class RideServiceImpl implements RideService {
 
     private final RideMapper rideMapper;
 
+    private final RidePageMapper ridePageMapper;
+
     private final PriceCounter priceCounter;
 
     private final MessageSource messageSource;
@@ -47,9 +49,10 @@ public class RideServiceImpl implements RideService {
     }
 
     @Override
-    public RidePageResponse findAll(@Min(0) Integer offset, @Min(1) @Max(50) Integer limit) {
+    public RidePageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+        limit = limit < 50 ? limit : 50;
         Page<Ride> ridePage = rideRepository.findAll(PageRequest.of(offset, limit));
-        return rideMapper.toResponsePage(ridePage, offset, limit);
+        return ridePageMapper.toResponsePage(ridePage, offset, limit);
     }
 
     @Override

@@ -9,12 +9,12 @@ import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;
 import com.example.driverservice.exception.custom.ResourceNotFoundException;
 import com.example.driverservice.mapper.CarMapper;
+import com.example.driverservice.mapper.CarPageMapper;
 import com.example.driverservice.model.Car;
 import com.example.driverservice.repository.CarRepository;
 import com.example.driverservice.service.CarService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,8 @@ import org.springframework.validation.annotation.Validated;
 public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
+
+    private final CarPageMapper carPageMapper;
     private final MessageSource messageSource;
 
     @Override
@@ -40,9 +42,10 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarPageResponse findAll(@Min(0) Integer offset, @Min(1) @Max(50) Integer limit) {
+    public CarPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+        limit = limit < 50 ? limit : 50;
         Page<Car> carPage = carRepository.findAll(PageRequest.of(offset, limit));
-        return carMapper.toResponsePage(carPage, offset, limit);
+        return carPageMapper.toResponsePage(carPage, offset, limit);
     }
 
     @Override

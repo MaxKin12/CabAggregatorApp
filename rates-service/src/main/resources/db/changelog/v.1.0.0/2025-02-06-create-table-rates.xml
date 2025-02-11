@@ -9,6 +9,9 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="ride_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="passenger_id" type="bigint">
                 <constraints nullable="false"/>
             </column>

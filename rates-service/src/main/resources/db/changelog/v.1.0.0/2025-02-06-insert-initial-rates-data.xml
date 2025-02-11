@@ -7,6 +7,7 @@
     <changeSet id="insert-initial-rates-data" author="MaxKin12">
         <insert tableName="rates">
             <column name="id" value="1"/>
+            <column name="ride_id" value="1"/>
             <column name="passenger_id" value="1"/>
             <column name="driver_id" value="1"/>
             <column name="author" value="0"/>
@@ -15,6 +16,7 @@
         </insert>
         <insert tableName="rates">
             <column name="id" value="2"/>
+            <column name="ride_id" value="2"/>
             <column name="passenger_id" value="5"/>
             <column name="driver_id" value="1"/>
             <column name="author" value="1"/>
@@ -23,6 +25,7 @@
         </insert>
         <insert tableName="rates">
             <column name="id" value="3"/>
+            <column name="ride_id" value="3"/>
             <column name="passenger_id" value="1"/>
             <column name="driver_id" value="1"/>
             <column name="author" value="0"/>
@@ -30,6 +33,7 @@
         </insert>
         <insert tableName="rates">
             <column name="id" value="4"/>
+            <column name="ride_id" value="4"/>
             <column name="passenger_id" value="10"/>
             <column name="driver_id" value="1"/>
             <column name="author" value="0"/>
@@ -37,6 +41,7 @@
         </insert>
         <insert tableName="rates">
             <column name="id" value="5"/>
+            <column name="ride_id" value="5"/>
             <column name="passenger_id" value="1"/>
             <column name="driver_id" value="2"/>
             <column name="author" value="1"/>

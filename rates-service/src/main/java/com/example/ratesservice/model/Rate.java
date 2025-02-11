@@ -32,6 +32,9 @@ public class Rate {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "ride_id", nullable = false)
+    private Long rideId;
+
     @Column(name = "passenger_id", nullable = false)
     private Long passengerId;
 

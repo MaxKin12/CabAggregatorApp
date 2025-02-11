@@ -15,6 +15,10 @@ public record RateRequest(
         @Positive(message = "{validate.field.passenger-id.negative}")
         Long passengerId,
 
+        @NotNull(message = "{validate.field.ride-id.not.null}")
+        @Positive(message = "{validate.field.ride-id.negative}")
+        Long rideId,
+
         @NotNull(message = "{validate.field.driver-id.not.null}")
         @Positive(message = "{validate.field.driver-id.negative}")
         Long driverId,
