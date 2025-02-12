@@ -9,12 +9,11 @@ import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;
 import com.example.driverservice.exception.custom.ResourceNotFoundException;
 import com.example.driverservice.mapper.CarMapper;
+import com.example.driverservice.mapper.CarPageMapper;
 import com.example.driverservice.model.Car;
 import com.example.driverservice.repository.CarRepository;
 import com.example.driverservice.service.CarService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -23,29 +22,37 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
 @Validated
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
+
     private final CarRepository carRepository;
     private final CarMapper carMapper;
+
+    private final CarPageMapper carPageMapper;
     private final MessageSource messageSource;
 
     @Override
+    @Transactional(readOnly = true)
     public CarResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Car car = findByIdOrThrow(id);
         return carMapper.toResponse(car);
     }
 
     @Override
-    public CarPageResponse findAll(@Min(0) Integer offset, @Min(1) @Max(50) Integer limit) {
+    @Transactional(readOnly = true)
+    public CarPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+        limit = limit < 50 ? limit : 50;
         Page<Car> carPage = carRepository.findAll(PageRequest.of(offset, limit));
-        return carMapper.toResponsePage(carPage, offset, limit);
+        return carPageMapper.toResponsePage(carPage, offset, limit);
     }
 
     @Override
+    @Transactional
     public CarResponse create(@Valid CarRequest carRequest) {
         try {
             Car car = carRepository.save(carMapper.toCar(carRequest));
@@ -71,6 +78,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Transactional
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         findByIdOrThrow(id);
         try {
@@ -95,4 +103,5 @@ public class CarServiceImpl implements CarService {
                 .getMessage(INVALID_ATTEMPT_CHANGE_CAR, new Object[] {methodName, exceptionMessage},
                         LocaleContextHolder.getLocale());
     }
+
 }

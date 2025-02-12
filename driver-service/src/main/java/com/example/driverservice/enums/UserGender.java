@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum UserGender {
+
     UNKNOWN(0),
     MALE(1),
     FEMALE(2);
@@ -19,4 +20,5 @@ public enum UserGender {
                 .filter(p -> p.getCode() == code)
                 .findAny();
     }
+
 }

@@ -26,19 +26,26 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "update cars set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
 public class Car {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
     @Column(name = "brand", length = 30, nullable = false)
     private String brand;
+
     @Column(name = "number", length = 8, nullable = false, unique = true)
     private String number;
+
     @Column(name = "color", length = 20, nullable = false)
     private String color;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id", updatable = false)
     private Driver driver;
+
     @Column(name = "deleted_at")
     private LocalDateTime deleteAt;
+
 }

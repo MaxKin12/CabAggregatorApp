@@ -1,34 +1,53 @@
 package com.example.passengerservice.exception;
 
+import static com.example.passengerservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
+
+import com.example.passengerservice.exception.custom.DbModificationAttemptException;
+import com.example.passengerservice.exception.custom.PassengerNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<PassengerException> handleResourceNotFoundException(Exception e) {
-        return new ResponseEntity<>(new PassengerException(HttpStatus.NOT_FOUND.value(), e.getMessage()),
+
+    private final MessageSource messageSource;
+
+    @ExceptionHandler({
+        PassengerNotFoundException.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(DbModificationAttemptException.class)
-    public ResponseEntity<PassengerException> handleDbException(Exception e) {
-        return new ResponseEntity<>(new PassengerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+    @ExceptionHandler({
+        DbModificationAttemptException.class,
+        ConstraintViolationException.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<PassengerException> handleValidationException(Exception e) {
-        return new ResponseEntity<>(new PassengerException(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
+    @ExceptionHandler({
+        Exception.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                getUnknownInternalServerErrorExceptionMessage(e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<PassengerException> handleOtherExceptions(Exception e) {
-        return new ResponseEntity<>(new PassengerException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Unknown internal server error: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    private String getUnknownInternalServerErrorExceptionMessage(String exceptionMessage) {
+        return messageSource
+                .getMessage(INTERNAL_SERVICE_ERROR, new Object[] {exceptionMessage}, LocaleContextHolder.getLocale());
     }
+
 }
+

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class CarController {
+
     private final CarService carService;
 
     @GetMapping("/{id}")
@@ -56,4 +57,5 @@ public class CarController {
         carService.delete(carId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

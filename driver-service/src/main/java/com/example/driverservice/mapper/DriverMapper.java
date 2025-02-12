@@ -1,6 +1,5 @@
 package com.example.driverservice.mapper;
 
-import com.example.driverservice.dto.driver.DriverPageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.enums.UserGender;
@@ -14,10 +13,13 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
-import org.springframework.data.domain.Page;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface DriverMapper {
+
     @Mapping(target = "carIds", source = "cars", qualifiedByName = "carsToCarIds")
     @Mapping(target = "gender", source = "gender", qualifiedByName = "genderToLowerCaseString")
     DriverResponse toResponse(Driver driver);
@@ -25,18 +27,8 @@ public interface DriverMapper {
     @Mapping(target = "gender", source = "gender", qualifiedByName = "stringToUpperCaseGender")
     Driver toDriver(DriverRequest driverRequest);
 
-    @Mapping(target = "driverList", source = "driverPage", qualifiedByName = "driverPageToDriverResponseList")
-    @Mapping(target = "currentPageNumber", source = "offset")
-    @Mapping(target = "pageLimit", source = "limit")
-    @Mapping(target = "totalPages", source = "driverPage.totalPages")
-    @Mapping(target = "totalElements", source = "driverPage.totalElements")
-    DriverPageResponse toResponsePage(Page<Driver> driverPage, int offset, int limit);
-
     @Mapping(target = "gender", source = "gender", qualifiedByName = "stringToUpperCaseGender")
     void updateDriverFromDto(DriverRequest driverRequest, @MappingTarget Driver driver);
-
-    @Named("driverPageToDriverResponseList")
-    List<DriverResponse> driverPageToDriverResponseList(Page<Driver> driverPage);
 
     @Named("carsToCarIds")
     default List<Long> carsToCarIds(List<Car> carList) {
@@ -55,4 +47,5 @@ public interface DriverMapper {
     default UserGender stringToUpperCaseGender(String gender) {
         return UserGender.valueOf(gender.toUpperCase());
     }
+
 }

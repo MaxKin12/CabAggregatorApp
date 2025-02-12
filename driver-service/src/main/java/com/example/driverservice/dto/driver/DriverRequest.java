@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record DriverRequest(
+
         @NotBlank(message = "{validate.field.name.blank}")
         @Size(max = 50, message = "{validate.field.name.too-long}")
         String name,
@@ -24,4 +25,6 @@ public record DriverRequest(
         @NotBlank(message = "{validate.field.gender.blank}")
         @UserGenderValidation(enumClass = UserGender.class, message = "{validate.field.gender.invalid.pattern}")
         String gender
-) {}
+
+) {
+}

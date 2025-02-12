@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class DriverController {
+
     private final DriverService driverService;
 
     @GetMapping("/{id}")
@@ -56,4 +57,5 @@ public class DriverController {
         driverService.delete(driverId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

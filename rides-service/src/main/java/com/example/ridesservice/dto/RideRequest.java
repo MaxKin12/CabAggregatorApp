@@ -3,11 +3,13 @@ package com.example.ridesservice.dto;
 import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.enums.annotation.StatusValidation;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record RideRequest(
 
+        @NotNull(message = "{validate.field.passenger-id.not.null}")
         @Positive(message = "{validate.field.passenger-id.negative}")
         Long passengerId,
 

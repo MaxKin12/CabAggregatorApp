@@ -1,6 +1,7 @@
 package com.example.ridesservice.utility.traveltime.impl;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.ADDRESS_NOT_FOUND;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.ADDRESS_TOO_FAR;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.TIMETRAVEL_REQUEST_EXCEPTION;
 
 import com.example.ridesservice.configuration.TimetravelRouteProperties;
@@ -76,6 +77,9 @@ public class TravelTimeServiceImpl implements TravelTimeService {
         if (!response.isRight()) {
             throw new TimetravelRequestException(getTimetravelRequestExceptionMessage(response.getLeft().getMessage()));
         }
+        if (!response.get().getResults().get(0).getUnreachable().isEmpty()) {
+            throw new TimetravelRequestException(getAddressesTooFarMessage(departureAddress, arrivalAddress));
+        }
         return response.get().getResults().get(0).getLocations().get(0).getProperties().get(0).getDistance();
     }
 
@@ -92,7 +96,7 @@ public class TravelTimeServiceImpl implements TravelTimeService {
             throw new TimetravelRequestException(getTimetravelRequestExceptionMessage(response.getLeft().getMessage()));
         }
         if (response.get().getFeatures().isEmpty()) {
-            throw new TimetravelRequestException(getAddressNotFoundExceptionMessage(response.getLeft().getMessage()));
+            throw new TimetravelRequestException(getAddressNotFoundExceptionMessage(address));
         }
 
         LngLatAlt lngLatAlt = response.get().getFeatures().get(0).getGeometry().getCoordinates();
@@ -108,6 +112,12 @@ public class TravelTimeServiceImpl implements TravelTimeService {
     private String getAddressNotFoundExceptionMessage(String address) {
         return messageSource
                 .getMessage(ADDRESS_NOT_FOUND, new Object[] {address},
+                        LocaleContextHolder.getLocale());
+    }
+
+    private String getAddressesTooFarMessage(String address1, String address2) {
+        return messageSource
+                .getMessage(ADDRESS_TOO_FAR, new Object[] {address1, address2},
                         LocaleContextHolder.getLocale());
     }
 
