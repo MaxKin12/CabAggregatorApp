@@ -1,6 +1,6 @@
 package com.example.driverservice.controller;
 
-import com.example.driverservice.dto.driver.DriverPageResponse;
+import com.example.driverservice.dto.common.PageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.service.DriverService;
@@ -31,11 +31,11 @@ public class DriverController {
     }
 
     @GetMapping
-    public ResponseEntity<DriverPageResponse> getAllDrivers(
+    public ResponseEntity<PageResponse<DriverResponse>> getAllDrivers(
             @RequestParam(name = "offset", defaultValue = "0") Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        DriverPageResponse driverPageResponse = driverService.findAll(offset, limit);
+        PageResponse<DriverResponse> driverPageResponse = driverService.findAll(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(driverPageResponse);
     }
 

@@ -1,5 +1,6 @@
 package com.example.driverservice.dto.driver;
 
+import com.example.driverservice.dto.EntityResponse;
 import java.util.List;
 import lombok.Builder;
 
@@ -18,5 +19,5 @@ public record DriverResponse(
 
         List<Long> carIds
 
-) {
+) implements EntityResponse {
 }

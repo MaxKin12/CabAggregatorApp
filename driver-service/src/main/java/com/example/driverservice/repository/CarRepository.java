@@ -1,6 +1,6 @@
 package com.example.driverservice.repository;
 
-import com.example.driverservice.model.Car;
+import com.example.driverservice.model.entity.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

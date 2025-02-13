@@ -1,9 +1,9 @@
-package com.example.driverservice.mapper;
+package com.example.driverservice.mapper.car;
 
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
-import com.example.driverservice.model.Car;
-import com.example.driverservice.model.Driver;
+import com.example.driverservice.model.entity.Car;
+import com.example.driverservice.model.entity.Driver;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

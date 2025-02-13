@@ -61,7 +61,9 @@ public class PassengerServiceImpl implements PassengerService {
             Passenger passenger = passengerRepository.save(savePassenger);
             return passengerMapper.toResponse(passenger);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("create", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_PASSENGER, "create", e.getMessage())
+            );
         }
     }
 
@@ -76,7 +78,9 @@ public class PassengerServiceImpl implements PassengerService {
             passengerRepository.flush();
             return passengerResponse;
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("update", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_PASSENGER, "update", e.getMessage())
+            );
         }
     }
 
@@ -87,23 +91,19 @@ public class PassengerServiceImpl implements PassengerService {
         try {
             passengerRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_PASSENGER, "delete", e.getMessage())
+            );
         }
     }
 
     private Passenger findByIdOrThrow(Long id) {
         return passengerRepository.findById(id)
-                .orElseThrow(() -> new PassengerNotFoundException(getPassengerNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new PassengerNotFoundException(getExceptionMessage(PASSENGER_NOT_FOUND, id)));
     }
 
-    private String getPassengerNotFoundExceptionMessage(Long id) {
-        return messageSource
-                .getMessage(PASSENGER_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
+    private String getExceptionMessage(String messageKey, Object... args) {
+        return messageSource.getMessage(messageKey, args, LocaleContextHolder.getLocale());
     }
 
-    private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
-        return messageSource
-                .getMessage(INVALID_ATTEMPT_CHANGE_PASSENGER, new Object[] {methodName, exceptionMessage},
-                        LocaleContextHolder.getLocale());
-    }
 }

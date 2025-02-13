@@ -23,6 +23,7 @@ public class AuthorTypeValidator implements ConstraintValidator<AuthorTypeValida
         if (value == null) {
             return false;
         }
+
         return acceptedValues.contains(value);
     }
 

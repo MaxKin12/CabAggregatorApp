@@ -3,14 +3,14 @@ package com.example.driverservice.service.impl;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.DRIVER_NOT_FOUND;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
 
-import com.example.driverservice.dto.driver.DriverPageResponse;
+import com.example.driverservice.dto.common.PageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;
 import com.example.driverservice.exception.custom.ResourceNotFoundException;
-import com.example.driverservice.mapper.DriverMapper;
-import com.example.driverservice.mapper.DriverPageMapper;
-import com.example.driverservice.model.Driver;
+import com.example.driverservice.mapper.driver.DriverMapper;
+import com.example.driverservice.mapper.driver.DriverPageMapper;
+import com.example.driverservice.model.entity.Driver;
 import com.example.driverservice.repository.DriverRepository;
 import com.example.driverservice.service.DriverService;
 import jakarta.validation.Valid;
@@ -39,14 +39,13 @@ public class DriverServiceImpl implements DriverService {
     @Override
     @Transactional(readOnly = true)
     public DriverResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Driver driver = driverRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
+        Driver driver = findByIdOrThrow(id);
         return driverMapper.toResponse(driver);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public DriverPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+    public PageResponse<DriverResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
         limit = limit < 50 ? limit : 50;
         Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(offset, limit));
         return driverPageMapper.toResponsePage(driverPage, offset, limit);
@@ -59,7 +58,9 @@ public class DriverServiceImpl implements DriverService {
             Driver driver = driverRepository.save(driverMapper.toDriver(driverRequest));
             return driverMapper.toResponse(driver);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("create", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_DRIVER, "create", e.getMessage())
+            );
         }
     }
 
@@ -67,39 +68,39 @@ public class DriverServiceImpl implements DriverService {
     @Transactional
     public DriverResponse update(@Valid DriverRequest driverRequest,
                                  @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Driver driver = driverRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
+        Driver driver = findByIdOrThrow(id);
         try {
             driverMapper.updateDriverFromDto(driverRequest, driver);
             DriverResponse driverResponse = driverMapper.toResponse(driver);
             driverRepository.flush();
             return driverResponse;
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("update", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_DRIVER, "update", e.getMessage())
+            );
         }
     }
 
     @Override
     @Transactional
     public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        driverRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getDriverNotFoundExceptionMessage(id)));
+        findByIdOrThrow(id);
         try {
             driverRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_DRIVER, "delete", e.getMessage())
+            );
         }
     }
 
-    private String getDriverNotFoundExceptionMessage(Long id) {
-        return messageSource
-                .getMessage(DRIVER_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
+    private Driver findByIdOrThrow(Long id) {
+        return driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(getExceptionMessage(DRIVER_NOT_FOUND, id)));
     }
 
-    private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
-        return messageSource
-                .getMessage(INVALID_ATTEMPT_CHANGE_DRIVER, new Object[] {methodName, exceptionMessage},
-                        LocaleContextHolder.getLocale());
+    private String getExceptionMessage(String messageKey, Object... args) {
+        return messageSource.getMessage(messageKey, args, LocaleContextHolder.getLocale());
     }
 
 }

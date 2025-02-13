@@ -23,6 +23,7 @@ public class UserGenderTypeValidator implements ConstraintValidator<UserGenderVa
         if (value == null) {
             return false;
         }
+
         return acceptedValues.contains(value);
     }
 

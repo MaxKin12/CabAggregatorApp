@@ -1,10 +1,10 @@
-package com.example.driverservice.mapper;
+package com.example.driverservice.mapper.driver;
 
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.enums.UserGender;
-import com.example.driverservice.model.Car;
-import com.example.driverservice.model.Driver;
+import com.example.driverservice.model.entity.Car;
+import com.example.driverservice.model.entity.Driver;
 import java.util.ArrayList;
 import java.util.List;
 import org.mapstruct.Mapper;

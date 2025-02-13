@@ -66,7 +66,9 @@ public class RideServiceImpl implements RideService {
             Ride ride = rideRepository.save(saveRide);
             return rideMapper.toResponse(ride);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("create", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_RIDE, "create", e.getMessage())
+            );
         }
     }
 
@@ -81,7 +83,9 @@ public class RideServiceImpl implements RideService {
             rideRepository.flush();
             return rideResponse;
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("update", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_RIDE, "update", e.getMessage())
+            );
         }
     }
 
@@ -92,24 +96,19 @@ public class RideServiceImpl implements RideService {
         try {
             rideRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_RIDE, "delete", e.getMessage())
+            );
         }
     }
 
     private Ride findByIdOrThrow(Long id) {
         return rideRepository.findById(id)
-                .orElseThrow(() -> new RideNotFoundException(getRideNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new RideNotFoundException(getExceptionMessage(RIDE_NOT_FOUND, id)));
     }
 
-    private String getRideNotFoundExceptionMessage(Long id) {
-        return messageSource
-                .getMessage(RIDE_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
-    }
-
-    private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
-        return messageSource
-                .getMessage(INVALID_ATTEMPT_CHANGE_RIDE, new Object[] {methodName, exceptionMessage},
-                        LocaleContextHolder.getLocale());
+    private String getExceptionMessage(String messageKey, Object... args) {
+        return messageSource.getMessage(messageKey, args, LocaleContextHolder.getLocale());
     }
 
 }

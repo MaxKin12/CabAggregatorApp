@@ -66,9 +66,9 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional(readOnly = true)
-    public RatePageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+    public RatePageResponse findAllByAuthor(@Min(0) Integer offset, @Min(1) Integer limit, AuthorType authorType) {
         limit = limit < 50 ? limit : 50;
-        Page<Rate> ratePage = rateRepository.findAll(PageRequest.of(offset, limit));
+        Page<Rate> ratePage = rateRepository.findAllByAuthor(PageRequest.of(offset, limit), authorType);
         return ratePageMapper.toResponsePage(ratePage, offset, limit);
     }
 
@@ -86,7 +86,8 @@ public class RateServiceImpl implements RateService {
                 .mapToDouble(Rate::getValue)
                 .average()
                 .orElseThrow(() -> new RateListIsEmptyException(
-                        getRateListIsEmptyExceptionMessage(RATE_PASSENGER_LIST_IS_EMPTY, passengerId)));
+                        getExceptionMessage(RATE_PASSENGER_LIST_IS_EMPTY, passengerId))
+                );
         BigDecimal averageDecimal = BigDecimal.valueOf(average).setScale(2, RoundingMode.CEILING);
         return rateAverageMapper.toRateAverageResponse(passengerId, averageDecimal);
     }
@@ -105,7 +106,8 @@ public class RateServiceImpl implements RateService {
                 .mapToDouble(Rate::getValue)
                 .average()
                 .orElseThrow(() -> new RateListIsEmptyException(
-                        getRateListIsEmptyExceptionMessage(RATE_DRIVER_LIST_IS_EMPTY, driverId)));
+                        getExceptionMessage(RATE_DRIVER_LIST_IS_EMPTY, driverId))
+                );
         BigDecimal averageDecimal = BigDecimal.valueOf(average).setScale(2, RoundingMode.CEILING);
         return rateAverageMapper.toRateAverageResponse(driverId, averageDecimal);
     }
@@ -119,7 +121,9 @@ public class RateServiceImpl implements RateService {
             Rate rate = rateRepository.save(saveRate);
             return rateMapper.toResponse(rate);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("create", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_RATE, "create", e.getMessage())
+            );
         }
     }
 
@@ -134,7 +138,9 @@ public class RateServiceImpl implements RateService {
             rateRepository.flush();
             return rateResponse;
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("update", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_RATE, "update", e.getMessage())
+            );
         }
     }
 
@@ -145,42 +151,25 @@ public class RateServiceImpl implements RateService {
         try {
             rateRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_RATE, "delete", e.getMessage())
+            );
         }
     }
 
     private Rate findByIdOrThrow(Long id) {
         return rateRepository.findById(id)
-                .orElseThrow(() -> new RateNotFoundException(getRateNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new RateNotFoundException(getExceptionMessage(RATE_NOT_FOUND, id)));
     }
 
     private void ifRateAlreadyExistsThrow(Rate rate) {
-        if (rateRepository.existsRateByRideIdAndAuthor(
-                rate.getRideId(), rate.getAuthor()
-        )) {
-            throw new RateAlreadyExistsException(getRateAlreadyExistsExceptionMessage());
+        if (rateRepository.existsRateByRideIdAndAuthor(rate.getRideId(), rate.getAuthor())) {
+            throw new RateAlreadyExistsException(getExceptionMessage(RATE_ALREADY_EXISTS));
         }
     }
 
-    private String getRateNotFoundExceptionMessage(Long id) {
-        return messageSource
-                .getMessage(RATE_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
-    }
-
-    private String getRateListIsEmptyExceptionMessage(String constant, Long id) {
-        return messageSource
-                .getMessage(constant, new Object[] {id}, LocaleContextHolder.getLocale());
-    }
-
-    private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
-        return messageSource
-                .getMessage(INVALID_ATTEMPT_CHANGE_RATE, new Object[] {methodName, exceptionMessage},
-                        LocaleContextHolder.getLocale());
-    }
-
-    private String getRateAlreadyExistsExceptionMessage() {
-        return messageSource
-                .getMessage(RATE_ALREADY_EXISTS, new Object[] {}, LocaleContextHolder.getLocale());
+    private String getExceptionMessage(String messageKey, Object... args) {
+        return messageSource.getMessage(messageKey, args, LocaleContextHolder.getLocale());
     }
 
 }

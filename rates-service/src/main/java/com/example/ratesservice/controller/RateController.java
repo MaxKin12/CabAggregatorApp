@@ -4,6 +4,7 @@ import com.example.ratesservice.dto.RateAverageResponse;
 import com.example.ratesservice.dto.RatePageResponse;
 import com.example.ratesservice.dto.RateRequest;
 import com.example.ratesservice.dto.RateResponse;
+import com.example.ratesservice.enums.AuthorType;
 import com.example.ratesservice.service.RateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,17 +32,26 @@ public class RateController {
         return ResponseEntity.status(HttpStatus.OK).body(rateResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<RatePageResponse> getAllRates(
+    @GetMapping("/passengers")
+    public ResponseEntity<RatePageResponse> getAllPassengersRates(
             @RequestParam(name = "offset", defaultValue = "0") Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        RatePageResponse ratePageResponse = rateService.findAll(offset, limit);
+        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, AuthorType.DRIVER);
+        return ResponseEntity.status(HttpStatus.OK).body(ratePageResponse);
+    }
+
+    @GetMapping("/drivers")
+    public ResponseEntity<RatePageResponse> getAllDriversRates(
+            @RequestParam(name = "offset", defaultValue = "0") Integer offset,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
+    ) {
+        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, AuthorType.PASSENGER);
         return ResponseEntity.status(HttpStatus.OK).body(ratePageResponse);
     }
 
     @GetMapping("/passengers/{id}")
-    public ResponseEntity<RateAverageResponse> getAveragePassengersRate(@PathVariable("id") Long passengerId) {
+    public ResponseEntity<RateAverageResponse> getAveragePassengerRate(@PathVariable("id") Long passengerId) {
         RateAverageResponse rateAverageResponse = rateService.findAveragePassengerRate(passengerId);
         return ResponseEntity.status(HttpStatus.OK).body(rateAverageResponse);
     }
@@ -53,7 +63,7 @@ public class RateController {
     }
 
     @PostMapping
-    public ResponseEntity<RateResponse> createRate(@RequestBody RateRequest rateRequest) {
+    public ResponseEntity<RateResponse> rateRide(@RequestBody RateRequest rateRequest) {
         RateResponse rateResponse = rateService.create(rateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(rateResponse);
     }

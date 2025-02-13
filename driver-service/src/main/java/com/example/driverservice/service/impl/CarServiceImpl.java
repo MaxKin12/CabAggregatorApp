@@ -3,14 +3,14 @@ package com.example.driverservice.service.impl;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.CAR_NOT_FOUND;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
 
-import com.example.driverservice.dto.car.CarPageResponse;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
+import com.example.driverservice.dto.common.PageResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;
 import com.example.driverservice.exception.custom.ResourceNotFoundException;
-import com.example.driverservice.mapper.CarMapper;
-import com.example.driverservice.mapper.CarPageMapper;
-import com.example.driverservice.model.Car;
+import com.example.driverservice.mapper.car.CarMapper;
+import com.example.driverservice.mapper.car.CarPageMapper;
+import com.example.driverservice.model.entity.Car;
 import com.example.driverservice.repository.CarRepository;
 import com.example.driverservice.service.CarService;
 import jakarta.validation.Valid;
@@ -45,7 +45,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional(readOnly = true)
-    public CarPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+    public PageResponse<CarResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
         limit = limit < 50 ? limit : 50;
         Page<Car> carPage = carRepository.findAll(PageRequest.of(offset, limit));
         return carPageMapper.toResponsePage(carPage, offset, limit);
@@ -58,7 +58,9 @@ public class CarServiceImpl implements CarService {
             Car car = carRepository.save(carMapper.toCar(carRequest));
             return carMapper.toResponse(car);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("create", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_CAR, "create", e.getMessage())
+            );
         }
     }
 
@@ -73,7 +75,9 @@ public class CarServiceImpl implements CarService {
             carRepository.flush();
             return carResponse;
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("update", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_CAR, "update", e.getMessage())
+            );
         }
     }
 
@@ -84,24 +88,19 @@ public class CarServiceImpl implements CarService {
         try {
             carRepository.deleteById(id);
         } catch (Exception e) {
-            throw new DbModificationAttemptException(getInvalidAttemptExceptionMessage("delete", e.getMessage()));
+            throw new DbModificationAttemptException(
+                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_CAR, "delete", e.getMessage())
+            );
         }
     }
 
     private Car findByIdOrThrow(Long id) {
         return carRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getCarNotFoundExceptionMessage(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(getExceptionMessage(CAR_NOT_FOUND, id)));
     }
 
-    private String getCarNotFoundExceptionMessage(Long id) {
-        return messageSource
-                .getMessage(CAR_NOT_FOUND, new Object[] {id}, LocaleContextHolder.getLocale());
-    }
-
-    private String getInvalidAttemptExceptionMessage(String methodName, String exceptionMessage) {
-        return messageSource
-                .getMessage(INVALID_ATTEMPT_CHANGE_CAR, new Object[] {methodName, exceptionMessage},
-                        LocaleContextHolder.getLocale());
+    private String getExceptionMessage(String messageKey, Object... args) {
+        return messageSource.getMessage(messageKey, args, LocaleContextHolder.getLocale());
     }
 
 }

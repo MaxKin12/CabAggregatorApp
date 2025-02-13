@@ -28,12 +28,12 @@ public interface RateMapper {
 
     @Named("authorToLowerCaseString")
     default String authorToLowerCaseString(AuthorType authorType) {
-        return authorType.name().toLowerCase();
+        return authorType == null ? null : authorType.name().toLowerCase();
     }
 
     @Named("stringToUpperCaseAuthor")
     default AuthorType stringToUpperCaseAuthor(String author) {
-        return AuthorType.valueOf(author.toUpperCase());
+        return author == null ? null : AuthorType.valueOf(author.toUpperCase());
     }
 
 }

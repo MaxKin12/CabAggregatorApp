@@ -6,6 +6,7 @@ import com.example.ratesservice.enums.AuthorType;
 import com.example.ratesservice.exception.custom.IllegalEnumArgumentException;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,12 +18,12 @@ public class AuthorTypeConverter implements AttributeConverter<AuthorType, Integ
     private final MessageSource messageSource;
 
     @Override
-    public Integer convertToDatabaseColumn(AuthorType status) {
+    public Integer convertToDatabaseColumn(@NonNull AuthorType status) {
         return status.getCode();
     }
 
     @Override
-    public AuthorType convertToEntityAttribute(Integer code) {
+    public AuthorType convertToEntityAttribute(@NonNull Integer code) {
         return AuthorType.codeToRideStatus(code)
                 .orElseThrow(() -> new IllegalEnumArgumentException(getExceptionMessage(code)));
     }
