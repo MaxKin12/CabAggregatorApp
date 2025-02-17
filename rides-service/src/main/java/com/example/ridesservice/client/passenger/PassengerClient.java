@@ -1,16 +1,15 @@
-package com.example.ridesservice.client;
+package com.example.ridesservice.client.passenger;
 
-import com.example.ridesservice.client.decoder.PassengerClientDecoder;
-import com.example.ridesservice.client.dto.PassengerResponse;
+import com.example.ridesservice.client.passenger.decoder.PassengerClientDecoder;
+import com.example.ridesservice.client.passenger.dto.PassengerResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
-        name = "passengerClient",
-        url = "http://localhost:8081/",
-        path = "/api/v1/passengers",
+        name = "passenger-client",
+        url = "http://localhost:8081/api/v1/passengers",
         configuration = {PassengerClientDecoder.class}
 )
 public interface PassengerClient {

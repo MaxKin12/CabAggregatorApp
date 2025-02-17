@@ -3,7 +3,8 @@ package com.example.ridesservice.service.impl;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RIDE;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
 
-import com.example.ridesservice.client.PassengerClient;
+import com.example.ridesservice.client.driver.DriverClient;
+import com.example.ridesservice.client.passenger.PassengerClient;
 import com.example.ridesservice.dto.RidePageResponse;
 import com.example.ridesservice.dto.RideRequest;
 import com.example.ridesservice.dto.RideResponse;
@@ -45,6 +46,8 @@ public class RideServiceImpl implements RideService {
 
     private final PassengerClient passengerClient;
 
+    private final DriverClient driverClient;
+
     @Override
     @Transactional(readOnly = true)
     public RideResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
@@ -64,6 +67,8 @@ public class RideServiceImpl implements RideService {
     @Transactional
     public RideResponse create(@Valid RideRequest rideRequest) {
         checkPassengerExistenceById(rideRequest.passengerId());
+        checkDriverExistenceById(rideRequest.driverId());
+        checkCarExistenceById(rideRequest.carId());
         try {
             BigDecimal price = priceCounter.count(rideRequest.pickUpAddress(), rideRequest.destinationAddress());
             Ride saveRide = rideMapper.toRide(rideRequest, price);
@@ -82,6 +87,8 @@ public class RideServiceImpl implements RideService {
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = findByIdOrThrow(id);
         checkPassengerExistenceById(rideRequest.passengerId());
+        checkDriverExistenceById(rideRequest.driverId());
+        checkCarExistenceById(rideRequest.carId());
         try {
             rideMapper.updateRideFromDto(rideRequest, ride);
             RideResponse rideResponse = rideMapper.toResponse(ride);
@@ -109,6 +116,14 @@ public class RideServiceImpl implements RideService {
 
     private void checkPassengerExistenceById(Long id) {
         passengerClient.getPassengerById(id);
+    }
+
+    private void checkDriverExistenceById(Long id) {
+        driverClient.getDriverById(id);
+    }
+
+    private void checkCarExistenceById(Long id) {
+        driverClient.getCarById(id);
     }
 
     private Ride findByIdOrThrow(Long id) {

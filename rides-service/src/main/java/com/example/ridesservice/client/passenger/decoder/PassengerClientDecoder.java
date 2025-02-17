@@ -1,11 +1,11 @@
-package com.example.ridesservice.client.decoder;
+package com.example.ridesservice.client.passenger.decoder;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.PASSENGER_SERVICE_ERROR;
 
-import com.example.ridesservice.client.dto.PassengerExceptionHandlerResponse;
-import com.example.ridesservice.client.exception.PassengerClientBadRequest;
-import com.example.ridesservice.client.exception.PassengerNotFoundException;
-import com.example.ridesservice.client.exception.PassengerUnknownInternalServerError;
+import com.example.ridesservice.client.passenger.dto.PassengerExceptionHandlerResponse;
+import com.example.ridesservice.client.passenger.exception.PassengerClientBadRequest;
+import com.example.ridesservice.client.passenger.exception.PassengerNotFoundException;
+import com.example.ridesservice.client.passenger.exception.PassengerUnknownInternalServerError;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -26,9 +26,9 @@ public class PassengerClientDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
         PassengerExceptionHandlerResponse passengerExceptionResponse;
-        try (InputStream bodyIs = response.body().asInputStream()) {
+        try (InputStream body = response.body().asInputStream()) {
             ObjectMapper mapper = new ObjectMapper();
-            passengerExceptionResponse = mapper.readValue(bodyIs, PassengerExceptionHandlerResponse.class);
+            passengerExceptionResponse = mapper.readValue(body, PassengerExceptionHandlerResponse.class);
         } catch (IOException e) {
             return new Exception(e.getMessage());
         }

@@ -2,8 +2,10 @@ package com.example.ridesservice.exception;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
 
-import com.example.ridesservice.client.exception.PassengerClientBadRequest;
-import com.example.ridesservice.client.exception.PassengerNotFoundException;
+import com.example.ridesservice.client.driver.exception.DriverClientBadRequest;
+import com.example.ridesservice.client.driver.exception.DriverServiceEntityNotFoundException;
+import com.example.ridesservice.client.passenger.exception.PassengerClientBadRequest;
+import com.example.ridesservice.client.passenger.exception.PassengerNotFoundException;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ridesservice.exception.custom.RideNotFoundException;
@@ -25,7 +27,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
         RideNotFoundException.class,
-        PassengerNotFoundException.class
+        PassengerNotFoundException.class,
+        DriverServiceEntityNotFoundException.class
     })
     public ResponseEntity<RideExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
         return new ResponseEntity<>(new RideExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
@@ -37,7 +40,8 @@ public class GlobalExceptionHandler {
         IllegalEnumArgumentException.class,
         DbModificationAttemptException.class,
         ConstraintViolationException.class,
-        PassengerClientBadRequest.class
+        PassengerClientBadRequest.class,
+        DriverClientBadRequest.class
     })
     public ResponseEntity<RideExceptionHandlerResponse> handleBadRequestException(Exception e) {
         return new ResponseEntity<>(new RideExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),

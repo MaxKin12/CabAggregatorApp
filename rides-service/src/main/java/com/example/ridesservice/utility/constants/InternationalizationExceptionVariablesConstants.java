@@ -22,4 +22,6 @@ public final class InternationalizationExceptionVariablesConstants {
 
     public static final String PASSENGER_SERVICE_ERROR = "exception.openfeign.passenger-service.error";
 
+    public static final String DRIVER_SERVICE_ERROR = "exception.openfeign.driver-service.error";
+
 }
