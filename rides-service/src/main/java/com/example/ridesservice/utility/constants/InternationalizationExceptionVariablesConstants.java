@@ -20,4 +20,6 @@ public final class InternationalizationExceptionVariablesConstants {
 
     public static final String INTERNAL_SERVICE_ERROR = "exception.internal.server.error";
 
+    public static final String PASSENGER_SERVICE_ERROR = "exception.openfeign.passenger-service.error";
+
 }

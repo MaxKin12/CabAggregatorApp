@@ -3,6 +3,7 @@ package com.example.ridesservice.service.impl;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RIDE;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
 
+import com.example.ridesservice.client.PassengerClient;
 import com.example.ridesservice.dto.RidePageResponse;
 import com.example.ridesservice.dto.RideRequest;
 import com.example.ridesservice.dto.RideResponse;
@@ -42,6 +43,8 @@ public class RideServiceImpl implements RideService {
 
     private final MessageSource messageSource;
 
+    private final PassengerClient passengerClient;
+
     @Override
     @Transactional(readOnly = true)
     public RideResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
@@ -60,6 +63,7 @@ public class RideServiceImpl implements RideService {
     @Override
     @Transactional
     public RideResponse create(@Valid RideRequest rideRequest) {
+        checkPassengerExistenceById(rideRequest.passengerId());
         try {
             BigDecimal price = priceCounter.count(rideRequest.pickUpAddress(), rideRequest.destinationAddress());
             Ride saveRide = rideMapper.toRide(rideRequest, price);
@@ -77,6 +81,7 @@ public class RideServiceImpl implements RideService {
     public RideResponse update(@Valid RideRequest rideRequest,
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = findByIdOrThrow(id);
+        checkPassengerExistenceById(rideRequest.passengerId());
         try {
             rideMapper.updateRideFromDto(rideRequest, ride);
             RideResponse rideResponse = rideMapper.toResponse(ride);
@@ -100,6 +105,10 @@ public class RideServiceImpl implements RideService {
                     getExceptionMessage(INVALID_ATTEMPT_CHANGE_RIDE, "delete", e.getMessage())
             );
         }
+    }
+
+    private void checkPassengerExistenceById(Long id) {
+        passengerClient.getPassengerById(id);
     }
 
     private Ride findByIdOrThrow(Long id) {
