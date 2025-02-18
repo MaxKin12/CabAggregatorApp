@@ -2,13 +2,13 @@ package com.example.driverservice.mapper;
 
 import com.example.driverservice.dto.EntityResponse;
 import com.example.driverservice.dto.common.PageResponse;
-import com.example.driverservice.model.DriverServiceEntity;
+import com.example.driverservice.model.DriverEntity;
 import java.util.List;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
-public interface PageMapper<T extends EntityResponse, G extends DriverServiceEntity> {
+public interface PageMapper<T extends EntityResponse, G extends DriverEntity> {
 
     @Mapping(target = "list", source = "page", qualifiedByName = "pageToResponseList")
     @Mapping(target = "currentPageNumber", source = "offset")

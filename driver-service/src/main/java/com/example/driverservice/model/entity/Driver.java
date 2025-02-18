@@ -2,7 +2,7 @@ package com.example.driverservice.model.entity;
 
 import com.example.driverservice.enums.UserGender;
 import com.example.driverservice.enums.converter.UserGenderConverter;
-import com.example.driverservice.model.DriverServiceEntity;
+import com.example.driverservice.model.DriverEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -30,7 +30,7 @@ import org.hibernate.annotations.SQLRestriction;
 @AllArgsConstructor
 @SQLDelete(sql = "update drivers set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
-public class Driver implements DriverServiceEntity {
+public class Driver implements DriverEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

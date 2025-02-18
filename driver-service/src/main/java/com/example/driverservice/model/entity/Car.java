@@ -1,6 +1,6 @@
 package com.example.driverservice.model.entity;
 
-import com.example.driverservice.model.DriverServiceEntity;
+import com.example.driverservice.model.DriverEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,7 +26,7 @@ import org.hibernate.annotations.SQLRestriction;
 @AllArgsConstructor
 @SQLDelete(sql = "update cars set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
-public class Car implements DriverServiceEntity {
+public class Car implements DriverEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

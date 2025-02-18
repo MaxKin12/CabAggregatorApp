@@ -1,4 +1,4 @@
 package com.example.driverservice.model;
 
-public interface DriverServiceEntity {
+public interface DriverEntity {
 }
