@@ -1,4 +1,4 @@
-package com.example.ridesservice.dto;
+package com.example.ridesservice.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

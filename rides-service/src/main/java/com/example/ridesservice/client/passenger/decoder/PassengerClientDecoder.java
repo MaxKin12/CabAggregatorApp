@@ -30,7 +30,7 @@ public class PassengerClientDecoder implements ErrorDecoder {
             ObjectMapper mapper = new ObjectMapper();
             passengerExceptionResponse = mapper.readValue(body, PassengerExceptionHandlerResponse.class);
         } catch (IOException e) {
-            return new Exception(e.getMessage());
+            return new PassengerUnknownInternalServerError(e.getMessage());
         }
 
         String exceptionMessage = getExceptionMessage(PASSENGER_SERVICE_ERROR, passengerExceptionResponse.message());
@@ -41,9 +41,7 @@ public class PassengerClientDecoder implements ErrorDecoder {
             return new PassengerNotFoundException(exceptionMessage);
         }
         if (response.status() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-            return new PassengerUnknownInternalServerError(
-                    getExceptionMessage(exceptionMessage)
-            );
+            return new PassengerUnknownInternalServerError(exceptionMessage);
         }
         return errorDecoder.decode(methodKey, response);
     }

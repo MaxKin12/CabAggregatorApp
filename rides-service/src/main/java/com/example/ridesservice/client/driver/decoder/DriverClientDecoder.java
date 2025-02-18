@@ -30,7 +30,7 @@ public class DriverClientDecoder implements ErrorDecoder {
             ObjectMapper mapper = new ObjectMapper();
             exceptionResponse = mapper.readValue(body, DriverServiceExceptionHandlerResponse.class);
         } catch (IOException e) {
-            return new Exception(e.getMessage());
+            return new DriverServiceUnknownInternalServerError(e.getMessage());
         }
 
         String exceptionMessage = getExceptionMessage(DRIVER_SERVICE_ERROR, exceptionResponse.message());
@@ -41,9 +41,7 @@ public class DriverClientDecoder implements ErrorDecoder {
             return new DriverServiceEntityNotFoundException(exceptionMessage);
         }
         if (response.status() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-            return new DriverServiceUnknownInternalServerError(
-                    getExceptionMessage(exceptionMessage)
-            );
+            return new DriverServiceUnknownInternalServerError(exceptionMessage);
         }
         return errorDecoder.decode(methodKey, response);
     }

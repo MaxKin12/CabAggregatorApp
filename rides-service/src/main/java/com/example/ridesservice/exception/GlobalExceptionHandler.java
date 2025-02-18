@@ -3,13 +3,16 @@ package com.example.ridesservice.exception;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
 
 import com.example.ridesservice.client.driver.exception.DriverClientBadRequest;
+import com.example.ridesservice.client.driver.exception.DriverNotContainsCarException;
 import com.example.ridesservice.client.driver.exception.DriverServiceEntityNotFoundException;
 import com.example.ridesservice.client.passenger.exception.PassengerClientBadRequest;
 import com.example.ridesservice.client.passenger.exception.PassengerNotFoundException;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
+import com.example.ridesservice.exception.custom.RideNotContainsDriverException;
 import com.example.ridesservice.exception.custom.RideNotFoundException;
 import com.example.ridesservice.exception.custom.TimetravelRequestException;
+import com.example.ridesservice.exception.custom.WrongStatusChangeException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -41,7 +44,10 @@ public class GlobalExceptionHandler {
         DbModificationAttemptException.class,
         ConstraintViolationException.class,
         PassengerClientBadRequest.class,
-        DriverClientBadRequest.class
+        DriverClientBadRequest.class,
+        DriverNotContainsCarException.class,
+        RideNotContainsDriverException.class,
+        WrongStatusChangeException.class
     })
     public ResponseEntity<RideExceptionHandlerResponse> handleBadRequestException(Exception e) {
         return new ResponseEntity<>(new RideExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
