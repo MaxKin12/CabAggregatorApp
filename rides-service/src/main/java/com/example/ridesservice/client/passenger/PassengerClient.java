@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
         name = "passenger-client",
-        url = "http://localhost:8081/api/v1/passengers",
         configuration = {PassengerClientDecoder.class}
 )
 public interface PassengerClient {

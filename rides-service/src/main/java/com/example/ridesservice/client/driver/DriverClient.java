@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
-        name = "driverClient",
-        url = "http://localhost:8082/api/v1",
+        name = "driver-client",
         configuration = {DriverClientDecoder.class}
 )
 public interface DriverClient {
