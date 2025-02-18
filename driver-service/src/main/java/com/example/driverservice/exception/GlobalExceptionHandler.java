@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
     private final MessageSource messageSource;
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler({
+        ResourceNotFoundException.class
+    })
     public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
@@ -35,7 +38,9 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({
+        Exception.class
+    })
     public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 getUnknownInternalServerErrorExceptionMessage(e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,4 +50,5 @@ public class GlobalExceptionHandler {
         return messageSource
                 .getMessage(INTERNAL_SERVICE_ERROR, new Object[] {exceptionMessage}, LocaleContextHolder.getLocale());
     }
+
 }

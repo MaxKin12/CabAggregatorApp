@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class UserGenderTypeValidator implements ConstraintValidator<UserGenderValidation, String> {
+
     private List<String> acceptedValues;
 
     @Override
@@ -22,6 +23,8 @@ public class UserGenderTypeValidator implements ConstraintValidator<UserGenderVa
         if (value == null) {
             return false;
         }
+
         return acceptedValues.contains(value);
     }
+
 }

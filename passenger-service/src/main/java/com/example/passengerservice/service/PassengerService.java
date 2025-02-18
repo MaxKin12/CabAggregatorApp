@@ -1,15 +1,17 @@
 package com.example.passengerservice.service;
 
+import com.example.passengerservice.dto.PassengerPageResponse;
 import com.example.passengerservice.dto.PassengerRequest;
 import com.example.passengerservice.dto.PassengerResponse;
-import com.example.passengerservice.dto.PassengerResponseList;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 public interface PassengerService {
+
     PassengerResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id);
 
-    PassengerResponseList findAll();
+    PassengerPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit);
 
     PassengerResponse create(@Valid PassengerRequest passengerRequest);
 
@@ -17,4 +19,5 @@ public interface PassengerService {
                              @Positive(message = "{validate.method.parameter.id.negative}") Long id);
 
     void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id);
+
 }

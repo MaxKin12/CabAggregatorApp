@@ -23,6 +23,7 @@ public class StatusTypeValidator implements ConstraintValidator<StatusValidation
         if (value == null) {
             return false;
         }
+
         return acceptedValues.contains(value);
     }
 
