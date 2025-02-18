@@ -271,7 +271,8 @@ public class RideServiceImpl implements RideService {
 
     private void throwIfWrongStatusChangeOrder(RideStatus oldRideStatus, RideStatus newRideStatus) {
         int statusDif = newRideStatus.getCode() - oldRideStatus.getCode();
-        if ((statusDif < 0 || statusDif > 100) && !newRideStatus.equals(RideStatus.COMPLETED)
+        if ((statusDif < 0 || statusDif > RideStatus.ACCEPTED.getCode() - RideStatus.CREATED.getCode())
+                && !newRideStatus.equals(RideStatus.COMPLETED)
                 && !newRideStatus.equals(RideStatus.CANCELLED)) {
             throw new WrongStatusChangeException(getExceptionMessage(WRONG_STATUS_CHANGE,
                             oldRideStatus.name().toLowerCase(), newRideStatus.name().toLowerCase()));

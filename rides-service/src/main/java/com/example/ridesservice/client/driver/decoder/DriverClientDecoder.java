@@ -12,10 +12,12 @@ import feign.codec.ErrorDecoder;
 import java.io.IOException;
 import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 
+@Slf4j
 @RequiredArgsConstructor
 public class DriverClientDecoder implements ErrorDecoder {
 
@@ -30,10 +32,13 @@ public class DriverClientDecoder implements ErrorDecoder {
             ObjectMapper mapper = new ObjectMapper();
             exceptionResponse = mapper.readValue(body, DriverServiceExceptionHandlerResponse.class);
         } catch (IOException e) {
+            log.error("Failed attempt to read feign exception (DriverClient) response body", e);
             return new DriverServiceUnknownInternalServerError(e.getMessage());
         }
 
         String exceptionMessage = getExceptionMessage(DRIVER_SERVICE_ERROR, exceptionResponse.message());
+        log.error("Feign exception (DriverClient): from method - {}; code - {}; message - {}", methodKey,
+                exceptionResponse.message(), exceptionResponse.statusCode());
         if (response.status() == HttpStatus.BAD_REQUEST.value()) {
             return new DriverClientBadRequest(exceptionMessage);
         }

@@ -12,10 +12,12 @@ import feign.codec.ErrorDecoder;
 import java.io.IOException;
 import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 
+@Slf4j
 @RequiredArgsConstructor
 public class PassengerClientDecoder implements ErrorDecoder {
 
@@ -30,10 +32,13 @@ public class PassengerClientDecoder implements ErrorDecoder {
             ObjectMapper mapper = new ObjectMapper();
             passengerExceptionResponse = mapper.readValue(body, PassengerExceptionHandlerResponse.class);
         } catch (IOException e) {
+            log.error("Failed attempt to read feign exception (PassengerClient) response body", e);
             return new PassengerUnknownInternalServerError(e.getMessage());
         }
 
         String exceptionMessage = getExceptionMessage(PASSENGER_SERVICE_ERROR, passengerExceptionResponse.message());
+        log.error("Feign exception (PassengerClient): from method - {}; code - {}; message - {}", methodKey,
+                passengerExceptionResponse.message(), passengerExceptionResponse.statusCode());
         if (response.status() == HttpStatus.BAD_REQUEST.value()) {
             return new PassengerClientBadRequest(exceptionMessage);
         }
