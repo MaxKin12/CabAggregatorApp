@@ -2,9 +2,11 @@ package com.example.ridesservice.exception;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
 
-import com.example.ridesservice.client.exception.ExternalServiceClientBadRequest;
-import com.example.ridesservice.client.exception.DriverNotContainsCarException;
-import com.example.ridesservice.client.exception.ExternalServiceEntityNotFoundException;
+import com.example.ridesservice.client.driver.exception.DriverClientBadRequest;
+import com.example.ridesservice.client.driver.exception.DriverNotContainsCarException;
+import com.example.ridesservice.client.driver.exception.DriverServiceEntityNotFoundException;
+import com.example.ridesservice.client.passenger.exception.PassengerClientBadRequest;
+import com.example.ridesservice.client.passenger.exception.PassengerNotFoundException;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ridesservice.exception.custom.RideNotContainsDriverException;

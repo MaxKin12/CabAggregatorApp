@@ -1,12 +1,19 @@
 package com.example.ratesservice.service.impl;
 
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RATE;
+import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_RIDE_CONTENT;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_ALREADY_EXISTS;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_DRIVER_LIST_IS_EMPTY;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_NOT_FOUND;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_PASSENGER_LIST_IS_EMPTY;
 
 import com.example.ratesservice.configuration.properties.RateServiceProperties;
+import com.example.ratesservice.client.driver.DriverClient;
+import com.example.ratesservice.client.passenger.PassengerClient;
+import com.example.ratesservice.client.ride.RidesClient;
+import com.example.ratesservice.client.ride.dto.RidesResponse;
+import com.example.ratesservice.client.ride.exception.InvalidRideContentException;
+import com.example.ratesservice.configuration.RateServiceProperties;
 import com.example.ratesservice.dto.RateAverageResponse;
 import com.example.ratesservice.dto.RatePageResponse;
 import com.example.ratesservice.dto.RateRequest;
@@ -28,6 +35,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
@@ -56,6 +64,12 @@ public class RateServiceImpl implements RateService {
     private final RateAverageMapper rateAverageMapper;
 
     private final MessageSource messageSource;
+
+    private final RidesClient ridesClient;
+
+    private final PassengerClient passengerClient;
+
+    private final DriverClient driverClient;
 
     @Override
     @Transactional(readOnly = true)
@@ -117,6 +131,10 @@ public class RateServiceImpl implements RateService {
     public RateResponse create(@Valid RateRequest rateRequest) {
         Rate saveRate = rateMapper.toRate(rateRequest);
         ifRateAlreadyExistsThrow(saveRate);
+        RidesResponse ridesResponse = getRideById(saveRate.getRideId());
+        checkPassengerById(saveRate.getPassengerId());
+        checkDriverById(saveRate.getDriverId());
+        checkRidesRules(ridesResponse, saveRate);
         try {
             Rate rate = rateRepository.save(saveRate);
             return rateMapper.toResponse(rate);
@@ -132,6 +150,10 @@ public class RateServiceImpl implements RateService {
     public RateResponse update(@Valid RateRequest rateRequest,
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Rate rate = findByIdOrThrow(id);
+        RidesResponse ridesResponse = getRideById(rate.getRideId());
+        checkPassengerById(rate.getPassengerId());
+        checkDriverById(rate.getDriverId());
+        checkRidesRules(ridesResponse, rate);
         try {
             rateMapper.updateRateFromDto(rateRequest, rate);
             RateResponse rateResponse = rateMapper.toResponse(rate);
@@ -154,6 +176,25 @@ public class RateServiceImpl implements RateService {
             throw new DbModificationAttemptException(
                     getExceptionMessage(INVALID_ATTEMPT_CHANGE_RATE, "delete", e.getMessage())
             );
+        }
+    }
+
+    private RidesResponse getRideById(Long id) {
+        return ridesClient.getRideById(id).getBody();
+    }
+
+    private void checkPassengerById(Long id) {
+        passengerClient.getPassengerById(id).getBody();
+    }
+
+    private void checkDriverById(Long id) {
+        driverClient.getDriverById(id).getBody();
+    }
+
+    private void checkRidesRules(RidesResponse ridesResponse, Rate rate) {
+        if (!Objects.equals(ridesResponse.passengerId(), rate.getPassengerId())
+                || !Objects.equals(ridesResponse.driverId(), rate.getDriverId())) {
+            throw new InvalidRideContentException(getExceptionMessage(INVALID_RIDE_CONTENT));
         }
     }
 

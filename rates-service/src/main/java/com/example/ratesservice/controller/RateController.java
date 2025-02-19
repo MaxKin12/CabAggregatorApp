@@ -37,7 +37,7 @@ public class RateController {
             @RequestParam(name = "offset", defaultValue = "0") Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, AuthorType.DRIVER);
+        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, AuthorType.PASSENGER);
         return ResponseEntity.status(HttpStatus.OK).body(ratePageResponse);
     }
 
@@ -46,7 +46,7 @@ public class RateController {
             @RequestParam(name = "offset", defaultValue = "0") Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, AuthorType.PASSENGER);
+        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, AuthorType.DRIVER);
         return ResponseEntity.status(HttpStatus.OK).body(ratePageResponse);
     }
 
