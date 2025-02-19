@@ -1,6 +1,6 @@
 package com.example.passengerservice.exception;
 
-public record ExceptionHandlerResponse(
+public record PassengerExceptionHandlerResponse(
 
     int statusCode,
 

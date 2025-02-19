@@ -1,7 +1,7 @@
 package com.example.ridesservice.mapper;
 
-import com.example.ridesservice.dto.RideRequest;
-import com.example.ridesservice.dto.RideResponse;
+import com.example.ridesservice.dto.request.RideRequest;
+import com.example.ridesservice.dto.response.RideResponse;
 import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.model.Ride;
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ public interface RideMapper {
     }
 
     @AfterMapping
-    default void setStatusField(BigDecimal price, @MappingTarget Ride ride) {
+    default void setPriceAndOrderTimeFields(BigDecimal price, @MappingTarget Ride ride) {
         if (ride.getPrice() == null) {
             ride.setPrice(price);
         }

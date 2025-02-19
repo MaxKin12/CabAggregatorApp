@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
         PassengerNotFoundException.class
     })
-    public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
-        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
+    public ResponseEntity<PassengerExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
+        return new ResponseEntity<>(new PassengerExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
 
@@ -31,16 +31,17 @@ public class GlobalExceptionHandler {
         DbModificationAttemptException.class,
         ConstraintViolationException.class
     })
-    public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
-        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
+    public ResponseEntity<PassengerExceptionHandlerResponse> handleBadRequestException(Exception e) {
+        return new ResponseEntity<>(new PassengerExceptionHandlerResponse(
+                HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler({
         Exception.class
     })
-    public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
-        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+    public ResponseEntity<PassengerExceptionHandlerResponse> handleOtherExceptions(Exception e) {
+        return new ResponseEntity<>(new PassengerExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 getUnknownInternalServerErrorExceptionMessage(e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -50,4 +51,3 @@ public class GlobalExceptionHandler {
     }
 
 }
-

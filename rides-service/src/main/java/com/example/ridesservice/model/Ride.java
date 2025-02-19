@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @SQLDelete(sql = "update rides set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
 public class Ride {
@@ -50,7 +52,8 @@ public class Ride {
 
     @Column(name = "status", nullable = false)
     @Convert(converter = StatusConverter.class)
-    private RideStatus status;
+    @Builder.Default
+    private RideStatus status = RideStatus.CREATED;
 
     @Column(name = "order_time", nullable = false)
     private LocalDateTime orderTime;

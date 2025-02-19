@@ -1,6 +1,6 @@
 package com.example.ridesservice.exception;
 
-public record ExceptionHandlerResponse(
+public record RideExceptionHandlerResponse(
 
         int statusCode,
 

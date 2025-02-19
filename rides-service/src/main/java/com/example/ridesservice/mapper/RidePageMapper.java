@@ -1,7 +1,7 @@
 package com.example.ridesservice.mapper;
 
-import com.example.ridesservice.dto.RidePageResponse;
-import com.example.ridesservice.dto.RideResponse;
+import com.example.ridesservice.dto.response.RidePageResponse;
+import com.example.ridesservice.dto.response.RideResponse;
 import com.example.ridesservice.model.Ride;
 import java.util.List;
 import org.mapstruct.Mapper;
