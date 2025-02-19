@@ -1,5 +1,7 @@
 package com.example.passengerservice.dto;
 
+import java.math.BigDecimal;
+
 public record PassengerResponse(
 
         Long id,
@@ -8,7 +10,9 @@ public record PassengerResponse(
 
         String email,
 
-        String phone
+        String phone,
+
+        BigDecimal rate
 
 ) {
 }

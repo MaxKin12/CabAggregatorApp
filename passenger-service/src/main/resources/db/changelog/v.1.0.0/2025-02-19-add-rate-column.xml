@@ -4,12 +4,12 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="add-tag-1.0.0" author="MaxKin12">
-        <tagDatabase tag="v.1.0.0"/>
+    <changeSet id="add-rate-column" author="MaxKin12">
+        <addColumn tableName="passengers">
+            <column name="rate" type="decimal(3, 2)">
+                <constraints checkConstraint="check value between 1 and 5"/>
+            </column>
+        </addColumn>
     </changeSet>
-
-    <include file="2025-01-28-create-tables.xml" relativeToChangelogFile="true"/>
-    <include file="2025-01-28-insert-initial-data.xml" relativeToChangelogFile="true"/>
-    <include file="2025-02-19-add-rate-column.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
