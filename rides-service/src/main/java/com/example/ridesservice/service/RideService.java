@@ -28,7 +28,7 @@ public interface RideService {
 
     RideResponse create(@Valid RideRequest rideRequest);
 
-    RideResponse book(@Valid RideBookingRequest rideRequest);
+    RideResponse bookRide(@Valid RideBookingRequest rideRequest);
 
     RideResponse update(@Valid RideRequest rideRequest,
                         @Positive(message = "{validate.method.parameter.id.negative}") Long id);

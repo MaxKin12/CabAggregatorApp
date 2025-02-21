@@ -68,7 +68,7 @@ public class RideController {
 
     @PostMapping("/booking")
     public ResponseEntity<RideResponse> bookRide(@RequestBody RideBookingRequest rideRequest) {
-        RideResponse rideResponse = rideService.book(rideRequest);
+        RideResponse rideResponse = rideService.bookRide(rideRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(rideResponse);
     }
 

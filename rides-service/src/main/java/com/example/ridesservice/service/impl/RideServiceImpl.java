@@ -4,13 +4,11 @@ import static com.example.ridesservice.utility.constants.InternationalizationExc
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RIDE;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_CONTAINS_DRIVER;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
-import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.WRONG_STATUS_CHANGE;
 
-import com.example.ridesservice.client.driver.DriverClient;
-import com.example.ridesservice.client.driver.dto.CarResponse;
-import com.example.ridesservice.client.driver.dto.DriverResponse;
-import com.example.ridesservice.client.driver.exception.DriverNotContainsCarException;
-import com.example.ridesservice.client.passenger.PassengerClient;
+import com.example.ridesservice.client.DriverClient;
+import com.example.ridesservice.client.dto.DriverResponse;
+import com.example.ridesservice.client.exception.DriverNotContainsCarException;
+import com.example.ridesservice.client.PassengerClient;
 import com.example.ridesservice.dto.request.RideBookingRequest;
 import com.example.ridesservice.dto.request.RideDriverSettingRequest;
 import com.example.ridesservice.dto.request.RideRequest;
@@ -21,7 +19,6 @@ import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.RideNotContainsDriverException;
 import com.example.ridesservice.exception.custom.RideNotFoundException;
-import com.example.ridesservice.exception.custom.WrongStatusChangeException;
 import com.example.ridesservice.mapper.RideBookingMapper;
 import com.example.ridesservice.mapper.RideDriverSettingMapper;
 import com.example.ridesservice.mapper.RideMapper;
@@ -36,6 +33,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -49,6 +47,9 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @RequiredArgsConstructor
 public class RideServiceImpl implements RideService {
+
+    @Value("${ride-service.max-page-limit:50}")
+    private Integer maxPageLimit;
 
     private final RideRepository rideRepository;
 
@@ -80,7 +81,7 @@ public class RideServiceImpl implements RideService {
     @Override
     @Transactional(readOnly = true)
     public RidePageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
-        limit = limit < 50 ? limit : 50;
+        limit = limit < maxPageLimit ? limit : maxPageLimit;
         Page<Ride> ridePage = rideRepository.findAll(PageRequest.of(offset, limit));
         return ridePageMapper.toResponsePage(ridePage, offset, limit);
     }
@@ -92,7 +93,7 @@ public class RideServiceImpl implements RideService {
             @Min(1) Integer limit
     ) {
         int offset = 0;
-        limit = limit < 50 ? limit : 50;
+        limit = limit < maxPageLimit ? limit : maxPageLimit;
         Page<Ride> ridePage = rideRepository.findByPassengerId(
                 PageRequest.of(offset, limit, Sort.by(Sort.Order.desc("id"))),
                 passengerId
@@ -119,9 +120,7 @@ public class RideServiceImpl implements RideService {
     @Transactional
     public RideResponse create(@Valid RideRequest rideRequest) {
         checkPassengerExistenceById(rideRequest.passengerId());
-        DriverResponse driverResponse = getDriverById(rideRequest.driverId());
-        CarResponse carResponse = getCarById(rideRequest.carId());
-        checkDriverHasCar(driverResponse, carResponse);
+        checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
         try {
             BigDecimal price = priceCounter.count(rideRequest.pickUpAddress(), rideRequest.destinationAddress());
             Ride saveRide = rideMapper.toRide(rideRequest, price);
@@ -136,7 +135,7 @@ public class RideServiceImpl implements RideService {
 
     @Override
     @Transactional
-    public RideResponse book(@Valid RideBookingRequest rideRequest) {
+    public RideResponse bookRide(@Valid RideBookingRequest rideRequest) {
         checkPassengerExistenceById(rideRequest.passengerId());
         try {
             BigDecimal price = priceCounter.count(rideRequest.pickUpAddress(), rideRequest.destinationAddress());
@@ -156,9 +155,8 @@ public class RideServiceImpl implements RideService {
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = findByIdOrThrow(id);
         checkPassengerExistenceById(rideRequest.passengerId());
-        DriverResponse driverResponse = getDriverById(rideRequest.driverId());
-        CarResponse carResponse = getCarById(rideRequest.carId());
-        checkDriverHasCar(driverResponse, carResponse);
+        checkCarExistenceById(rideRequest.carId());
+        checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
         try {
             rideMapper.updateRideFromDto(rideRequest, ride);
             RideResponse rideResponse = rideMapper.toResponse(ride);
@@ -177,9 +175,8 @@ public class RideServiceImpl implements RideService {
                                         @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = findByIdOrThrow(id);
         checkRideHasDriver(ride);
-        DriverResponse driverResponse = getDriverById(rideRequest.driverId());
-        CarResponse carResponse = getCarById(rideRequest.carId());
-        checkDriverHasCar(driverResponse, carResponse);
+        checkCarExistenceById(rideRequest.carId());
+        checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
         try {
             rideDriverMapper.updateRideFromDto(rideRequest, ride, RideStatus.ACCEPTED);
             RideResponse rideResponse = rideMapper.toResponse(ride);
@@ -197,7 +194,7 @@ public class RideServiceImpl implements RideService {
     public RideResponse updateStatus(@Valid RideStatusRequest rideRequest,
                                      @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Ride ride = findByIdOrThrow(id);
-        checkStatusChangeRules(ride, rideRequest);
+        checkStatusTransitionAllowed(ride, rideRequest);
         try {
             rideStatusMapper.updateRideFromDto(rideRequest, ride);
             RideResponse rideResponse = rideMapper.toResponse(ride);
@@ -227,16 +224,12 @@ public class RideServiceImpl implements RideService {
         passengerClient.getPassengerById(id);
     }
 
-    private DriverResponse getDriverById(Long id) {
-        return driverClient.getDriverById(id).getBody();
+    private void checkCarExistenceById(Long id) {
+        driverClient.getCarById(id);
     }
 
-    private CarResponse getCarById(Long id) {
-        return driverClient.getCarById(id).getBody();
-    }
-
-    private void checkDriverHasCar(DriverResponse driverResponse, CarResponse carResponse) {
-        Long carId = carResponse.id();
+    private void checkDriverExistenceAndCarOwning(Long driverId, Long carId) {
+        DriverResponse driverResponse = driverClient.getDriverById(driverId);
         if (!driverResponse.carIds().contains(carId)) {
             throw new DriverNotContainsCarException(
                     getExceptionMessage(DRIVER_NOT_CONTAINS_CAR, driverResponse.id(), carId)
@@ -252,31 +245,10 @@ public class RideServiceImpl implements RideService {
         }
     }
 
-    private void checkStatusChangeRules(Ride ride, RideStatusRequest rideRequest) {
+    private void checkStatusTransitionAllowed(Ride ride, RideStatusRequest rideRequest) {
         RideStatus oldRideStatus = ride.getStatus();
         RideStatus newRideStatus = RideStatus.valueOf(rideRequest.status().toUpperCase());
-
-        throwIfOldStatusIsCompletedOrCancelled(oldRideStatus, newRideStatus);
-        throwIfWrongStatusChangeOrder(oldRideStatus, newRideStatus);
-    }
-
-    private void throwIfOldStatusIsCompletedOrCancelled(RideStatus oldRideStatus, RideStatus newRideStatus) {
-        if (oldRideStatus.equals(RideStatus.COMPLETED) || oldRideStatus.equals(RideStatus.CANCELLED)) {
-            throw new WrongStatusChangeException(
-                    getExceptionMessage(WRONG_STATUS_CHANGE,
-                            oldRideStatus.name().toLowerCase(), newRideStatus.name().toLowerCase())
-            );
-        }
-    }
-
-    private void throwIfWrongStatusChangeOrder(RideStatus oldRideStatus, RideStatus newRideStatus) {
-        int statusDif = newRideStatus.getCode() - oldRideStatus.getCode();
-        if ((statusDif < 0 || statusDif > RideStatus.ACCEPTED.getCode() - RideStatus.CREATED.getCode())
-                && !newRideStatus.equals(RideStatus.COMPLETED)
-                && !newRideStatus.equals(RideStatus.CANCELLED)) {
-            throw new WrongStatusChangeException(getExceptionMessage(WRONG_STATUS_CHANGE,
-                            oldRideStatus.name().toLowerCase(), newRideStatus.name().toLowerCase()));
-        }
+        RideStatus.throwIfWrongStatusChangeOrder(oldRideStatus, newRideStatus);
     }
 
     private Ride findByIdOrThrow(Long id) {

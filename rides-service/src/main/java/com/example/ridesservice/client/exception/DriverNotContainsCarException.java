@@ -1,4 +1,4 @@
-package com.example.ridesservice.client.driver.exception;
+package com.example.ridesservice.client.exception;
 
 public class DriverNotContainsCarException extends RuntimeException {
 

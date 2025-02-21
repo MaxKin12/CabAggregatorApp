@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,9 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
+
+    @Value("${driver-service.max-page-limit:50}")
+    private Integer maxPageLimit;
 
     private final CarRepository carRepository;
     private final CarMapper carMapper;
@@ -46,7 +50,7 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional(readOnly = true)
     public PageResponse<CarResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
-        limit = limit < 50 ? limit : 50;
+        limit = limit < maxPageLimit ? limit : maxPageLimit;
         Page<Car> carPage = carRepository.findAll(PageRequest.of(offset, limit));
         return carPageMapper.toResponsePage(carPage, offset, limit);
     }

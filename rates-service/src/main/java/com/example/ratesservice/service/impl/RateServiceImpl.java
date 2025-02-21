@@ -67,7 +67,7 @@ public class RateServiceImpl implements RateService {
     @Override
     @Transactional(readOnly = true)
     public RatePageResponse findAllByAuthor(@Min(0) Integer offset, @Min(1) Integer limit, AuthorType authorType) {
-        limit = limit < 50 ? limit : 50;
+        limit = limit < rateServiceProperties.maxPageLimit() ? limit : rateServiceProperties.maxPageLimit();
         Page<Rate> ratePage = rateRepository.findAllByAuthor(PageRequest.of(offset, limit), authorType);
         return ratePageMapper.toResponsePage(ratePage, offset, limit);
     }

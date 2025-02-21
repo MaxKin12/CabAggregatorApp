@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,9 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @RequiredArgsConstructor
 public class PassengerServiceImpl implements PassengerService {
+
+    @Value("${passenger-service.max-page-limit:50}")
+    private Integer maxPageLimit;
 
     private final PassengerRepository passengerRepository;
 
@@ -48,7 +52,7 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     @Transactional(readOnly = true)
     public PassengerPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
-        limit = limit < 50 ? limit : 50;
+        limit = limit < maxPageLimit ? limit : maxPageLimit;
         Page<Passenger> passengerPage = passengerRepository.findAll(PageRequest.of(offset, limit));
         return passengerPageMapper.toResponsePage(passengerPage, offset, limit);
     }

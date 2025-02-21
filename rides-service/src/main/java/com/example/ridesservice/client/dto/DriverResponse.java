@@ -1,4 +1,4 @@
-package com.example.ridesservice.client.driver.dto;
+package com.example.ridesservice.client.dto;
 
 import java.util.List;
 

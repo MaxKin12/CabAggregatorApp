@@ -2,11 +2,9 @@ package com.example.ridesservice.exception;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
 
-import com.example.ridesservice.client.driver.exception.DriverClientBadRequest;
-import com.example.ridesservice.client.driver.exception.DriverNotContainsCarException;
-import com.example.ridesservice.client.driver.exception.DriverServiceEntityNotFoundException;
-import com.example.ridesservice.client.passenger.exception.PassengerClientBadRequest;
-import com.example.ridesservice.client.passenger.exception.PassengerNotFoundException;
+import com.example.ridesservice.client.exception.ExternalServiceClientBadRequest;
+import com.example.ridesservice.client.exception.DriverNotContainsCarException;
+import com.example.ridesservice.client.exception.ExternalServiceEntityNotFoundException;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ridesservice.exception.custom.RideNotContainsDriverException;
@@ -30,8 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
         RideNotFoundException.class,
-        PassengerNotFoundException.class,
-        DriverServiceEntityNotFoundException.class
+        ExternalServiceEntityNotFoundException.class
     })
     public ResponseEntity<RideExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
         return new ResponseEntity<>(new RideExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
@@ -43,8 +40,7 @@ public class GlobalExceptionHandler {
         IllegalEnumArgumentException.class,
         DbModificationAttemptException.class,
         ConstraintViolationException.class,
-        PassengerClientBadRequest.class,
-        DriverClientBadRequest.class,
+        ExternalServiceClientBadRequest.class,
         DriverNotContainsCarException.class,
         RideNotContainsDriverException.class,
         WrongStatusChangeException.class
