@@ -25,8 +25,10 @@ import com.example.ridesservice.mapper.RideDriverSettingMapper;
 import com.example.ridesservice.mapper.RideMapper;
 import com.example.ridesservice.mapper.RidePageMapper;
 import com.example.ridesservice.mapper.RideStatusMapper;
+import com.example.ridesservice.model.QueueRide;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.RideRepository;
+import com.example.ridesservice.service.QueueRideService;
 import com.example.ridesservice.service.RideService;
 import com.example.ridesservice.utility.pricecounter.PriceCounter;
 import jakarta.validation.Valid;
@@ -72,6 +74,8 @@ public class RideServiceImpl implements RideService {
 
     private final DriverClient driverClient;
 
+    private final QueueRideService queueRideService;
+
     @Override
     @Transactional(readOnly = true)
     public RideResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
@@ -109,7 +113,7 @@ public class RideServiceImpl implements RideService {
             @Min(1) Integer limit
     ) {
         int offset = 0;
-        limit = limit < 50 ? limit : 50;
+        limit = limit < rideServiceProperties.maxPageLimit() ? limit : rideServiceProperties.maxPageLimit();
         Page<Ride> ridePage = rideRepository.findByDriverId(
                 PageRequest.of(offset, limit, Sort.by(Sort.Order.desc("id"))),
                 driverId
@@ -142,6 +146,7 @@ public class RideServiceImpl implements RideService {
             BigDecimal price = priceCounter.count(rideRequest.pickUpAddress(), rideRequest.destinationAddress());
             Ride saveRide = rideBookingMapper.toRide(rideRequest, price);
             Ride ride = rideRepository.save(saveRide);
+            queueRideService.append(ride);
             return rideMapper.toResponse(ride);
         } catch (Exception e) {
             throw new DbModificationAttemptException(
@@ -172,12 +177,11 @@ public class RideServiceImpl implements RideService {
 
     @Override
     @Transactional
-    public RideResponse setDriverToRide(@Valid RideDriverSettingRequest rideRequest,
-                                        @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Ride ride = findByIdOrThrow(id);
-        checkRideHasDriver(ride);
-        checkCarExistenceById(rideRequest.carId());
+    public RideResponse setDriverToRide(@Valid RideDriverSettingRequest rideRequest) {
         checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
+
+        QueueRide queueRide = queueRideService.popRide();
+        Ride ride = findByIdOrThrow(queueRide.getRideId());
         try {
             rideDriverMapper.updateRideFromDto(rideRequest, ride, RideStatus.ACCEPTED);
             RideResponse rideResponse = rideMapper.toResponse(ride);
