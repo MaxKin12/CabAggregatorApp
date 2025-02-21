@@ -1,7 +1,7 @@
 package com.example.passengerservice.mapper;
 
-import com.example.passengerservice.dto.PassengerPageResponse;
-import com.example.passengerservice.dto.PassengerResponse;
+import com.example.passengerservice.dto.passenger.PassengerPageResponse;
+import com.example.passengerservice.dto.passenger.PassengerResponse;
 import com.example.passengerservice.model.Passenger;
 import java.util.List;
 import org.mapstruct.Mapper;

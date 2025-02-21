@@ -1,7 +1,7 @@
-package com.example.ratesservice.mapper;
+package com.example.ratesservice.mapper.rate;
 
-import com.example.ratesservice.dto.RatePageResponse;
-import com.example.ratesservice.dto.RateResponse;
+import com.example.ratesservice.dto.rate.RatePageResponse;
+import com.example.ratesservice.dto.rate.RateResponse;
 import com.example.ratesservice.model.Rate;
 import java.util.List;
 import org.mapstruct.Mapper;

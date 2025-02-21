@@ -10,7 +10,7 @@
             <column name="ride_id" value="1"/>
             <column name="passenger_id" value="1"/>
             <column name="driver_id" value="1"/>
-            <column name="author" value="0"/>
+            <column name="recipient" value="0"/>
             <column name="value" value="5"/>
             <column name="comment" value="So cool driver!"/>
         </insert>
@@ -19,7 +19,7 @@
             <column name="ride_id" value="2"/>
             <column name="passenger_id" value="5"/>
             <column name="driver_id" value="1"/>
-            <column name="author" value="1"/>
+            <column name="recipient" value="1"/>
             <column name="value" value="2"/>
             <column name="comment" value="Rude passenger..."/>
         </insert>
@@ -28,7 +28,7 @@
             <column name="ride_id" value="3"/>
             <column name="passenger_id" value="1"/>
             <column name="driver_id" value="1"/>
-            <column name="author" value="0"/>
+            <column name="recipient" value="0"/>
             <column name="value" value="4"/>
         </insert>
         <insert tableName="rates">
@@ -36,7 +36,7 @@
             <column name="ride_id" value="4"/>
             <column name="passenger_id" value="10"/>
             <column name="driver_id" value="1"/>
-            <column name="author" value="0"/>
+            <column name="recipient" value="0"/>
             <column name="value" value="5"/>
         </insert>
         <insert tableName="rates">
@@ -44,7 +44,7 @@
             <column name="ride_id" value="5"/>
             <column name="passenger_id" value="1"/>
             <column name="driver_id" value="2"/>
-            <column name="author" value="1"/>
+            <column name="recipient" value="1"/>
             <column name="value" value="3"/>
         </insert>
     </changeSet>

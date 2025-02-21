@@ -5,7 +5,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.example.ratesservice.enums.validator.AuthorTypeValidator;
+import com.example.ratesservice.enums.validator.RecipientTypeValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.Documented;
@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
 @Target({METHOD, FIELD, PARAMETER})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = AuthorTypeValidator.class)
-public @interface AuthorTypeValidation {
+@Constraint(validatedBy = RecipientTypeValidator.class)
+public @interface RecipientTypeValidation {
 
     Class<? extends Enum<?>> enumClass();
 

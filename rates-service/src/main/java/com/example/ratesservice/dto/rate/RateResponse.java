@@ -1,4 +1,4 @@
-package com.example.ratesservice.dto;
+package com.example.ratesservice.dto.rate;
 
 import lombok.Builder;
 
@@ -13,7 +13,7 @@ public record RateResponse(
 
         Long driverId,
 
-        String author,
+        String recipient,
 
         Integer value,
 

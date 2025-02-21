@@ -7,15 +7,15 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum AuthorType {
+public enum RecipientType {
 
     PASSENGER(0),
     DRIVER(1);
 
     private final int code;
 
-    public static Optional<AuthorType> codeToRideStatus(Integer code) {
-        return Arrays.stream(AuthorType.values())
+    public static Optional<RecipientType> codeToRideStatus(Integer code) {
+        return Arrays.stream(RecipientType.values())
                 .filter(p -> p.getCode() == code)
                 .findAny();
     }

@@ -1,4 +1,4 @@
-package com.example.passengerservice.dto;
+package com.example.passengerservice.dto.passenger;
 
 import static com.example.passengerservice.utility.constants.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
 

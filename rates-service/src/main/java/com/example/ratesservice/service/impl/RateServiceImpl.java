@@ -13,20 +13,22 @@ import com.example.ratesservice.client.passenger.PassengerClient;
 import com.example.ratesservice.client.ride.RidesClient;
 import com.example.ratesservice.client.ride.dto.RidesResponse;
 import com.example.ratesservice.client.ride.exception.InvalidRideContentException;
-import com.example.ratesservice.configuration.RateServiceProperties;
-import com.example.ratesservice.dto.RateAverageResponse;
-import com.example.ratesservice.dto.RatePageResponse;
-import com.example.ratesservice.dto.RateRequest;
-import com.example.ratesservice.dto.RateResponse;
-import com.example.ratesservice.enums.AuthorType;
+import com.example.ratesservice.configuration.properties.RateServiceProperties;
+import com.example.ratesservice.dto.rate.RateAverageResponse;
+import com.example.ratesservice.dto.rate.RatePageResponse;
+import com.example.ratesservice.dto.rate.RateRequest;
+import com.example.ratesservice.dto.rate.RateResponse;
+import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
 import com.example.ratesservice.exception.custom.RateListIsEmptyException;
 import com.example.ratesservice.exception.custom.RateNotFoundException;
-import com.example.ratesservice.mapper.RateAverageMapper;
-import com.example.ratesservice.mapper.RateMapper;
-import com.example.ratesservice.mapper.RatePageMapper;
+import com.example.ratesservice.mapper.rate.RateAverageMapper;
+import com.example.ratesservice.mapper.rate.RateMapper;
+import com.example.ratesservice.mapper.rate.RatePageMapper;
 import com.example.ratesservice.model.Rate;
+import com.example.ratesservice.model.RateChangeEvent;
+import com.example.ratesservice.repository.RateEventsRepository;
 import com.example.ratesservice.repository.RateRepository;
 import com.example.ratesservice.service.RateService;
 import jakarta.validation.Valid;
@@ -71,6 +73,8 @@ public class RateServiceImpl implements RateService {
 
     private final DriverClient driverClient;
 
+    private final RateEventsRepository rateEventsRepository;
+
     @Override
     @Transactional(readOnly = true)
     public RateResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
@@ -88,42 +92,32 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional(readOnly = true)
-    public RateAverageResponse findAveragePassengerRate(
-            @Positive(message = "{validate.method.parameter.id.negative}") Long passengerId
+    public RateAverageResponse findAverageRate(
+            @Positive(message = "{validate.method.parameter.id.negative}") Long personId,
+            RecipientType recipientType
     ) {
-        List<Rate> ratePage = rateRepository.findByPassengerIdAndAuthor(
-                PageRequest.of(0, rateServiceProperties.lastRidesCount(), Sort.by(Sort.Order.desc("id"))),
-                passengerId,
-                AuthorType.DRIVER);
+        List<Rate> ratePage = recipientType.equals(RecipientType.PASSENGER) ?
+                rateRepository.findByPassengerIdAndRecipient(
+                        PageRequest.of(0, rateServiceProperties.lastRidesCount(),
+                                Sort.by(Sort.Order.desc("id"))),
+                        personId,
+                        recipientType) :
+                rateRepository.findByDriverIdAndRecipient(
+                        PageRequest.of(0, rateServiceProperties.lastRidesCount(),
+                                Sort.by(Sort.Order.desc("id"))),
+                        personId,
+                        recipientType);
         double average = ratePage
                 .stream()
                 .mapToDouble(Rate::getValue)
                 .average()
                 .orElseThrow(() -> new RateListIsEmptyException(
-                        getExceptionMessage(RATE_PASSENGER_LIST_IS_EMPTY, passengerId))
+                        recipientType.equals(RecipientType.PASSENGER) ?
+                        getExceptionMessage(RATE_PASSENGER_LIST_IS_EMPTY, personId) :
+                        getExceptionMessage(RATE_DRIVER_LIST_IS_EMPTY, personId))
                 );
         BigDecimal averageDecimal = BigDecimal.valueOf(average).setScale(2, RoundingMode.CEILING);
-        return rateAverageMapper.toRateAverageResponse(passengerId, averageDecimal);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public RateAverageResponse findAverageDriverRate(
-            @Positive(message = "{validate.method.parameter.id.negative}") Long driverId
-    ) {
-        List<Rate> ratePage = rateRepository.findByDriverIdAndAuthor(
-                PageRequest.of(0, rateServiceProperties.lastRidesCount(), Sort.by(Sort.Order.desc("id"))),
-                driverId,
-                AuthorType.PASSENGER);
-        double average = ratePage
-                .stream()
-                .mapToDouble(Rate::getValue)
-                .average()
-                .orElseThrow(() -> new RateListIsEmptyException(
-                        getExceptionMessage(RATE_DRIVER_LIST_IS_EMPTY, driverId))
-                );
-        BigDecimal averageDecimal = BigDecimal.valueOf(average).setScale(2, RoundingMode.CEILING);
-        return rateAverageMapper.toRateAverageResponse(driverId, averageDecimal);
+        return rateAverageMapper.toRateAverageResponse(personId, averageDecimal);
     }
 
     @Override
@@ -168,15 +162,37 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional
-    public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        findByIdOrThrow(id);
+    public RateResponse delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
+        Rate rate = findByIdOrThrow(id);
         try {
             rateRepository.deleteById(id);
+            return rateMapper.toResponse(rate);
         } catch (Exception e) {
             throw new DbModificationAttemptException(
                     getExceptionMessage(INVALID_ATTEMPT_CHANGE_RATE, "delete", e.getMessage())
             );
         }
+    }
+
+    @Override
+    @Transactional
+    public void updateAverageRate(RateResponse rateResponse) {
+        RecipientType recipientType = RecipientType.valueOf(rateResponse.recipient().toUpperCase());
+        Long recipientId = recipientType.equals(RecipientType.PASSENGER) ?
+                rateResponse.passengerId() : rateResponse.driverId();
+        RateAverageResponse rateAverageResponse;
+        try {
+            rateAverageResponse = findAverageRate(recipientId, recipientType);
+        } catch (RateListIsEmptyException e) {
+            return;
+        }
+        RateChangeEvent event = RateChangeEvent
+                .builder()
+                .recipientId(recipientId)
+                .recipientType(recipientType)
+                .rate(rateAverageResponse.averageValue())
+                .build();
+        rateEventsRepository.save(event);
     }
 
     private RidesResponse getRideById(Long id) {
@@ -204,7 +220,7 @@ public class RateServiceImpl implements RateService {
     }
 
     private void ifRateAlreadyExistsThrow(Rate rate) {
-        if (rateRepository.existsRateByRideIdAndAuthor(rate.getRideId(), rate.getAuthor())) {
+        if (rateRepository.existsRateByRideIdAndRecipient(rate.getRideId(), rate.getRecipient())) {
             throw new RateAlreadyExistsException(getExceptionMessage(RATE_ALREADY_EXISTS));
         }
     }

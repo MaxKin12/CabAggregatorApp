@@ -1,10 +1,10 @@
 package com.example.ratesservice.controller;
 
-import com.example.ratesservice.dto.RateAverageResponse;
-import com.example.ratesservice.dto.RatePageResponse;
-import com.example.ratesservice.dto.RateRequest;
-import com.example.ratesservice.dto.RateResponse;
-import com.example.ratesservice.enums.AuthorType;
+import com.example.ratesservice.dto.rate.RateAverageResponse;
+import com.example.ratesservice.dto.rate.RatePageResponse;
+import com.example.ratesservice.dto.rate.RateRequest;
+import com.example.ratesservice.dto.rate.RateResponse;
+import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.service.RateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,7 @@ public class RateController {
             @RequestParam(name = "offset", defaultValue = "0") Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, AuthorType.PASSENGER);
+        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, RecipientType.DRIVER);
         return ResponseEntity.status(HttpStatus.OK).body(ratePageResponse);
     }
 
@@ -46,25 +46,28 @@ public class RateController {
             @RequestParam(name = "offset", defaultValue = "0") Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, AuthorType.DRIVER);
+        RatePageResponse ratePageResponse = rateService.findAllByAuthor(offset, limit, RecipientType.PASSENGER);
         return ResponseEntity.status(HttpStatus.OK).body(ratePageResponse);
     }
 
     @GetMapping("/passengers/{id}")
     public ResponseEntity<RateAverageResponse> getAveragePassengerRate(@PathVariable("id") Long passengerId) {
-        RateAverageResponse rateAverageResponse = rateService.findAveragePassengerRate(passengerId);
+        RateAverageResponse rateAverageResponse = rateService
+                .findAverageRate(passengerId, RecipientType.PASSENGER);
         return ResponseEntity.status(HttpStatus.OK).body(rateAverageResponse);
     }
 
     @GetMapping("/drivers/{id}")
     public ResponseEntity<RateAverageResponse> getAverageDriverRate(@PathVariable("id") Long driverId) {
-        RateAverageResponse rateAverageResponse = rateService.findAverageDriverRate(driverId);
+        RateAverageResponse rateAverageResponse = rateService
+                .findAverageRate(driverId, RecipientType.DRIVER);
         return ResponseEntity.status(HttpStatus.OK).body(rateAverageResponse);
     }
 
     @PostMapping
     public ResponseEntity<RateResponse> rateRide(@RequestBody RateRequest rateRequest) {
         RateResponse rateResponse = rateService.create(rateRequest);
+        rateService.updateAverageRate(rateResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(rateResponse);
     }
 
@@ -72,12 +75,14 @@ public class RateController {
     public ResponseEntity<RateResponse> updateRate(@RequestBody RateRequest rateRequest,
                                                    @PathVariable("id") Long rateId) {
         RateResponse rateResponse = rateService.update(rateRequest, rateId);
+        rateService.updateAverageRate(rateResponse);
         return ResponseEntity.status(HttpStatus.OK).body(rateResponse);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRate(@PathVariable("id") Long rateId) {
-        rateService.delete(rateId);
+        RateResponse rateResponse = rateService.delete(rateId);
+        rateService.updateAverageRate(rateResponse);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

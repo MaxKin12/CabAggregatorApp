@@ -1,4 +1,4 @@
-package com.example.ratesservice.dto;
+package com.example.ratesservice.dto.rate;
 
 import java.util.List;
 

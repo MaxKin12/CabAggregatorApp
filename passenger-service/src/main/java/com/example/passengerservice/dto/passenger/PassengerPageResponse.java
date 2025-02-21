@@ -1,4 +1,4 @@
-package com.example.passengerservice.dto;
+package com.example.passengerservice.dto.passenger;
 
 import java.util.List;
 

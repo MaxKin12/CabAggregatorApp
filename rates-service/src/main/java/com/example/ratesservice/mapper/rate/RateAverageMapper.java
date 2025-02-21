@@ -1,6 +1,6 @@
-package com.example.ratesservice.mapper;
+package com.example.ratesservice.mapper.rate;
 
-import com.example.ratesservice.dto.RateAverageResponse;
+import com.example.ratesservice.dto.rate.RateAverageResponse;
 import java.math.BigDecimal;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

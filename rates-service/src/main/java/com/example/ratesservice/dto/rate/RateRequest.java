@@ -1,7 +1,7 @@
-package com.example.ratesservice.dto;
+package com.example.ratesservice.dto.rate;
 
-import com.example.ratesservice.enums.AuthorType;
-import com.example.ratesservice.enums.annotation.AuthorTypeValidation;
+import com.example.ratesservice.enums.RecipientType;
+import com.example.ratesservice.enums.annotation.RecipientTypeValidation;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -23,9 +23,12 @@ public record RateRequest(
         @Positive(message = "{validate.field.driver-id.negative}")
         Long driverId,
 
-        @NotBlank(message = "{validate.field.author.blank}")
-        @AuthorTypeValidation(enumClass = AuthorType.class, message = "{validate.field.author.invalid.pattern}")
-        String author,
+        @NotBlank(message = "{validate.field.recipient.blank}")
+        @RecipientTypeValidation(
+                enumClass = RecipientType.class,
+                message = "{validate.field.recipient.invalid.pattern}"
+        )
+        String recipient,
 
         @NotNull(message = "{validate.field.value.not.null}")
         @Min(1)
