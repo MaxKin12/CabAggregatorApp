@@ -1,7 +1,7 @@
-package com.example.ratesservice.client.driver;
+package com.example.ratesservice.client;
 
-import com.example.ratesservice.client.driver.decoder.DriverClientDecoder;
-import com.example.ratesservice.client.driver.dto.DriverResponse;
+import com.example.ratesservice.client.decoder.ExternalServiceClientDecoder;
+import com.example.ratesservice.client.dto.DriverResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
         name = "driver-client",
-        configuration = {DriverClientDecoder.class}
+        configuration = {ExternalServiceClientDecoder.class}
 )
 public interface DriverClient {
 

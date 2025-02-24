@@ -1,4 +1,4 @@
-package com.example.ratesservice.client.driver.dto;
+package com.example.ratesservice.client.dto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.ratesservice.client.ride.dto;
+package com.example.ratesservice.client.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

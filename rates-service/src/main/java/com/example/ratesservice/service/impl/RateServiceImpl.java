@@ -8,11 +8,11 @@ import static com.example.ratesservice.utility.constants.InternationalizationExc
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_PASSENGER_LIST_IS_EMPTY;
 
 import com.example.ratesservice.configuration.properties.RateServiceProperties;
-import com.example.ratesservice.client.driver.DriverClient;
-import com.example.ratesservice.client.passenger.PassengerClient;
-import com.example.ratesservice.client.ride.RidesClient;
-import com.example.ratesservice.client.ride.dto.RidesResponse;
-import com.example.ratesservice.client.ride.exception.InvalidRideContentException;
+import com.example.ratesservice.client.DriverClient;
+import com.example.ratesservice.client.PassengerClient;
+import com.example.ratesservice.client.RidesClient;
+import com.example.ratesservice.client.dto.RidesResponse;
+import com.example.ratesservice.client.exception.InvalidRideContentException;
 import com.example.ratesservice.configuration.properties.RateServiceProperties;
 import com.example.ratesservice.dto.rate.RateAverageResponse;
 import com.example.ratesservice.dto.rate.RatePageResponse;
@@ -57,7 +57,11 @@ public class RateServiceImpl implements RateService {
 
     private final RateServiceProperties rateServiceProperties;
 
+    private final MessageSource messageSource;
+
     private final RateRepository rateRepository;
+
+    private final RateEventsRepository rateEventsRepository;
 
     private final RateMapper rateMapper;
 

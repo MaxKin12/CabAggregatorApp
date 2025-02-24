@@ -1,6 +1,7 @@
 package com.example.ratesservice.utility.kafka.impl;
 
 import com.example.ratesservice.dto.kafkaevent.RateChangeEventResponse;
+import com.example.ratesservice.exception.custom.KafkaSendException;
 import com.example.ratesservice.mapper.event.RateChangeEventMapper;
 import com.example.ratesservice.model.RateChangeEvent;
 import com.example.ratesservice.repository.RateEventsRepository;
@@ -24,8 +25,17 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     @Transactional
     public void sendAndDeleteMessage(String topic, RateChangeEvent event) {
         RateChangeEventResponse eventResponse = rateChangeEventMapper.toResponse(event);
-        kafkaTemplate.send(topic, eventResponse);
+        sendOrThrow(topic, eventResponse);
         rateEventsRepository.delete(event);
+    }
+
+    private void sendOrThrow(String topic, RateChangeEventResponse event) {
+        try {
+            kafkaTemplate.send(topic, event);
+        }
+        catch (Exception e) {
+            throw new KafkaSendException(e.getMessage());
+        }
     }
 
 }

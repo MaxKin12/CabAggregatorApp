@@ -1,4 +1,4 @@
-package com.example.ratesservice.client.ride.exception;
+package com.example.ratesservice.client.exception;
 
 public class InvalidRideContentException extends RuntimeException {
 

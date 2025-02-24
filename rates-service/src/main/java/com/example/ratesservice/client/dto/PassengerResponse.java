@@ -1,4 +1,4 @@
-package com.example.ratesservice.client.passenger.dto;
+package com.example.ratesservice.client.dto;
 
 public record PassengerResponse(
 
