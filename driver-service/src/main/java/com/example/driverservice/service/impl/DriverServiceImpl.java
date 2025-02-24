@@ -3,6 +3,7 @@ package com.example.driverservice.service.impl;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.DRIVER_NOT_FOUND;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
 
+import com.example.driverservice.configuration.properties.DriverServiceProperties;
 import com.example.driverservice.dto.common.PageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
@@ -17,7 +18,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -29,10 +30,10 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
+@EnableConfigurationProperties(DriverServiceProperties.class)
 public class DriverServiceImpl implements DriverService {
 
-    @Value("${driver-service.max-page-limit:50}")
-    private Integer maxPageLimit;
+    private final DriverServiceProperties driverServiceProperties;
 
     private final DriverRepository driverRepository;
 
@@ -52,7 +53,7 @@ public class DriverServiceImpl implements DriverService {
     @Override
     @Transactional(readOnly = true)
     public PageResponse<DriverResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
-        limit = limit < maxPageLimit ? limit : maxPageLimit;
+        limit = limit < driverServiceProperties.maxPageLimit() ? limit : driverServiceProperties.maxPageLimit();
         Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(offset, limit));
         return driverPageMapper.toResponsePage(driverPage, offset, limit);
     }

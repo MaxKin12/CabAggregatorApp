@@ -1,4 +1,4 @@
-package com.example.ratesservice.configuration;
+package com.example.ratesservice.configuration.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

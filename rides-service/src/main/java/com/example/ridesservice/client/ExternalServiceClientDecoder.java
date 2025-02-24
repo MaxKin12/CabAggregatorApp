@@ -40,12 +40,23 @@ public class ExternalServiceClientDecoder implements ErrorDecoder {
         log.error("Feign exception: from method - {}; code - {}; message - {}", methodKey,
                 exceptionResponse.message(), exceptionResponse.statusCode());
 
-        return switch (HttpStatus.valueOf(response.status())) {
+        HttpStatus responseStatue = getResponseStatusOrThrow(response);
+        return switch (responseStatue) {
             case BAD_REQUEST -> new ExternalServiceClientBadRequest(exceptionMessage);
             case NOT_FOUND -> new ExternalServiceEntityNotFoundException(exceptionMessage);
             case INTERNAL_SERVER_ERROR -> new ExternalServiceUnknownInternalServerError(exceptionMessage);
             default -> errorDecoder.decode(methodKey, response);
         };
+    }
+
+    private HttpStatus getResponseStatusOrThrow(Response response) {
+        try {
+            return HttpStatus.valueOf(response.status());
+        }
+        catch (Exception e) {
+            log.error("Failed attempt to read feign exception response status", e);
+            throw new ExternalServiceUnknownInternalServerError(e.getMessage());
+        }
     }
 
     private String getExceptionMessage(Object... args) {

@@ -4,7 +4,7 @@ import static com.example.ridesservice.utility.constants.InternationalizationExc
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.ADDRESS_TOO_FAR;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.TIMETRAVEL_REQUEST_EXCEPTION;
 
-import com.example.ridesservice.configuration.TimetravelRouteProperties;
+import com.example.ridesservice.configuration.properties.TimetravelRouteProperties;
 import com.example.ridesservice.exception.custom.TimetravelRequestException;
 import com.example.ridesservice.utility.traveltime.TravelTimeService;
 import com.traveltime.sdk.TravelTimeSDK;

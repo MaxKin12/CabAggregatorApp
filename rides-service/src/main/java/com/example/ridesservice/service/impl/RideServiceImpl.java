@@ -9,6 +9,7 @@ import com.example.ridesservice.client.DriverClient;
 import com.example.ridesservice.client.dto.DriverResponse;
 import com.example.ridesservice.client.exception.DriverNotContainsCarException;
 import com.example.ridesservice.client.PassengerClient;
+import com.example.ridesservice.configuration.properties.RideServiceProperties;
 import com.example.ridesservice.dto.request.RideBookingRequest;
 import com.example.ridesservice.dto.request.RideDriverSettingRequest;
 import com.example.ridesservice.dto.request.RideRequest;
@@ -33,7 +34,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -46,10 +47,10 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
+@EnableConfigurationProperties(RideServiceProperties.class)
 public class RideServiceImpl implements RideService {
 
-    @Value("${ride-service.max-page-limit:50}")
-    private Integer maxPageLimit;
+    private final RideServiceProperties rideServiceProperties;
 
     private final RideRepository rideRepository;
 
@@ -81,7 +82,7 @@ public class RideServiceImpl implements RideService {
     @Override
     @Transactional(readOnly = true)
     public RidePageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
-        limit = limit < maxPageLimit ? limit : maxPageLimit;
+        limit = limit < rideServiceProperties.maxPageLimit() ? limit : rideServiceProperties.maxPageLimit();
         Page<Ride> ridePage = rideRepository.findAll(PageRequest.of(offset, limit));
         return ridePageMapper.toResponsePage(ridePage, offset, limit);
     }
@@ -93,7 +94,7 @@ public class RideServiceImpl implements RideService {
             @Min(1) Integer limit
     ) {
         int offset = 0;
-        limit = limit < maxPageLimit ? limit : maxPageLimit;
+        limit = limit < rideServiceProperties.maxPageLimit() ? limit : rideServiceProperties.maxPageLimit();
         Page<Ride> ridePage = rideRepository.findByPassengerId(
                 PageRequest.of(offset, limit, Sort.by(Sort.Order.desc("id"))),
                 passengerId

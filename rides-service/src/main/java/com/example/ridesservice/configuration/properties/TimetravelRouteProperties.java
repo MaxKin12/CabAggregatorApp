@@ -1,4 +1,4 @@
-package com.example.ridesservice.configuration;
+package com.example.ridesservice.configuration.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
