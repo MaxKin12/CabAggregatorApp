@@ -49,9 +49,9 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     @Transactional
     public PassengerResponse create(@Valid PassengerRequest passengerRequest) {
-        Passenger savePassenger = passengerMapper.toPassenger(passengerRequest);
-        Passenger passenger = validation.saveOrThrow(savePassenger);
-        return passengerMapper.toResponse(passenger);
+        Passenger passenger = passengerMapper.toPassenger(passengerRequest);
+        Passenger savedPassenger = validation.saveOrThrow(passenger);
+        return passengerMapper.toResponse(savedPassenger);
     }
 
     @Override

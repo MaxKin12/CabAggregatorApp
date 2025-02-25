@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class KafkaConsumerServiceImpl {
+public class KafkaConsumerService {
 
     private final KafkaConsumerServiceValidation validation;
 

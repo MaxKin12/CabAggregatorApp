@@ -6,6 +6,7 @@ import com.example.passengerservice.dto.exception.PassengerExceptionHandlerRespo
 import com.example.passengerservice.exception.custom.DbModificationAttemptException;
 import com.example.passengerservice.exception.custom.PassengerNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -47,8 +48,9 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<PassengerExceptionHandlerResponse> getExceptionResponse(Exception e, HttpStatus httpStatus) {
         return new ResponseEntity<>(new PassengerExceptionHandlerResponse(
-                httpStatus.value(),
-                getExceptionMessage(e)),
+                    httpStatus.value(),
+                    getExceptionMessage(e),
+                    LocalDateTime.now()),
                 httpStatus
         );
     }
