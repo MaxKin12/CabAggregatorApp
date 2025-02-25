@@ -17,6 +17,7 @@ import com.example.ratesservice.dto.rate.RateAverageResponse;
 import com.example.ratesservice.dto.rate.RatePageResponse;
 import com.example.ratesservice.dto.rate.RateRequest;
 import com.example.ratesservice.dto.rate.RateResponse;
+import com.example.ratesservice.dto.rate.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
@@ -25,6 +26,7 @@ import com.example.ratesservice.exception.custom.RateNotFoundException;
 import com.example.ratesservice.mapper.rate.RateAverageMapper;
 import com.example.ratesservice.mapper.rate.RateMapper;
 import com.example.ratesservice.mapper.rate.RatePageMapper;
+import com.example.ratesservice.mapper.rate.RateUpdateMapper;
 import com.example.ratesservice.model.Rate;
 import com.example.ratesservice.model.RateChangeEvent;
 import com.example.ratesservice.repository.RateEventsRepository;
@@ -67,6 +69,8 @@ public class RateServiceImpl implements RateService {
     private final RatePageMapper ratePageMapper;
 
     private final RateAverageMapper rateAverageMapper;
+
+    private final RateUpdateMapper rateUpdateMapper;
 
     private final RidesClient ridesClient;
 
@@ -140,15 +144,11 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional
-    public RateResponse update(@Valid RateRequest rateRequest,
+    public RateResponse update(@Valid RateUpdateRequest rateUpdateRequest,
                                @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Rate rate = findByIdOrThrow(id);
-        RidesResponse ridesResponse = getRideById(rate.getRideId());
-        checkPassengerById(rate.getPassengerId());
-        checkDriverById(rate.getDriverId());
-        checkRidesRules(ridesResponse, rate);
         try {
-            rateMapper.updateRateFromDto(rateRequest, rate);
+            rateUpdateMapper.updateRateFromDto(rateUpdateRequest, rate);
             RateResponse rateResponse = rateMapper.toResponse(rate);
             rateRepository.flush();
             return rateResponse;
@@ -208,7 +208,8 @@ public class RateServiceImpl implements RateService {
 
     private void checkRidesRules(RidesResponse ridesResponse, Rate rate) {
         if (!Objects.equals(ridesResponse.passengerId(), rate.getPassengerId())
-                || !Objects.equals(ridesResponse.driverId(), rate.getDriverId())) {
+                || !Objects.equals(ridesResponse.driverId(), rate.getDriverId())
+                || !Objects.equals(ridesResponse.status(), "completed")) {
             throw new InvalidRideContentException(getExceptionMessage(INVALID_RIDE_CONTENT));
         }
     }

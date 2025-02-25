@@ -4,6 +4,7 @@ import com.example.ratesservice.dto.rate.RateAverageResponse;
 import com.example.ratesservice.dto.rate.RatePageResponse;
 import com.example.ratesservice.dto.rate.RateRequest;
 import com.example.ratesservice.dto.rate.RateResponse;
+import com.example.ratesservice.dto.rate.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.service.RateService;
 import lombok.RequiredArgsConstructor;
@@ -72,9 +73,9 @@ public class RateController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<RateResponse> updateRate(@RequestBody RateRequest rateRequest,
+    public ResponseEntity<RateResponse> updateRate(@RequestBody RateUpdateRequest rateUpdateRequest,
                                                    @PathVariable("id") Long rateId) {
-        RateResponse rateResponse = rateService.update(rateRequest, rateId);
+        RateResponse rateResponse = rateService.update(rateUpdateRequest, rateId);
         rateService.updateAverageRate(rateResponse);
         return ResponseEntity.status(HttpStatus.OK).body(rateResponse);
     }
