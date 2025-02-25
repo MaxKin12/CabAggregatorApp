@@ -1,6 +1,6 @@
 package com.example.driverservice.controller;
 
-import com.example.driverservice.dto.common.PageResponse;
+import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.service.DriverService;

@@ -1,5 +1,6 @@
 package com.example.driverservice.enums.annotation;
 
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.GENDER_INVALID_PATTERN;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
@@ -20,7 +21,7 @@ public @interface UserGenderValidation {
 
     Class<? extends Enum<?>> enumClass();
 
-    String message() default "{}";
+    String message() default GENDER_INVALID_PATTERN;
 
     Class<?>[] groups() default {};
 

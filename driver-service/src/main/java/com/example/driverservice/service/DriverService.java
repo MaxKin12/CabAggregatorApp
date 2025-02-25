@@ -1,6 +1,6 @@
 package com.example.driverservice.service;
 
-import com.example.driverservice.dto.common.PageResponse;
+import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;

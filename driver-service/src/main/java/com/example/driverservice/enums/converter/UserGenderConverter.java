@@ -7,14 +7,10 @@ import com.example.driverservice.exception.custom.IllegalEnumArgumentException;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 @Converter
 @RequiredArgsConstructor
 public class UserGenderConverter implements AttributeConverter<UserGender, Integer> {
-
-    private final MessageSource messageSource;
 
     @Override
     public Integer convertToDatabaseColumn(UserGender userGender) {
@@ -24,12 +20,7 @@ public class UserGenderConverter implements AttributeConverter<UserGender, Integ
     @Override
     public UserGender convertToEntityAttribute(Integer code) {
         return UserGender.codeToUserGender(code)
-                .orElseThrow(() -> new IllegalEnumArgumentException(getExceptionMessage(code)));
-    }
-
-    private String getExceptionMessage(Integer code) {
-        return messageSource
-                .getMessage(INVALID_ENUM_ARGUMENT, new Object[] {code}, LocaleContextHolder.getLocale());
+                .orElseThrow(() -> new IllegalEnumArgumentException(INVALID_ENUM_ARGUMENT, code.toString()));
     }
 
 }

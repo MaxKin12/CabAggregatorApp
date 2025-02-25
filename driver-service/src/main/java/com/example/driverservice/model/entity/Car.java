@@ -33,13 +33,13 @@ public class Car implements DriverEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "brand", length = 30, nullable = false)
+    @Column(name = "brand", nullable = false, length = 30)
     private String brand;
 
-    @Column(name = "number", length = 8, nullable = false, unique = true)
+    @Column(name = "number", nullable = false, length = 8, unique = true)
     private String number;
 
-    @Column(name = "color", length = 20, nullable = false)
+    @Column(name = "color", nullable = false, length = 20)
     private String color;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

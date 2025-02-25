@@ -1,5 +1,14 @@
 package com.example.driverservice.dto.car;
 
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.BRAND_BLANK;
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.BRAND_TOO_LONG;
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.COLOR_BLANK;
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.COLOR_TOO_LONG;
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.DRIVER_ID_NEGATIVE;
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.DRIVER_ID_NOT_NULL;
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.NUMBER_BLANK;
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.NUMBER_INVALID_PATTERN;
+import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.NUMBER_TOO_LONG;
 import static com.example.driverservice.utility.constants.RegularExpressionsConstants.CAR_NUMBER_CHECK;
 
 import jakarta.validation.constraints.NotBlank;
@@ -10,21 +19,21 @@ import jakarta.validation.constraints.Size;
 
 public record CarRequest(
 
-        @NotBlank(message = "{validate.field.brand.blank}")
-        @Size(max = 30, message = "{validate.field.brand.too-long}")
+        @NotBlank(message = BRAND_BLANK)
+        @Size(max = 30, message = BRAND_TOO_LONG)
         String brand,
 
-        @NotBlank(message = "{validate.field.number.blank}")
-        @Size(max = 8, message = "{validate.field.number.too-long}")
-        @Pattern(regexp = CAR_NUMBER_CHECK, message = "{validate.field.number.invalid.pattern")
+        @NotBlank(message = NUMBER_BLANK)
+        @Size(max = 8, message = NUMBER_TOO_LONG)
+        @Pattern(regexp = CAR_NUMBER_CHECK, message = NUMBER_INVALID_PATTERN)
         String number,
 
-        @NotBlank(message = "{validate.field.color.blank}")
-        @Size(max = 20, message = "{validate.field.color.too-long}")
+        @NotBlank(message = COLOR_BLANK)
+        @Size(max = 20, message = COLOR_TOO_LONG)
         String color,
 
-        @NotNull(message = "{validate.field.driver-id.not.null}")
-        @Positive(message = "{validate.field.driver-id.negative}")
+        @NotNull(message = DRIVER_ID_NOT_NULL)
+        @Positive(message = DRIVER_ID_NEGATIVE)
         Long driverId
 
 ) {

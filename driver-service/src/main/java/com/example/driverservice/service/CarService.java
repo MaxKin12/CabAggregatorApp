@@ -1,8 +1,8 @@
 package com.example.driverservice.service;
 
+import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
-import com.example.driverservice.dto.common.PageResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
