@@ -6,9 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record KafkaProperties(
 
         String bootstrapServers,
-
         String topicPassengerRate,
-
         String groupId
 
 ) {
