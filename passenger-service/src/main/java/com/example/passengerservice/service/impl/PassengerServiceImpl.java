@@ -3,6 +3,7 @@ package com.example.passengerservice.service.impl;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionVariablesConstants.PASSENGER_NOT_FOUND;
 
+import com.example.passengerservice.configuration.properties.PassengerServiceProperties;
 import com.example.passengerservice.dto.PassengerPageResponse;
 import com.example.passengerservice.dto.PassengerRequest;
 import com.example.passengerservice.dto.PassengerResponse;
@@ -17,6 +18,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -28,7 +30,10 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
+@EnableConfigurationProperties(PassengerServiceProperties.class)
 public class PassengerServiceImpl implements PassengerService {
+
+    private final PassengerServiceProperties passengerServiceProperties;
 
     private final PassengerRepository passengerRepository;
 
@@ -48,7 +53,7 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     @Transactional(readOnly = true)
     public PassengerPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
-        limit = limit < 50 ? limit : 50;
+        limit = limit < passengerServiceProperties.maxPageLimit() ? limit : passengerServiceProperties.maxPageLimit();
         Page<Passenger> passengerPage = passengerRepository.findAll(PageRequest.of(offset, limit));
         return passengerPageMapper.toResponsePage(passengerPage, offset, limit);
     }

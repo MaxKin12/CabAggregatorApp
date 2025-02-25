@@ -3,6 +3,7 @@ package com.example.driverservice.service.impl;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.CAR_NOT_FOUND;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
 
+import com.example.driverservice.configuration.properties.DriverServiceProperties;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.dto.common.PageResponse;
@@ -17,6 +18,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -28,12 +30,17 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
+@EnableConfigurationProperties(DriverServiceProperties.class)
 public class CarServiceImpl implements CarService {
 
+    private final DriverServiceProperties driverServiceProperties;
+
     private final CarRepository carRepository;
+
     private final CarMapper carMapper;
 
     private final CarPageMapper carPageMapper;
+
     private final MessageSource messageSource;
 
     @Override
@@ -46,7 +53,7 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional(readOnly = true)
     public PageResponse<CarResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
-        limit = limit < 50 ? limit : 50;
+        limit = limit < driverServiceProperties.maxPageLimit() ? limit : driverServiceProperties.maxPageLimit();
         Page<Car> carPage = carRepository.findAll(PageRequest.of(offset, limit));
         return carPageMapper.toResponsePage(carPage, offset, limit);
     }

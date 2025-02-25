@@ -6,7 +6,7 @@ import static com.example.ratesservice.utility.constants.InternationalizationExc
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_NOT_FOUND;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.RATE_PASSENGER_LIST_IS_EMPTY;
 
-import com.example.ratesservice.configuration.RateServiceProperties;
+import com.example.ratesservice.configuration.properties.RateServiceProperties;
 import com.example.ratesservice.dto.RateAverageResponse;
 import com.example.ratesservice.dto.RatePageResponse;
 import com.example.ratesservice.dto.RateRequest;
@@ -67,7 +67,7 @@ public class RateServiceImpl implements RateService {
     @Override
     @Transactional(readOnly = true)
     public RatePageResponse findAllByAuthor(@Min(0) Integer offset, @Min(1) Integer limit, AuthorType authorType) {
-        limit = limit < 50 ? limit : 50;
+        limit = limit < rateServiceProperties.maxPageLimit() ? limit : rateServiceProperties.maxPageLimit();
         Page<Rate> ratePage = rateRepository.findAllByAuthor(PageRequest.of(offset, limit), authorType);
         return ratePageMapper.toResponsePage(ratePage, offset, limit);
     }

@@ -1,8 +1,11 @@
 package com.example.ridesservice.controller;
 
-import com.example.ridesservice.dto.RidePageResponse;
-import com.example.ridesservice.dto.RideRequest;
-import com.example.ridesservice.dto.RideResponse;
+import com.example.ridesservice.dto.request.RideBookingRequest;
+import com.example.ridesservice.dto.request.RideDriverSettingRequest;
+import com.example.ridesservice.dto.request.RideRequest;
+import com.example.ridesservice.dto.request.RideStatusRequest;
+import com.example.ridesservice.dto.response.RidePageResponse;
+import com.example.ridesservice.dto.response.RideResponse;
 import com.example.ridesservice.service.RideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,9 +42,33 @@ public class RideController {
         return ResponseEntity.status(HttpStatus.OK).body(ridePageResponse);
     }
 
+    @GetMapping("/passenger/{id}")
+    public ResponseEntity<RidePageResponse> getLastPassengerRides(
+            @PathVariable("id") Long passengerId,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
+    ) {
+        RidePageResponse ridePageResponse = rideService.findLastPassengerRides(passengerId, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(ridePageResponse);
+    }
+
+    @GetMapping("/driver/{id}")
+    public ResponseEntity<RidePageResponse> getLastDriverRides(
+            @PathVariable("id") Long passengerId,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
+    ) {
+        RidePageResponse ridePageResponse = rideService.findLastDriverRides(passengerId, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(ridePageResponse);
+    }
+
     @PostMapping
     public ResponseEntity<RideResponse> createRide(@RequestBody RideRequest rideRequest) {
         RideResponse rideResponse = rideService.create(rideRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(rideResponse);
+    }
+
+    @PostMapping("/booking")
+    public ResponseEntity<RideResponse> bookRide(@RequestBody RideBookingRequest rideRequest) {
+        RideResponse rideResponse = rideService.bookRide(rideRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(rideResponse);
     }
 
@@ -49,6 +76,20 @@ public class RideController {
     public ResponseEntity<RideResponse> updateRide(@RequestBody RideRequest rideRequest,
                                                    @PathVariable("id") Long rideId) {
         RideResponse rideResponse = rideService.update(rideRequest, rideId);
+        return ResponseEntity.status(HttpStatus.OK).body(rideResponse);
+    }
+
+    @PatchMapping("/{id}/driver")
+    public ResponseEntity<RideResponse> updateRidesDriver(@RequestBody RideDriverSettingRequest rideRequest,
+                                                           @PathVariable("id") Long rideId) {
+        RideResponse rideResponse = rideService.setDriverToRide(rideRequest, rideId);
+        return ResponseEntity.status(HttpStatus.OK).body(rideResponse);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<RideResponse> updateStatus(@RequestBody RideStatusRequest rideRequest,
+                                                     @PathVariable("id") Long rideId) {
+        RideResponse rideResponse = rideService.updateStatus(rideRequest, rideId);
         return ResponseEntity.status(HttpStatus.OK).body(rideResponse);
     }
 
