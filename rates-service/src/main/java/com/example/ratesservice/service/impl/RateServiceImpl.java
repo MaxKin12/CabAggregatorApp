@@ -13,7 +13,6 @@ import com.example.ratesservice.client.PassengerClient;
 import com.example.ratesservice.client.RidesClient;
 import com.example.ratesservice.client.dto.RidesResponse;
 import com.example.ratesservice.client.exception.InvalidRideContentException;
-import com.example.ratesservice.configuration.properties.RateServiceProperties;
 import com.example.ratesservice.dto.rate.RateAverageResponse;
 import com.example.ratesservice.dto.rate.RatePageResponse;
 import com.example.ratesservice.dto.rate.RateRequest;
@@ -69,15 +68,11 @@ public class RateServiceImpl implements RateService {
 
     private final RateAverageMapper rateAverageMapper;
 
-    private final MessageSource messageSource;
-
     private final RidesClient ridesClient;
 
     private final PassengerClient passengerClient;
 
     private final DriverClient driverClient;
-
-    private final RateEventsRepository rateEventsRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -88,9 +83,9 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional(readOnly = true)
-    public RatePageResponse findAllByAuthor(@Min(0) Integer offset, @Min(1) Integer limit, AuthorType authorType) {
+    public RatePageResponse findAllByAuthor(@Min(0) Integer offset, @Min(1) Integer limit, RecipientType recipientType) {
         limit = limit < rateServiceProperties.maxPageLimit() ? limit : rateServiceProperties.maxPageLimit();
-        Page<Rate> ratePage = rateRepository.findAllByAuthor(PageRequest.of(offset, limit), authorType);
+        Page<Rate> ratePage = rateRepository.findAllByRecipient(PageRequest.of(offset, limit), recipientType);
         return ratePageMapper.toResponsePage(ratePage, offset, limit);
     }
 

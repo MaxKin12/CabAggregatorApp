@@ -4,9 +4,9 @@ import static com.example.passengerservice.utility.constants.Internationalizatio
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionVariablesConstants.PASSENGER_NOT_FOUND;
 
 import com.example.passengerservice.configuration.properties.PassengerServiceProperties;
-import com.example.passengerservice.dto.PassengerPageResponse;
-import com.example.passengerservice.dto.PassengerRequest;
-import com.example.passengerservice.dto.PassengerResponse;
+import com.example.passengerservice.dto.passenger.PassengerPageResponse;
+import com.example.passengerservice.dto.passenger.PassengerRequest;
+import com.example.passengerservice.dto.passenger.PassengerResponse;
 import com.example.passengerservice.exception.custom.DbModificationAttemptException;
 import com.example.passengerservice.exception.custom.PassengerNotFoundException;
 import com.example.passengerservice.mapper.PassengerMapper;

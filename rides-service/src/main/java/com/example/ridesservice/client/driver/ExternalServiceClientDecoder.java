@@ -1,4 +1,4 @@
-package com.example.ridesservice.client;
+package com.example.ridesservice.client.driver;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.EXTERNAL_SERVICE_ERROR;
 
