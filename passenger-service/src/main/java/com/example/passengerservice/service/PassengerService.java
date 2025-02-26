@@ -1,5 +1,6 @@
 package com.example.passengerservice.service;
 
+import com.example.passengerservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
@@ -15,8 +16,10 @@ public interface PassengerService {
 
     PassengerResponse create(@Valid PassengerRequest passengerRequest);
 
-    PassengerResponse update(@Valid PassengerRequest passengerRequest,
-                             @Positive(message = "{validate.method.parameter.id.negative}") Long id);
+    PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest,
+                                      @Positive(message = "{validate.method.parameter.id.negative}") Long id);
+
+    void updateRate(RateChangeEventResponse event);
 
     void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id);
 

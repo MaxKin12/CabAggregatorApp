@@ -48,7 +48,7 @@ public class DriverController {
     @PatchMapping("/{id}")
     public ResponseEntity<DriverResponse> updateDriver(@RequestBody DriverRequest driverRequest,
                                                        @PathVariable("id") Long driverId) {
-        DriverResponse driverResponse = driverService.update(driverRequest, driverId);
+        DriverResponse driverResponse = driverService.updateDriver(driverRequest, driverId);
         return ResponseEntity.status(HttpStatus.OK).body(driverResponse);
     }
 

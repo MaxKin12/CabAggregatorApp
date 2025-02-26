@@ -48,7 +48,7 @@ public class PassengerController {
     @PatchMapping("/{id}")
     public ResponseEntity<PassengerResponse> updatePassenger(@RequestBody PassengerRequest passengerRequest,
                                                              @PathVariable("id") Long passengerId) {
-        PassengerResponse passengerResponse = passengerService.update(passengerRequest, passengerId);
+        PassengerResponse passengerResponse = passengerService.updatePassenger(passengerRequest, passengerId);
         return ResponseEntity.status(HttpStatus.OK).body(passengerResponse);
     }
 

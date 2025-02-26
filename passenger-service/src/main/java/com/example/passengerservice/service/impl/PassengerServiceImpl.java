@@ -4,6 +4,7 @@ import static com.example.passengerservice.utility.constants.Internationalizatio
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionVariablesConstants.PASSENGER_NOT_FOUND;
 
 import com.example.passengerservice.configuration.properties.PassengerServiceProperties;
+import com.example.passengerservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
@@ -74,8 +75,8 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public PassengerResponse update(@Valid PassengerRequest passengerRequest,
-                                    @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
+    public PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest,
+                                             @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Passenger passenger = findByIdOrThrow(id);
         try {
             passengerMapper.updatePassengerFromDto(passengerRequest, passenger);
@@ -87,6 +88,14 @@ public class PassengerServiceImpl implements PassengerService {
                     getExceptionMessage(INVALID_ATTEMPT_CHANGE_PASSENGER, "update", e.getMessage())
             );
         }
+    }
+
+    @Override
+    @Transactional
+    public void updateRate(RateChangeEventResponse event) {
+        Passenger passenger = findByIdOrThrow(event.recipientId());
+        passenger.setRate(event.rate());
+        passengerRepository.save(passenger);
     }
 
     @Override
