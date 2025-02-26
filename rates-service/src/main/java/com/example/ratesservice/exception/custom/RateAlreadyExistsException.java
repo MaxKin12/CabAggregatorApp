@@ -1,9 +1,11 @@
 package com.example.ratesservice.exception.custom;
 
-public class RateAlreadyExistsException extends RuntimeException {
+import com.example.ratesservice.exception.MessageSourceException;
 
-    public RateAlreadyExistsException(String message) {
-        super(message);
+public class RateAlreadyExistsException extends MessageSourceException {
+
+    public RateAlreadyExistsException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

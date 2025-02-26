@@ -1,9 +1,11 @@
 package com.example.ratesservice.client.exception;
 
-public class ExternalServiceEntityNotFoundException extends RuntimeException {
+import com.example.ratesservice.exception.MessageSourceException;
 
-    public ExternalServiceEntityNotFoundException(String message) {
-        super(message);
+public class ExternalServiceEntityNotFoundException extends MessageSourceException {
+
+    public ExternalServiceEntityNotFoundException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

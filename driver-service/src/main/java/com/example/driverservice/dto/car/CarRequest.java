@@ -1,14 +1,14 @@
 package com.example.driverservice.dto.car;
 
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.BRAND_BLANK;
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.BRAND_TOO_LONG;
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.COLOR_BLANK;
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.COLOR_TOO_LONG;
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.DRIVER_ID_NEGATIVE;
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.DRIVER_ID_NOT_NULL;
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.NUMBER_BLANK;
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.NUMBER_INVALID_PATTERN;
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.NUMBER_TOO_LONG;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.BRAND_BLANK;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.BRAND_TOO_LONG;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.COLOR_BLANK;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.COLOR_TOO_LONG;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.DRIVER_ID_NEGATIVE;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.DRIVER_ID_NULL;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.NUMBER_BLANK;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.NUMBER_INVALID_PATTERN;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.NUMBER_TOO_LONG;
 import static com.example.driverservice.utility.constants.RegularExpressionsConstants.CAR_NUMBER_CHECK;
 
 import jakarta.validation.constraints.NotBlank;
@@ -32,7 +32,7 @@ public record CarRequest(
         @Size(max = 20, message = COLOR_TOO_LONG)
         String color,
 
-        @NotNull(message = DRIVER_ID_NOT_NULL)
+        @NotNull(message = DRIVER_ID_NULL)
         @Positive(message = DRIVER_ID_NEGATIVE)
         Long driverId
 

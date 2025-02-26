@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InternationalizationExceptionVariablesConstants {
+public class InternationalizationExceptionPropertyVariablesConstants {
 
     public static final String INVALID_ENUM_ARGUMENT = "exception.invalid.enum.argument";
     public static final String DRIVER_NOT_FOUND = "exception.driver.not.found";

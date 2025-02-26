@@ -1,7 +1,7 @@
 package com.example.driverservice.utility.validation.impl;
 
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.DRIVER_NOT_FOUND;
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.DRIVER_NOT_FOUND;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
 
 import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;

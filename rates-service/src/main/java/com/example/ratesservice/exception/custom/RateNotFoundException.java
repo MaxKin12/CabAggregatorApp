@@ -1,9 +1,11 @@
 package com.example.ratesservice.exception.custom;
 
-public class RateNotFoundException extends RuntimeException {
+import com.example.ratesservice.exception.MessageSourceException;
 
-    public RateNotFoundException(String message) {
-        super(message);
+public class RateNotFoundException extends MessageSourceException {
+
+    public RateNotFoundException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

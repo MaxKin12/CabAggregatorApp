@@ -1,8 +1,8 @@
 package com.example.passengerservice.exception;
 
-import static com.example.passengerservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
+import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INTERNAL_SERVICE_ERROR;
 
-import com.example.passengerservice.dto.exception.PassengerExceptionHandlerResponse;
+import com.example.passengerservice.dto.exception.ExceptionHandlerResponse;
 import com.example.passengerservice.exception.custom.DbModificationAttemptException;
 import com.example.passengerservice.exception.custom.PassengerNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
         PassengerNotFoundException.class
     })
-    public ResponseEntity<PassengerExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
+    public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
         return getExceptionResponse(e, HttpStatus.NOT_FOUND);
     }
 
@@ -32,22 +32,22 @@ public class GlobalExceptionHandler {
         DbModificationAttemptException.class,
         ConstraintViolationException.class
     })
-    public ResponseEntity<PassengerExceptionHandlerResponse> handleBadRequestException(Exception e) {
+    public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
         return getExceptionResponse(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({
         Exception.class
     })
-    public ResponseEntity<PassengerExceptionHandlerResponse> handleOtherExceptions(Exception e) {
+    public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
         return getExceptionResponse(
                 new MessageSourceException(INTERNAL_SERVICE_ERROR, e.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
 
-    private ResponseEntity<PassengerExceptionHandlerResponse> getExceptionResponse(Exception e, HttpStatus httpStatus) {
-        return new ResponseEntity<>(new PassengerExceptionHandlerResponse(
+    private ResponseEntity<ExceptionHandlerResponse> getExceptionResponse(Exception e, HttpStatus httpStatus) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(
                     httpStatus.value(),
                     getExceptionMessage(e),
                     LocalDateTime.now()),

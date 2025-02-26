@@ -7,7 +7,6 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
@@ -19,7 +18,6 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(KafkaProperties.class)
 public class KafkaProducerConfig {
 
     private final KafkaProperties kafkaProperties;
@@ -41,13 +39,13 @@ public class KafkaProducerConfig {
     @Bean
     public NewTopics topics() {
         return new NewTopics(
-                TopicBuilder.name(kafkaProperties.topicPassengerRate())
-                        .partitions(1)
-                        .replicas(1)
+                TopicBuilder.name(kafkaProperties.topicPassenger())
+                        .partitions(kafkaProperties.topicPassengerPartitionsCount())
+                        .replicas(kafkaProperties.topicPassengerReplicasCount())
                         .build(),
-                TopicBuilder.name(kafkaProperties.topicDriverRate())
-                        .partitions(1)
-                        .replicas(1)
+                TopicBuilder.name(kafkaProperties.topicDriver())
+                        .partitions(kafkaProperties.topicDriverPartitionsCount())
+                        .replicas(kafkaProperties.topicDriverReplicasCount())
                         .build());
     }
 

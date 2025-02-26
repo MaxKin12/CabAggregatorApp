@@ -1,6 +1,6 @@
 package com.example.driverservice.exception;
 
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INTERNAL_SERVICE_ERROR;
 
 import com.example.driverservice.dto.exception.ExceptionHandlerResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;

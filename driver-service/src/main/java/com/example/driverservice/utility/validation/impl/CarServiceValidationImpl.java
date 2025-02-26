@@ -1,7 +1,7 @@
 package com.example.driverservice.utility.validation.impl;
 
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.CAR_NOT_FOUND;
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.CAR_NOT_FOUND;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
 
 import com.example.driverservice.configuration.properties.DriverServiceProperties;
 import com.example.driverservice.dto.car.CarRequest;

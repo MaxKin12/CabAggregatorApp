@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class InternationalizationValidationVariablesConstants {
+public final class InternationalizationValidationPropertyVariablesConstants {
 
     public static final String ID_NEGATIVE = "{validate.method.parameter.id.negative}";
     public static final String NAME_BLANK = "{validate.field.name.blank}";
@@ -24,7 +24,7 @@ public final class InternationalizationValidationVariablesConstants {
     public static final String NUMBER_INVALID_PATTERN = "{validate.field.number.invalid.pattern}";
     public static final String COLOR_BLANK = "{validate.field.color.blank}";
     public static final String COLOR_TOO_LONG = "{validate.field.color.too-long}";
-    public static final String DRIVER_ID_NOT_NULL = "{validate.field.driver-id.not.null}";
+    public static final String DRIVER_ID_NULL = "{validate.field.driver-id.null}";
     public static final String DRIVER_ID_NEGATIVE = "{validate.field.driver-id.negative}";
 
 }

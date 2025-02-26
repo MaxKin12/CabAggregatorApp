@@ -1,7 +1,7 @@
 package com.example.passengerservice.utility.validation.impl;
 
-import static com.example.passengerservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
-import static com.example.passengerservice.utility.constants.InternationalizationExceptionVariablesConstants.PASSENGER_NOT_FOUND;
+import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
+import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.PASSENGER_NOT_FOUND;
 
 import com.example.passengerservice.configuration.properties.PassengerServiceProperties;
 import com.example.passengerservice.dto.passenger.PassengerRequest;

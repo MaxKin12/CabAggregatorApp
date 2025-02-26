@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class InternationalizationValidationVariablesConstants {
+public final class InternationalizationValidationPropertyVariablesConstants {
 
     public static final String ID_NEGATIVE = "{validate.method.parameter.id.negative}";
     public static final String NAME_BLANK = "{validate.field.name.blank}";

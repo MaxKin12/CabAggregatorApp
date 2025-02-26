@@ -1,7 +1,7 @@
 package com.example.passengerservice.kafka;
 
-import static com.example.passengerservice.utility.constants.KafkaConsumerConstants.CONSUMER_GROUP_ID;
-import static com.example.passengerservice.utility.constants.KafkaConsumerConstants.CONSUMER_TOPIC_PASSENGER_RATE;
+import static com.example.passengerservice.utility.constants.KafkaConsumerPropertyVariablesConstants.CONSUMER_GROUP_ID;
+import static com.example.passengerservice.utility.constants.KafkaConsumerPropertyVariablesConstants.CONSUMER_TOPIC_PASSENGER_RATE;
 
 import com.example.passengerservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.passengerservice.model.Passenger;

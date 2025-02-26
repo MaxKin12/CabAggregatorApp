@@ -1,9 +1,11 @@
 package com.example.ratesservice.client.exception;
 
-public class InvalidRideContentException extends RuntimeException {
+import com.example.ratesservice.exception.MessageSourceException;
 
-    public InvalidRideContentException(String message) {
-        super(message);
+public class InvalidRideContentException extends MessageSourceException {
+
+    public InvalidRideContentException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record RateServiceProperties(
 
         Integer lastRidesCount,
-
         Integer maxPageLimit
 
 ) {

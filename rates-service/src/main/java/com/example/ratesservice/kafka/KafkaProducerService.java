@@ -1,4 +1,4 @@
-package com.example.ratesservice.utility.kafka;
+package com.example.ratesservice.kafka;
 
 import com.example.ratesservice.model.RateChangeEvent;
 

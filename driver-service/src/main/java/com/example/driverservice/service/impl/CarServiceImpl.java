@@ -1,11 +1,10 @@
 package com.example.driverservice.service.impl;
 
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.ID_NEGATIVE;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
 
-import com.example.driverservice.configuration.properties.DriverServiceProperties;
-import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
+import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.mapper.car.CarMapper;
 import com.example.driverservice.mapper.car.CarPageMapper;
 import com.example.driverservice.model.entity.Car;
@@ -16,7 +15,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-@EnableConfigurationProperties(DriverServiceProperties.class)
 public class CarServiceImpl implements CarService {
 
     private final CarServiceValidation validation;

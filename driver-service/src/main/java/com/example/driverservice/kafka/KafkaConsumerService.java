@@ -1,7 +1,7 @@
 package com.example.driverservice.kafka;
 
-import static com.example.driverservice.utility.constants.KafkaConsumerConstants.CONSUMER_GROUP_ID;
-import static com.example.driverservice.utility.constants.KafkaConsumerConstants.CONSUMER_TOPIC_PASSENGER_RATE;
+import static com.example.driverservice.utility.constants.KafkaConsumerPropertyVariablesConstants.CONSUMER_GROUP_ID;
+import static com.example.driverservice.utility.constants.KafkaConsumerPropertyVariablesConstants.CONSUMER_TOPIC_PASSENGER_RATE;
 
 import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.driverservice.model.entity.Driver;

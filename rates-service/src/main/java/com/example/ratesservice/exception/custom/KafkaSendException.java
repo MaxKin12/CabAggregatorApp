@@ -1,9 +1,11 @@
 package com.example.ratesservice.exception.custom;
 
-public class KafkaSendException extends RuntimeException {
+import com.example.ratesservice.exception.MessageSourceException;
 
-    public KafkaSendException(String message) {
-        super(message);
+public class KafkaSendException extends MessageSourceException {
+
+    public KafkaSendException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

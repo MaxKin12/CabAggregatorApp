@@ -1,6 +1,6 @@
 package com.example.driverservice.enums.annotation;
 
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.GENDER_INVALID_PATTERN;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.GENDER_INVALID_PATTERN;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;

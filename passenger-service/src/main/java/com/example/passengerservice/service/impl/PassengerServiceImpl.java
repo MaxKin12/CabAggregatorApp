@@ -1,6 +1,6 @@
 package com.example.passengerservice.service.impl;
 
-import static com.example.passengerservice.utility.constants.InternationalizationValidationVariablesConstants.ID_NEGATIVE;
+import static com.example.passengerservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
 
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;

@@ -1,16 +1,18 @@
 package com.example.ratesservice.exception;
 
-import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
+import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INTERNAL_SERVICE_ERROR;
 
 import com.example.ratesservice.client.exception.ExternalServiceClientBadRequest;
 import com.example.ratesservice.client.exception.ExternalServiceEntityNotFoundException;
 import com.example.ratesservice.client.exception.InvalidRideContentException;
+import com.example.ratesservice.dto.exception.ExceptionHandlerResponse;
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
 import com.example.ratesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
 import com.example.ratesservice.exception.custom.RateListIsEmptyException;
 import com.example.ratesservice.exception.custom.RateNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,8 +32,7 @@ public class GlobalExceptionHandler {
         ExternalServiceEntityNotFoundException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
-        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
-                HttpStatus.NOT_FOUND);
+        return getExceptionResponse(e, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({
@@ -44,21 +45,38 @@ public class GlobalExceptionHandler {
         InvalidRideContentException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
-        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
+        return getExceptionResponse(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({
         Exception.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
-        return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                getUnknownInternalServerErrorExceptionMessage(e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
+        return getExceptionResponse(
+                new MessageSourceException(INTERNAL_SERVICE_ERROR, e.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 
-    private String getUnknownInternalServerErrorExceptionMessage(String exceptionMessage) {
-        return messageSource
-                .getMessage(INTERNAL_SERVICE_ERROR, new Object[] {exceptionMessage}, LocaleContextHolder.getLocale());
+    private ResponseEntity<ExceptionHandlerResponse> getExceptionResponse(Exception e, HttpStatus httpStatus) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(
+                httpStatus.value(),
+                getExceptionMessage(e),
+                LocalDateTime.now()),
+                httpStatus
+        );
+    }
+
+    private String getExceptionMessage(Exception e) {
+        if (e instanceof MessageSourceException messageSourceException) {
+            return messageSource.getMessage(
+                    messageSourceException.getMessageKey(),
+                    messageSourceException.getArgs(),
+                    LocaleContextHolder.getLocale()
+            );
+        }
+
+        return e.getMessage();
     }
 
 }

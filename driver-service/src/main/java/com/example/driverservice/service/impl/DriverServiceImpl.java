@@ -1,11 +1,10 @@
 package com.example.driverservice.service.impl;
 
-import static com.example.driverservice.utility.constants.InternationalizationValidationVariablesConstants.ID_NEGATIVE;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
 
-import com.example.driverservice.configuration.properties.DriverServiceProperties;
-import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
+import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.mapper.driver.DriverMapper;
 import com.example.driverservice.mapper.driver.DriverPageMapper;
 import com.example.driverservice.model.entity.Driver;
@@ -16,7 +15,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-@EnableConfigurationProperties(DriverServiceProperties.class)
 public class DriverServiceImpl implements DriverService {
 
     private final DriverServiceValidation validation;
