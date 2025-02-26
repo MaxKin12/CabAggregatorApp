@@ -4,6 +4,7 @@ import static com.example.driverservice.utility.constants.InternationalizationVa
 
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
+import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.mapper.driver.DriverMapper;
 import com.example.driverservice.mapper.driver.DriverPageMapper;
@@ -56,8 +57,8 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public DriverResponse update(@Valid DriverRequest driverRequest,
-                                 @Positive(message = ID_NEGATIVE) Long id) {
+    public DriverResponse updateDriver(@Valid DriverRequest driverRequest,
+                                       @Positive(message = ID_NEGATIVE) Long id) {
         Driver driver = validation.findByIdOrThrow(id);
         validation.updateOrThrow(driver, driverRequest);
         return driverMapper.toResponse(driver);
@@ -66,7 +67,7 @@ public class DriverServiceImpl implements DriverService {
     @Override
     @Transactional
     public void updateRate(RateChangeEventResponse event) {
-        Driver driver = findByIdOrThrow(event.recipientId());
+        Driver driver = validation.findByIdOrThrow(event.recipientId());
         driver.setRate(event.rate());
         driverRepository.save(driver);
     }

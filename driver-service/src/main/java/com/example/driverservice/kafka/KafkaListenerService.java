@@ -1,5 +1,8 @@
 package com.example.driverservice.kafka;
 
+import static com.example.driverservice.utility.constants.KafkaListenerPropertyVariablesConstants.CONSUMER_GROUP_ID;
+import static com.example.driverservice.utility.constants.KafkaListenerPropertyVariablesConstants.CONSUMER_TOPIC_PASSENGER_RATE;
+
 import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.driverservice.service.DriverService;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +16,8 @@ public class KafkaListenerService {
     private final DriverService driverService;
 
     @KafkaListener(
-            topics = "${spring.kafka.consumer.topic-driver-rate}",
-            groupId = "${spring.kafka.consumer.group-id}"
+            topics = CONSUMER_TOPIC_PASSENGER_RATE,
+            groupId = CONSUMER_GROUP_ID
     )
     public void listen(RateChangeEventResponse event) {
         driverService.updateRate(event);

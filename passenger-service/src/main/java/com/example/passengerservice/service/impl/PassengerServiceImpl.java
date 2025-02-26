@@ -2,6 +2,7 @@ package com.example.passengerservice.service.impl;
 
 import static com.example.passengerservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
 
+import com.example.passengerservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
@@ -56,8 +57,8 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public PassengerResponse update(@Valid PassengerRequest passengerRequest,
-                                    @Positive(message = ID_NEGATIVE) Long id) {
+    public PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest,
+                                             @Positive(message = ID_NEGATIVE) Long id) {
         Passenger passenger = validation.findByIdOrThrow(id);
         validation.updateOrThrow(passenger, passengerRequest);
         return passengerMapper.toResponse(passenger);
@@ -66,7 +67,7 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     @Transactional
     public void updateRate(RateChangeEventResponse event) {
-        Passenger passenger = findByIdOrThrow(event.recipientId());
+        Passenger passenger = validation.findByIdOrThrow(event.recipientId());
         passenger.setRate(event.rate());
         passengerRepository.save(passenger);
     }

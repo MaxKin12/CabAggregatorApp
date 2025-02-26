@@ -1,9 +1,9 @@
 package com.example.driverservice.service;
 
-import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;
+import com.example.driverservice.dto.page.PageResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
