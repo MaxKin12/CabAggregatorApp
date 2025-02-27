@@ -1,9 +1,11 @@
 package com.example.ridesservice.exception.custom;
 
-public class TimetravelRequestException extends RuntimeException {
+import com.example.ridesservice.exception.MessageSourceException;
 
-    public TimetravelRequestException(String message) {
-        super(message);
+public class TimetravelRequestException extends MessageSourceException {
+
+    public TimetravelRequestException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

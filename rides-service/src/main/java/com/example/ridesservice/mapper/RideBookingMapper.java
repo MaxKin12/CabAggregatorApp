@@ -1,6 +1,6 @@
 package com.example.ridesservice.mapper;
 
-import com.example.ridesservice.dto.request.RideBookingRequest;
+import com.example.ridesservice.dto.ride.request.RideBookingRequest;
 import com.example.ridesservice.model.Ride;
 import java.math.BigDecimal;
 import org.mapstruct.Mapper;

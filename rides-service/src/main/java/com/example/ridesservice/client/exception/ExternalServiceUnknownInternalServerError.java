@@ -1,9 +1,11 @@
 package com.example.ridesservice.client.exception;
 
-public class ExternalServiceUnknownInternalServerError extends RuntimeException {
+import com.example.ridesservice.exception.MessageSourceException;
 
-    public ExternalServiceUnknownInternalServerError(String message) {
-        super(message);
+public class ExternalServiceUnknownInternalServerError extends MessageSourceException {
+
+    public ExternalServiceUnknownInternalServerError(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

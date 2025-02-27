@@ -1,7 +1,7 @@
 package com.example.ridesservice.mapper;
 
-import com.example.ridesservice.dto.request.RideRequest;
-import com.example.ridesservice.dto.response.RideResponse;
+import com.example.ridesservice.dto.ride.request.RideRequest;
+import com.example.ridesservice.dto.ride.response.RideResponse;
 import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.model.Ride;
 import java.math.BigDecimal;

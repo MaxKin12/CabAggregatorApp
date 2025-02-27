@@ -9,9 +9,9 @@ import com.example.ridesservice.utility.traveltime.TravelTimeService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class PriceCounterImpl implements PriceCounter {
 

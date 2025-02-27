@@ -1,9 +1,11 @@
 package com.example.ridesservice.exception.custom;
 
-public class RideNotContainsDriverException extends RuntimeException {
+import com.example.ridesservice.exception.MessageSourceException;
 
-    public RideNotContainsDriverException(String message) {
-        super(message);
+public class RideNotContainsDriverException extends MessageSourceException {
+
+    public RideNotContainsDriverException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

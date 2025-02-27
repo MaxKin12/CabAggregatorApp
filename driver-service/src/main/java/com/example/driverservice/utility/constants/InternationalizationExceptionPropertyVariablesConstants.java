@@ -11,6 +11,6 @@ public class InternationalizationExceptionPropertyVariablesConstants {
     public static final String CAR_NOT_FOUND = "exception.car.not.found";
     public static final String INVALID_ATTEMPT_CHANGE_DRIVER = "exception.invalid.attempt.change.driver";
     public static final String INVALID_ATTEMPT_CHANGE_CAR = "exception.invalid.attempt.change.car";
-    public static final String INTERNAL_SERVICE_ERROR = "exception.internal.server.error";
+    public static final String INTERNAL_SERVICE_ERROR = "exception.internal-server.error";
 
 }

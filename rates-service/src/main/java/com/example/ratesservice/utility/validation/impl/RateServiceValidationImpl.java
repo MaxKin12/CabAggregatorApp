@@ -73,17 +73,17 @@ public class RateServiceValidationImpl implements RateServiceValidation {
 
     @Override
     public RidesResponse getRideById(Long id) {
-        return ridesClient.getRideById(id).getBody();
+        return ridesClient.getRideById(id);
     }
 
     @Override
     public void checkPassengerExistence(Long id) {
-        passengerClient.getPassengerById(id).getBody();
+        passengerClient.getPassengerById(id);
     }
 
     @Override
     public void checkDriverExistence(Long id) {
-        driverClient.getDriverById(id).getBody();
+        driverClient.getDriverById(id);
     }
 
     @Override

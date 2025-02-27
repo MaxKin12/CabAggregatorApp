@@ -1,6 +1,6 @@
 package com.example.ridesservice.mapper;
 
-import com.example.ridesservice.dto.request.RideStatusRequest;
+import com.example.ridesservice.dto.ride.request.RideStatusRequest;
 import com.example.ridesservice.model.Ride;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

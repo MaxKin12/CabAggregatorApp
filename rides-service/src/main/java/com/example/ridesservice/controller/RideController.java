@@ -1,11 +1,12 @@
 package com.example.ridesservice.controller;
 
-import com.example.ridesservice.dto.request.RideBookingRequest;
-import com.example.ridesservice.dto.request.RideDriverSettingRequest;
-import com.example.ridesservice.dto.request.RideRequest;
-import com.example.ridesservice.dto.request.RideStatusRequest;
-import com.example.ridesservice.dto.response.RidePageResponse;
-import com.example.ridesservice.dto.response.RideResponse;
+import com.example.ridesservice.dto.ride.request.RideBookingRequest;
+import com.example.ridesservice.dto.ride.request.RideDriverSettingRequest;
+import com.example.ridesservice.dto.ride.request.RideRequest;
+import com.example.ridesservice.dto.ride.request.RideStatusRequest;
+import com.example.ridesservice.dto.ride.response.RidePageResponse;
+import com.example.ridesservice.dto.ride.response.RideResponse;
+import com.example.ridesservice.enums.PersonType;
 import com.example.ridesservice.service.RideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,8 @@ public class RideController {
             @PathVariable("id") Long passengerId,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        RidePageResponse ridePageResponse = rideService.findLastPassengerRides(passengerId, limit);
+        RidePageResponse ridePageResponse = rideService
+                .findLastPersonRides(passengerId, limit, PersonType.PASSENGER);
         return ResponseEntity.status(HttpStatus.OK).body(ridePageResponse);
     }
 
@@ -56,7 +58,8 @@ public class RideController {
             @PathVariable("id") Long passengerId,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        RidePageResponse ridePageResponse = rideService.findLastDriverRides(passengerId, limit);
+        RidePageResponse ridePageResponse = rideService
+                .findLastPersonRides(passengerId, limit, PersonType.DRIVER);
         return ResponseEntity.status(HttpStatus.OK).body(ridePageResponse);
     }
 

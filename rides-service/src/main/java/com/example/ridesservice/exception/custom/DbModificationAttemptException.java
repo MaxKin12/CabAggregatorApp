@@ -1,9 +1,11 @@
 package com.example.ridesservice.exception.custom;
 
-public class DbModificationAttemptException extends RuntimeException {
+import com.example.ridesservice.exception.MessageSourceException;
 
-    public DbModificationAttemptException(String message) {
-        super(message);
+public class DbModificationAttemptException extends MessageSourceException {
+
+    public DbModificationAttemptException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }
