@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="delete-initial-rides-data" author="MaxKin12">
+        <delete tableName="rides"/>
+    </changeSet>
+
+    <changeSet id="insert-new-rides-data" author="MaxKin12">
+        <insert tableName="rides">
+            <column name="id" value="1"/>
+            <column name="passenger_id" value="1"/>
+            <column name="driver_id" value="1"/>
+            <column name="car_id" value="1"/>
+            <column name="pick_up_address" value="Независимости 4, Минск"/>
+            <column name="destination_address" value="Гикало 9, Минск"/>
+            <column name="status" value="500"/>
+            <column name="order_time" value="2025-02-02 15:00:00"/>
+            <column name="price" value="17.5"/>
+        </insert>
+        <insert tableName="rides">
+            <column name="id" value="2"/>
+            <column name="passenger_id" value="5"/>
+            <column name="driver_id" value="5"/>
+            <column name="car_id" value="4"/>
+            <column name="pick_up_address" value="Притыцкого 132, Барановичи"/>
+            <column name="destination_address" value="Новаторов 120, Барановичи"/>
+            <column name="status" value="600"/>
+            <column name="order_time" value="2025-02-02 16:00:00"/>
+            <column name="price" value="28"/>
+        </insert>
+        <insert tableName="rides">
+            <column name="id" value="3"/>
+            <column name="passenger_id" value="15"/>
+            <column name="driver_id" value="10"/>
+            <column name="car_id" value="2"/>
+            <column name="pick_up_address" value="Гоголя 9, Брест"/>
+            <column name="destination_address" value="Машерова 15, Брест"/>
+            <column name="status" value="500"/>
+            <column name="order_time" value="2025-02-02 17:00:00"/>
+            <column name="price" value="9"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
