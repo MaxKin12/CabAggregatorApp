@@ -1,7 +1,7 @@
 package com.example.passengerservice.mapper;
 
-import com.example.passengerservice.dto.PassengerRequest;
-import com.example.passengerservice.dto.PassengerResponse;
+import com.example.passengerservice.dto.passenger.PassengerRequest;
+import com.example.passengerservice.dto.passenger.PassengerResponse;
 import com.example.passengerservice.model.Passenger;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

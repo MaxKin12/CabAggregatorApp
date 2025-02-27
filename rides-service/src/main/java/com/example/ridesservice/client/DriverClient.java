@@ -1,5 +1,6 @@
 package com.example.ridesservice.client;
 
+import com.example.ridesservice.client.driver.ExternalServiceClientDecoder;
 import com.example.ridesservice.client.dto.CarResponse;
 import com.example.ridesservice.client.dto.DriverResponse;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -33,8 +33,7 @@ public interface RideService {
     RideResponse update(@Valid RideRequest rideRequest,
                         @Positive(message = "{validate.method.parameter.id.negative}") Long id);
 
-    RideResponse setDriverToRide(@Valid RideDriverSettingRequest rideRequest,
-                                 @Positive(message = "{validate.method.parameter.id.negative}") Long id);
+    RideResponse setDriverToRide(@Valid RideDriverSettingRequest rideRequest);
 
     RideResponse updateStatus(@Valid RideStatusRequest rideRequest,
                               @Positive(message = "{validate.method.parameter.id.negative}") Long id);

@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -49,6 +50,9 @@ public class Driver implements DriverEntity {
     @Column(name = "sex", nullable = false)
     @Convert(converter = UserGenderConverter.class)
     private UserGender gender;
+
+    @Column(name = "rate")
+    private BigDecimal rate;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Car> cars;

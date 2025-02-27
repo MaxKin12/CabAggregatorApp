@@ -18,7 +18,10 @@
         <java.version>17</java.version>
         <mapstruct.version>1.6.2</mapstruct.version>
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
+        <spring-cloud-starter-openfeign.version>4.2.0</spring-cloud-starter-openfeign.version>
         <spring-boot-configuration-processor.version>3.4.1</spring-boot-configuration-processor.version>
+        <spring-kafka.version>3.3.3</spring-kafka.version>
+        <shedlock-spring.version>6.3.0</shedlock-spring.version>
     </properties>
 
     <dependencies>
@@ -38,6 +41,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${spring-cloud-starter-openfeign.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -68,6 +76,21 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${spring-kafka.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-spring</artifactId>
+            <version>${shedlock-spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-provider-jdbc-template</artifactId>
+            <version>${shedlock-spring.version}</version>
         </dependency>
     </dependencies>
 

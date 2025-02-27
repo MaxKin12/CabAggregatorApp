@@ -7,6 +7,7 @@ import com.example.driverservice.configuration.properties.DriverServicePropertie
 import com.example.driverservice.dto.common.PageResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
+import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.driverservice.exception.custom.DbModificationAttemptException;
 import com.example.driverservice.exception.custom.ResourceNotFoundException;
 import com.example.driverservice.mapper.driver.DriverMapper;
@@ -73,8 +74,8 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public DriverResponse update(@Valid DriverRequest driverRequest,
-                                 @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
+    public DriverResponse updateDriver(@Valid DriverRequest driverRequest,
+                                       @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
         Driver driver = findByIdOrThrow(id);
         try {
             driverMapper.updateDriverFromDto(driverRequest, driver);
@@ -86,6 +87,14 @@ public class DriverServiceImpl implements DriverService {
                     getExceptionMessage(INVALID_ATTEMPT_CHANGE_DRIVER, "update", e.getMessage())
             );
         }
+    }
+
+    @Override
+    @Transactional
+    public void updateRate(RateChangeEventResponse event) {
+        Driver driver = findByIdOrThrow(event.recipientId());
+        driver.setRate(event.rate());
+        driverRepository.save(driver);
     }
 
     @Override

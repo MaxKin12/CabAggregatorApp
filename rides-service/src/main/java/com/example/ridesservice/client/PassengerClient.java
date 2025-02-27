@@ -1,5 +1,6 @@
 package com.example.ridesservice.client;
 
+import com.example.ridesservice.client.driver.ExternalServiceClientDecoder;
 import com.example.ridesservice.client.dto.PassengerResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

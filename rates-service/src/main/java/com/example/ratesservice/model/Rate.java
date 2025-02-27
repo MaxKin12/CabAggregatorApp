@@ -1,7 +1,7 @@
 package com.example.ratesservice.model;
 
-import com.example.ratesservice.enums.AuthorType;
-import com.example.ratesservice.enums.converter.AuthorTypeConverter;
+import com.example.ratesservice.enums.RecipientType;
+import com.example.ratesservice.enums.converter.RecipientTypeConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -41,9 +41,9 @@ public class Rate {
     @Column(name = "driver_id", nullable = false)
     private Long driverId;
 
-    @Column(name = "author")
-    @Convert(converter = AuthorTypeConverter.class)
-    private AuthorType author;
+    @Column(name = "recipient")
+    @Convert(converter = RecipientTypeConverter.class)
+    private RecipientType recipient;
 
     @Column(name = "value", nullable = false)
     private Integer value;

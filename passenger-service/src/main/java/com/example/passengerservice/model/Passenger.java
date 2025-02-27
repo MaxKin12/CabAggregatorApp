@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +38,9 @@ public class Passenger {
 
     @Column(name = "phone", nullable = false, length = 13, unique = true)
     private String phone;
+
+    @Column(name = "rate")
+    private BigDecimal rate;
 
     @Column(name = "deleted_at")
     private LocalDateTime deleteAt;

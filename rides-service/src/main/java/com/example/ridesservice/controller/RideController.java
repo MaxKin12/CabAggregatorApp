@@ -79,10 +79,9 @@ public class RideController {
         return ResponseEntity.status(HttpStatus.OK).body(rideResponse);
     }
 
-    @PatchMapping("/{id}/driver")
-    public ResponseEntity<RideResponse> updateRidesDriver(@RequestBody RideDriverSettingRequest rideRequest,
-                                                           @PathVariable("id") Long rideId) {
-        RideResponse rideResponse = rideService.setDriverToRide(rideRequest, rideId);
+    @PatchMapping("/accepting")
+    public ResponseEntity<RideResponse> updateRidesDriver(@RequestBody RideDriverSettingRequest rideRequest) {
+        RideResponse rideResponse = rideService.setDriverToRide(rideRequest);
         return ResponseEntity.status(HttpStatus.OK).body(rideResponse);
     }
 

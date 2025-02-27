@@ -2,6 +2,9 @@ package com.example.ratesservice.exception;
 
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
 
+import com.example.ratesservice.client.exception.ExternalServiceClientBadRequest;
+import com.example.ratesservice.client.exception.ExternalServiceEntityNotFoundException;
+import com.example.ratesservice.client.exception.InvalidRideContentException;
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
 import com.example.ratesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
@@ -23,7 +26,8 @@ public class GlobalExceptionHandler {
     private final MessageSource messageSource;
 
     @ExceptionHandler({
-        RateNotFoundException.class
+        RateNotFoundException.class,
+        ExternalServiceEntityNotFoundException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
@@ -35,7 +39,9 @@ public class GlobalExceptionHandler {
         DbModificationAttemptException.class,
         ConstraintViolationException.class,
         RateAlreadyExistsException.class,
-        RateListIsEmptyException.class
+        RateListIsEmptyException.class,
+        ExternalServiceClientBadRequest.class,
+        InvalidRideContentException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
         return new ResponseEntity<>(new ExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),

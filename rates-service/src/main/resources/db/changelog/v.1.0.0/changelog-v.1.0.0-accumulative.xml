@@ -10,5 +10,7 @@
 
     <include file="2025-02-06-create-table-rates.xml" relativeToChangelogFile="true"/>
     <include file="2025-02-06-insert-initial-rates-data.xml" relativeToChangelogFile="true"/>
+    <include file="2025-02-20-create-table-rate-events.xml" relativeToChangelogFile="true"/>
+    <include file="2025-02-20-create-table-shedlock.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
