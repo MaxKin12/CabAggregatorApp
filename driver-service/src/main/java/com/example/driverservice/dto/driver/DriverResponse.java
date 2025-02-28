@@ -9,17 +9,11 @@ import lombok.Builder;
 public record DriverResponse(
 
         Long id,
-
         String name,
-
         String email,
-
         String phone,
-
         String gender,
-
         BigDecimal rate,
-
         List<Long> carIds
 
 ) implements EntityResponse {

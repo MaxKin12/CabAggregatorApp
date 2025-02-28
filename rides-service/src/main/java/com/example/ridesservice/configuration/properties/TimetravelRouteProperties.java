@@ -6,9 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record TimetravelRouteProperties(
 
         String appId,
-
         String apiKey,
-
         String countryCode
 
 ) {

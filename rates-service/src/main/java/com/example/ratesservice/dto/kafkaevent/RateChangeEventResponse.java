@@ -7,9 +7,7 @@ import lombok.Builder;
 public record RateChangeEventResponse(
 
         Long eventId,
-
         Long recipientId,
-
         BigDecimal rate
 
 ) {

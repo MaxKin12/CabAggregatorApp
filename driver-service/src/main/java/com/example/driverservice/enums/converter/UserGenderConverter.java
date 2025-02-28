@@ -1,35 +1,27 @@
 package com.example.driverservice.enums.converter;
 
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ENUM_ARGUMENT;
+import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ENUM_ARGUMENT;
 
 import com.example.driverservice.enums.UserGender;
 import com.example.driverservice.exception.custom.IllegalEnumArgumentException;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 @Converter
 @RequiredArgsConstructor
 public class UserGenderConverter implements AttributeConverter<UserGender, Integer> {
 
-    private final MessageSource messageSource;
-
     @Override
-    public Integer convertToDatabaseColumn(UserGender userGender) {
+    public Integer convertToDatabaseColumn(@NonNull UserGender userGender) {
         return userGender.getCode();
     }
 
     @Override
-    public UserGender convertToEntityAttribute(Integer code) {
+    public UserGender convertToEntityAttribute(@NonNull Integer code) {
         return UserGender.codeToUserGender(code)
-                .orElseThrow(() -> new IllegalEnumArgumentException(getExceptionMessage(code)));
-    }
-
-    private String getExceptionMessage(Integer code) {
-        return messageSource
-                .getMessage(INVALID_ENUM_ARGUMENT, new Object[] {code}, LocaleContextHolder.getLocale());
+                .orElseThrow(() -> new IllegalEnumArgumentException(INVALID_ENUM_ARGUMENT, code.toString()));
     }
 
 }

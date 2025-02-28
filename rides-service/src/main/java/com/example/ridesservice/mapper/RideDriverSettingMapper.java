@@ -1,6 +1,6 @@
 package com.example.ridesservice.mapper;
 
-import com.example.ridesservice.dto.request.RideDriverSettingRequest;
+import com.example.ridesservice.dto.ride.request.RideDriverSettingRequest;
 import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.model.Ride;
 import org.mapstruct.Mapper;

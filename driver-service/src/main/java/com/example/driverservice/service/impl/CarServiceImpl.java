@@ -1,26 +1,20 @@
 package com.example.driverservice.service.impl;
 
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.CAR_NOT_FOUND;
-import static com.example.driverservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
+import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
 
-import com.example.driverservice.configuration.properties.DriverServiceProperties;
 import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
-import com.example.driverservice.dto.common.PageResponse;
-import com.example.driverservice.exception.custom.DbModificationAttemptException;
-import com.example.driverservice.exception.custom.ResourceNotFoundException;
+import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.mapper.car.CarMapper;
 import com.example.driverservice.mapper.car.CarPageMapper;
 import com.example.driverservice.model.entity.Car;
 import com.example.driverservice.repository.CarRepository;
 import com.example.driverservice.service.CarService;
+import com.example.driverservice.utility.validation.CarServiceValidation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -30,30 +24,24 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-@EnableConfigurationProperties(DriverServiceProperties.class)
 public class CarServiceImpl implements CarService {
 
-    private final DriverServiceProperties driverServiceProperties;
-
+    private final CarServiceValidation validation;
     private final CarRepository carRepository;
-
     private final CarMapper carMapper;
-
     private final CarPageMapper carPageMapper;
-
-    private final MessageSource messageSource;
 
     @Override
     @Transactional(readOnly = true)
-    public CarResponse findById(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Car car = findByIdOrThrow(id);
+    public CarResponse findById(@Positive(message = ID_NEGATIVE) Long id) {
+        Car car = validation.findByIdOrThrow(id);
         return carMapper.toResponse(car);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PageResponse<CarResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
-        limit = limit < driverServiceProperties.maxPageLimit() ? limit : driverServiceProperties.maxPageLimit();
+        limit = validation.cutDownLimit(limit);
         Page<Car> carPage = carRepository.findAll(PageRequest.of(offset, limit));
         return carPageMapper.toResponsePage(carPage, offset, limit);
     }
@@ -61,53 +49,25 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional
     public CarResponse create(@Valid CarRequest carRequest) {
-        try {
-            Car car = carRepository.save(carMapper.toCar(carRequest));
-            return carMapper.toResponse(car);
-        } catch (Exception e) {
-            throw new DbModificationAttemptException(
-                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_CAR, "create", e.getMessage())
-            );
-        }
+        Car car = carMapper.toCar(carRequest);
+        Car savedCar = validation.saveOrThrow(car);
+        return carMapper.toResponse(savedCar);
     }
 
     @Override
     @Transactional
     public CarResponse update(@Valid CarRequest carRequest,
-                              @Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        Car car = findByIdOrThrow(id);
-        try {
-            carMapper.updateCarFromDto(carRequest, car);
-            CarResponse carResponse = carMapper.toResponse(car);
-            carRepository.flush();
-            return carResponse;
-        } catch (Exception e) {
-            throw new DbModificationAttemptException(
-                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_CAR, "update", e.getMessage())
-            );
-        }
+                              @Positive(message = ID_NEGATIVE) Long id) {
+        Car car = validation.findByIdOrThrow(id);
+        validation.updateOrThrow(car, carRequest);
+        return carMapper.toResponse(car);
     }
 
     @Override
     @Transactional
-    public void delete(@Positive(message = "{validate.method.parameter.id.negative}") Long id) {
-        findByIdOrThrow(id);
-        try {
-            carRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new DbModificationAttemptException(
-                    getExceptionMessage(INVALID_ATTEMPT_CHANGE_CAR, "delete", e.getMessage())
-            );
-        }
-    }
-
-    private Car findByIdOrThrow(Long id) {
-        return carRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(getExceptionMessage(CAR_NOT_FOUND, id)));
-    }
-
-    private String getExceptionMessage(String messageKey, Object... args) {
-        return messageSource.getMessage(messageKey, args, LocaleContextHolder.getLocale());
+    public void delete(@Positive(message = ID_NEGATIVE) Long id) {
+        validation.findByIdOrThrow(id);
+        carRepository.deleteById(id);
     }
 
 }

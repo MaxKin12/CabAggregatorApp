@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 public record RateAverageResponse(
 
         Long personId,
-
         BigDecimal averageValue
 
 ) {

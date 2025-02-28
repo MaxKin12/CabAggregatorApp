@@ -1,9 +1,11 @@
 package com.example.ratesservice.exception.custom;
 
-public class RateListIsEmptyException extends RuntimeException {
+import com.example.ratesservice.exception.MessageSourceException;
 
-    public RateListIsEmptyException(String message) {
-        super(message);
+public class RateListIsEmptyException extends MessageSourceException {
+
+    public RateListIsEmptyException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

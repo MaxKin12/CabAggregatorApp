@@ -1,5 +1,6 @@
 package com.example.ridesservice.enums.annotation;
 
+import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.STATUS_INVALID_PATTERN;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
@@ -20,7 +21,7 @@ public @interface StatusValidation {
 
     Class<? extends Enum<?>> enumClass();
 
-    String message() default "{}";
+    String message() default STATUS_INVALID_PATTERN;
 
     Class<?>[] groups() default {};
 

@@ -1,12 +1,12 @@
 package com.example.ridesservice.enums;
 
-import com.example.ridesservice.exception.custom.WrongStatusChangeException;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.WRONG_STATUS_TRANSITION;
+
+import com.example.ridesservice.exception.custom.WrongStatusTransitionException;
 import java.util.Arrays;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.WRONG_STATUS_CHANGE;
 
 @RequiredArgsConstructor
 @Getter
@@ -28,13 +28,13 @@ public enum RideStatus {
                 .findAny();
     }
 
-    public static void throwIfWrongStatusChangeOrder(RideStatus oldRideStatus, RideStatus newRideStatus) {
+    public static void throwIfWrongStatusTransition(RideStatus oldRideStatus, RideStatus newRideStatus) {
         int statusDif = RideStatus.ACCEPTED.getCode() - RideStatus.CREATED.getCode();
         int actualStatusDif = newRideStatus.getCode() - oldRideStatus.getCode();
         if (oldRideStatus.equals(RideStatus.COMPLETED)
                 || ((actualStatusDif < 0 || actualStatusDif > statusDif) && !newRideStatus.equals(RideStatus.CANCELLED))
         ) {
-            throw new WrongStatusChangeException(WRONG_STATUS_CHANGE);
+            throw new WrongStatusTransitionException(WRONG_STATUS_TRANSITION);
         }
     }
 

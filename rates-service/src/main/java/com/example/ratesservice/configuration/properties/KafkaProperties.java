@@ -5,12 +5,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.kafka.producer")
 public record KafkaProperties(
 
-        String topicPassengerRate,
-
-        String topicDriverRate,
-
         String bootstrapServers,
-
+        String topicPassenger,
+        Integer topicPassengerPartitionsCount,
+        Integer topicPassengerReplicasCount,
+        String topicDriver,
+        Integer topicDriverPartitionsCount,
+        Integer topicDriverReplicasCount,
         Integer schedulerProcessingBatchSize
 
 ) {

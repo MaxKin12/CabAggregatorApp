@@ -1,9 +1,11 @@
 package com.example.passengerservice.exception.custom;
 
-public class PassengerNotFoundException extends RuntimeException {
+import com.example.passengerservice.exception.MessageSourceException;
 
-    public PassengerNotFoundException(String message) {
-        super(message);
+public class PassengerNotFoundException extends MessageSourceException {
+
+    public PassengerNotFoundException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

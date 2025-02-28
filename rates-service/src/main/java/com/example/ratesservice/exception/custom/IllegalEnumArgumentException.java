@@ -1,9 +1,11 @@
 package com.example.ratesservice.exception.custom;
 
-public class IllegalEnumArgumentException extends RuntimeException {
+import com.example.ratesservice.exception.MessageSourceException;
 
-    public IllegalEnumArgumentException(String message) {
-        super(message);
+public class IllegalEnumArgumentException extends MessageSourceException {
+
+    public IllegalEnumArgumentException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

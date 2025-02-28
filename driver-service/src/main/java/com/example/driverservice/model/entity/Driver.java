@@ -38,13 +38,13 @@ public class Driver implements DriverEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "email", length = 100, nullable = false, unique = true)
+    @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(name = "phone", length = 13, nullable = false, unique = true)
+    @Column(name = "phone", nullable = false, length = 13, unique = true)
     private String phone;
 
     @Column(name = "sex", nullable = false)

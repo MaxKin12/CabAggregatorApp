@@ -1,9 +1,11 @@
 package com.example.ridesservice.exception.custom;
 
-public class RideNotFoundException extends RuntimeException {
+import com.example.ridesservice.exception.MessageSourceException;
 
-    public RideNotFoundException(String message) {
-        super(message);
+public class RideNotFoundException extends MessageSourceException {
+
+    public RideNotFoundException(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

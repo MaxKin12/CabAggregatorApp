@@ -1,7 +1,7 @@
 package com.example.driverservice.mapper;
 
 import com.example.driverservice.dto.EntityResponse;
-import com.example.driverservice.dto.common.PageResponse;
+import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.model.DriverEntity;
 import java.util.List;
 import org.mapstruct.Mapping;

@@ -1,9 +1,11 @@
 package com.example.ratesservice.client.exception;
 
-public class ExternalServiceClientBadRequest extends RuntimeException {
+import com.example.ratesservice.exception.MessageSourceException;
 
-    public ExternalServiceClientBadRequest(String message) {
-        super(message);
+public class ExternalServiceClientBadRequest extends MessageSourceException {
+
+    public ExternalServiceClientBadRequest(String messageKey, String... args) {
+        super(messageKey, args);
     }
 
 }

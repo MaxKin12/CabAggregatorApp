@@ -1,17 +1,19 @@
 package com.example.ridesservice.exception;
 
-import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVICE_ERROR;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVER_ERROR;
 
 import com.example.ridesservice.client.exception.DriverNotContainsCarException;
 import com.example.ridesservice.client.exception.ExternalServiceClientBadRequest;
 import com.example.ridesservice.client.exception.ExternalServiceEntityNotFoundException;
+import com.example.ridesservice.dto.exception.ExceptionHandlerResponse;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ridesservice.exception.custom.RideNotContainsDriverException;
 import com.example.ridesservice.exception.custom.RideNotFoundException;
 import com.example.ridesservice.exception.custom.TimetravelRequestException;
-import com.example.ridesservice.exception.custom.WrongStatusChangeException;
+import com.example.ridesservice.exception.custom.WrongStatusTransitionException;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,9 +32,8 @@ public class GlobalExceptionHandler {
         RideNotFoundException.class,
         ExternalServiceEntityNotFoundException.class
     })
-    public ResponseEntity<RideExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
-        return new ResponseEntity<>(new RideExceptionHandlerResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
-                HttpStatus.NOT_FOUND);
+    public ResponseEntity<ExceptionHandlerResponse> handleResourceNotFoundException(Exception e) {
+        return getExceptionResponse(e, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({
@@ -43,24 +44,40 @@ public class GlobalExceptionHandler {
         ExternalServiceClientBadRequest.class,
         DriverNotContainsCarException.class,
         RideNotContainsDriverException.class,
-        WrongStatusChangeException.class
+        WrongStatusTransitionException.class
     })
-    public ResponseEntity<RideExceptionHandlerResponse> handleBadRequestException(Exception e) {
-        return new ResponseEntity<>(new RideExceptionHandlerResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-                HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
+        return getExceptionResponse(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({
         Exception.class
     })
-    public ResponseEntity<RideExceptionHandlerResponse> handleOtherExceptions(Exception e) {
-        return new ResponseEntity<>(new RideExceptionHandlerResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                getUnknownInternalServerErrorExceptionMessage(e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
+        return getExceptionResponse(
+                new MessageSourceException(INTERNAL_SERVER_ERROR, e.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 
-    private String getUnknownInternalServerErrorExceptionMessage(String exceptionMessage) {
-        return messageSource
-                .getMessage(INTERNAL_SERVICE_ERROR, new Object[] {exceptionMessage}, LocaleContextHolder.getLocale());
+    private ResponseEntity<ExceptionHandlerResponse> getExceptionResponse(Exception e, HttpStatus httpStatus) {
+        return new ResponseEntity<>(new ExceptionHandlerResponse(
+                httpStatus.value(),
+                getExceptionMessage(e),
+                LocalDateTime.now()),
+                httpStatus
+        );
+    }
+
+    private String getExceptionMessage(Exception e) {
+        if (e instanceof MessageSourceException messageSourceException) {
+            return messageSource.getMessage(
+                    messageSourceException.getMessageKey(),
+                    messageSourceException.getArgs(),
+                    LocaleContextHolder.getLocale()
+            );
+        }
+        return e.getMessage();
     }
 
 }
