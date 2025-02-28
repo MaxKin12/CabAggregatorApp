@@ -1,7 +1,10 @@
 package com.example.passengerservice.dto.passenger;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
 
+@Builder
 public record PassengerResponse(
 
         Long id,
