@@ -77,7 +77,6 @@ public class GlobalExceptionHandler {
                     LocaleContextHolder.getLocale()
             );
         }
-
         return e.getMessage();
     }
 
