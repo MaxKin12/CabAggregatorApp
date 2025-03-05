@@ -48,7 +48,7 @@ class PassengerServiceValidationImplTest {
     private PassengerMapper passengerMapper;
 
     @Test
-    void findByIdOrThrow_ValidId_ReturnsPassenger() {
+    void findByIdOrThrowTest_ValidId_ReturnsPassenger() {
         Long id = PASSENGER_ID;
         Passenger passenger = PASSENGER;
 
@@ -62,7 +62,7 @@ class PassengerServiceValidationImplTest {
     }
 
     @Test
-    void findByIdOrThrow_InvalidId_ThrowsException() {
+    void findByIdOrThrowTest_InvalidId_ThrowsException() {
         Long id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
@@ -77,7 +77,7 @@ class PassengerServiceValidationImplTest {
     }
 
     @Test
-    void cutDownLimit_LimitLessThanMax_ReturnsSameLimit() {
+    void cutDownLimitTest_LimitLessThanMax_ReturnsSameLimit() {
         int limit = LIMIT_CUT;
         int maxLimit = LIMIT;
 
@@ -90,7 +90,7 @@ class PassengerServiceValidationImplTest {
     }
 
     @Test
-    void cutDownLimit_LimitGreaterThanMax_ReturnsCutLimit() {
+    void cutDownLimitTest_LimitGreaterThanMax_ReturnsCutLimit() {
         int limit = LIMIT;
         int maxLimit = LIMIT_CUT;
 
@@ -103,7 +103,7 @@ class PassengerServiceValidationImplTest {
     }
 
     @Test
-    void saveOrThrow_ValidEntity_SavesPassenger() {
+    void saveOrThrowTest_ValidEntity_SavesPassenger() {
         Passenger passenger = PASSENGER;
 
         when(passengerRepository.save(passenger)).thenReturn(passenger);
@@ -116,7 +116,7 @@ class PassengerServiceValidationImplTest {
     }
 
     @Test
-    void saveOrThrow_InvalidEntity_ThrowsException() {
+    void saveOrThrowTest_InvalidEntity_ThrowsException() {
         Passenger passenger = PASSENGER;
         String[] args = new String[] {ATTEMPT_CHANGE_CREATE, EXCEPTION_MESSAGE};
 
@@ -131,7 +131,7 @@ class PassengerServiceValidationImplTest {
     }
 
     @Test
-    void updateOrThrow_ValidAttemptToUpdateEntity_UpdatesPassenger() {
+    void updateOrThrowTest_ValidAttemptToUpdateEntity_UpdatesPassenger() {
         Passenger passenger = PASSENGER;
         PassengerRequest request = PASSENGER_REQUEST;
 
@@ -145,7 +145,7 @@ class PassengerServiceValidationImplTest {
     }
 
     @Test
-    void updateOrThrow_InvalidAttemptToUpdateEntity_ThrowsException() {
+    void updateOrThrowTest_InvalidAttemptToUpdateEntity_ThrowsException() {
         Passenger passenger = PASSENGER;
         PassengerRequest request = PASSENGER_REQUEST;
         String[] args = new String[] {ATTEMPT_CHANGE_UPDATE, EXCEPTION_MESSAGE};
