@@ -1,18 +1,21 @@
 package com.example.passengerservice.service.impl;
 
-import static com.example.passengerservice.constants.PassengerServiceTestData.EXCEPTION_MESSAGE;
-import static com.example.passengerservice.constants.PassengerServiceTestData.LIMIT;
-import static com.example.passengerservice.constants.PassengerServiceTestData.LIMIT_CUT;
-import static com.example.passengerservice.constants.PassengerServiceTestData.OFFSET;
-import static com.example.passengerservice.constants.PassengerServiceTestData.PASSENGER;
-import static com.example.passengerservice.constants.PassengerServiceTestData.PASSENGER1_ID;
-import static com.example.passengerservice.constants.PassengerServiceTestData.PASSENGER_PAGE;
-import static com.example.passengerservice.constants.PassengerServiceTestData.PASSENGER_PAGE_RESPONSE;
-import static com.example.passengerservice.constants.PassengerServiceTestData.PASSENGER_REQUEST;
-import static com.example.passengerservice.constants.PassengerServiceTestData.PASSENGER_RESPONSE;
-import static com.example.passengerservice.constants.PassengerServiceTestData.RATE_CHANGE_EVENT_RESPONSE;
+import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
+import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
+import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
+import static com.example.passengerservice.utility.constants.PassengerTestData.LIMIT;
+import static com.example.passengerservice.utility.constants.PassengerTestData.LIMIT_CUT;
+import static com.example.passengerservice.utility.constants.PassengerTestData.OFFSET;
+import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER;
+import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_ID;
+import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_PAGE;
+import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_PAGE_RESPONSE;
+import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_REQUEST;
+import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_RESPONSE;
+import static com.example.passengerservice.utility.constants.PassengerTestData.RATE_CHANGE_EVENT_RESPONSE;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.PASSENGER_NOT_FOUND;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -61,8 +64,8 @@ class PassengerServiceImplTest {
     private PassengerPageMapper passengerPageMapper;
 
     @Test
-    void findByIdTest_IdIsValid_ReturnsValidResponseEntity() {
-        Long id = PASSENGER1_ID;
+    void findByIdTest_ValidId_ReturnsValidResponseEntity() {
+        Long id = PASSENGER_ID;
         Passenger passenger = PASSENGER;
         PassengerResponse passengerResponse = PASSENGER_RESPONSE;
 
@@ -78,25 +81,24 @@ class PassengerServiceImplTest {
     }
 
     @Test
-    void findByIdTset_PassengerIsNotFound_ThrowsException() {
-        Long id = PASSENGER1_ID;
-        String messageKey = PASSENGER_NOT_FOUND;
+    void findByIdTest_InvalidId_ThrowsException() {
+        Long id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id))
-                .thenThrow(new PassengerNotFoundException(messageKey, args));
+                .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
         PassengerNotFoundException exception = assertThrows(PassengerNotFoundException.class,
                 () -> passengerService.findById(id));
 
-        assertEquals(messageKey, exception.getMessageKey());
-        assertEquals(args, exception.getArgs());
+        assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
+        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerMapper);
     }
 
     @Test
-    void findAllTset_LimitIsNotCut_ReturnsValidResponseEntity() {
+    void findAllTset_UncutLimit_ReturnsValidResponseEntity() {
         int offset = OFFSET;
         int limit = LIMIT;
         PageRequest pageRequest = PageRequest.of(offset, limit);
@@ -117,17 +119,17 @@ class PassengerServiceImplTest {
     }
 
     @Test
-    void findAll_LimitIsCut_ReturnsValidResponseEntity() {
+    void findAllTest_CutLimit_ReturnsValidResponseEntity() {
         int offset = OFFSET;
         int limit = LIMIT;
-        int limit_cut = LIMIT_CUT;
-        PageRequest pageRequest = PageRequest.of(offset, limit_cut);
+        int limitCut = LIMIT_CUT;
+        PageRequest pageRequest = PageRequest.of(offset, limitCut);
         Page<Passenger> passengerPage = PASSENGER_PAGE;
         PassengerPageResponse passengerPageResponse = PASSENGER_PAGE_RESPONSE;
 
-        when(validation.cutDownLimit(limit)).thenReturn(limit_cut);
+        when(validation.cutDownLimit(limit)).thenReturn(limitCut);
         when(passengerRepository.findAll(pageRequest)).thenReturn(passengerPage);
-        when(passengerPageMapper.toResponsePage(passengerPage, offset, limit_cut)).thenReturn(passengerPageResponse);
+        when(passengerPageMapper.toResponsePage(passengerPage, offset, limitCut)).thenReturn(passengerPageResponse);
 
         PassengerPageResponse result = passengerService.findAll(offset, limit);
 
@@ -135,11 +137,11 @@ class PassengerServiceImplTest {
         assertEquals(passengerPageResponse, result);
         verify(validation).cutDownLimit(limit);
         verify(passengerRepository).findAll(pageRequest);
-        verify(passengerPageMapper).toResponsePage(passengerPage, offset, limit_cut);
+        verify(passengerPageMapper).toResponsePage(passengerPage, offset, limitCut);
     }
 
     @Test
-    void createTset_RequestEntityIsValid_ReturnsValidResponseEntity() {
+    void createTest_ValidRequestEntity_ReturnsValidResponseEntity() {
         PassengerRequest passengerRequest = PASSENGER_REQUEST;
         Passenger passenger = PASSENGER;
         PassengerResponse passengerResponse = PASSENGER_RESPONSE;
@@ -158,28 +160,27 @@ class PassengerServiceImplTest {
     }
 
     @Test
-    void createTset_AttemptToSaveEntityIsInvalid_ThrowsException() {
+    void createTest_InvalidAttemptToSaveEntity_ThrowsException() {
         PassengerRequest passengerRequest = PASSENGER_REQUEST;
         Passenger passenger = PASSENGER;
-        String messageKey = INVALID_ATTEMPT_CHANGE_PASSENGER;
-        String[] args = new String[] {"create", EXCEPTION_MESSAGE};
+        String[] args = new String[] {ATTEMPT_CHANGE_CREATE, EXCEPTION_MESSAGE};
 
         when(passengerMapper.toPassenger(passengerRequest)).thenReturn(passenger);
         when(validation.saveOrThrow(passenger))
-                .thenThrow(new DbModificationAttemptException(messageKey, args));
+                .thenThrow(new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_PASSENGER, args));
 
         DbModificationAttemptException exception = assertThrows(DbModificationAttemptException.class,
                 () -> passengerService.create(passengerRequest));
 
-        assertEquals(messageKey, exception.getMessageKey());
-        assertEquals(args, exception.getArgs());
+        assertEquals(INVALID_ATTEMPT_CHANGE_PASSENGER, exception.getMessageKey());
+        assertArrayEquals(args, exception.getArgs());
         verify(passengerMapper).toPassenger(passengerRequest);
         verify(validation).saveOrThrow(passenger);
     }
 
     @Test
-    void updatePassengerTest_RequestEntityAndIdAreValid_ReturnsValidResponseEntity() {
-        Long id = PASSENGER1_ID;
+    void updatePassengerTest_ValidIdAndRequestEntity_ReturnsValidResponseEntity() {
+        Long id = PASSENGER_ID;
         PassengerRequest passengerRequest = PASSENGER_REQUEST;
         Passenger passenger = PASSENGER;
         PassengerResponse passengerResponseUpdated = PASSENGER_RESPONSE;
@@ -198,48 +199,46 @@ class PassengerServiceImplTest {
     }
 
     @Test
-    void updatePassengerTest_IdIsInvalid_ThrowsEntityNotFoundException() {
-        Long id = PASSENGER1_ID;
-        String messageKey = PASSENGER_NOT_FOUND;
+    void updatePassengerTest_InvalidId_ThrowsEntityNotFoundException() {
+        Long id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id))
-                .thenThrow(new PassengerNotFoundException(messageKey, args));
+                .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
         PassengerNotFoundException exception = assertThrows(PassengerNotFoundException.class,
                 () -> passengerService.updatePassenger(PASSENGER_REQUEST, id));
 
-        assertEquals(messageKey, exception.getMessageKey());
-        assertEquals(args, exception.getArgs());
+        assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
+        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerMapper);
     }
 
     @Test
     void updatePassengerTest_ValidIdButInvalidAttemptToUpdateEntity_ThrowsDbModificationAttemptException() {
-        Long id = PASSENGER1_ID;
+        Long id = PASSENGER_ID;
         PassengerRequest passengerRequest = PASSENGER_REQUEST;
         Passenger passenger = PASSENGER;
-        String messageKey = PASSENGER_NOT_FOUND;
-        String[] args = new String[] {id.toString()};
+        String[] args = new String[] {ATTEMPT_CHANGE_UPDATE, EXCEPTION_MESSAGE};
 
         when(validation.findByIdOrThrow(id)).thenReturn(passenger);
-        doThrow(new DbModificationAttemptException(messageKey, args))
+        doThrow(new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_PASSENGER, args))
                 .when(validation)
                 .updateOrThrow(passenger, passengerRequest);
 
         DbModificationAttemptException exception = assertThrows(DbModificationAttemptException.class,
                 () -> passengerService.updatePassenger(passengerRequest, id));
 
-        assertEquals(messageKey, exception.getMessageKey());
-        assertEquals(args, exception.getArgs());
+        assertEquals(INVALID_ATTEMPT_CHANGE_PASSENGER, exception.getMessageKey());
+        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(id);
         verify(validation).updateOrThrow(passenger, passengerRequest);
         verifyNoInteractions(passengerMapper);
     }
 
     @Test
-    void updateRateTest_ChangeEventIsValid_EntityIsUpdated() {
+    void updateRateTest_ValidChangeEvent_EntityIsUpdated() {
         RateChangeEventResponse event = RATE_CHANGE_EVENT_RESPONSE;
 
         when(validation.findByIdOrThrow(event.recipientId())).thenReturn(PASSENGER);
@@ -250,25 +249,24 @@ class PassengerServiceImplTest {
     }
 
     @Test
-    void updateRateTest_IdInChangeEventIsNotValid_ThrowsEntityNotFoundException() {
+    void updateRateTest_IdInChangeEventInvalid_ThrowsEntityNotFoundException() {
         RateChangeEventResponse event = RATE_CHANGE_EVENT_RESPONSE;
-        String messageKey = PASSENGER_NOT_FOUND;
         String[] args = new String[] {event.recipientId().toString()};
 
         when(validation.findByIdOrThrow(event.recipientId()))
-                .thenThrow(new PassengerNotFoundException(messageKey, args));
+                .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
         PassengerNotFoundException exception = assertThrows(PassengerNotFoundException.class,
                 () -> passengerService.updateRate(event));
 
-        assertEquals(messageKey, exception.getMessageKey());
-        assertEquals(args, exception.getArgs());
+        assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
+        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(event.recipientId());
     }
 
     @Test
-    void deleteTest_IdIsValid_EntityIsDeleted() {
-        Long id = PASSENGER1_ID;
+    void deleteTest_ValidId_EntityIsDeleted() {
+        Long id = PASSENGER_ID;
 
         when(validation.findByIdOrThrow(id)).thenReturn(PASSENGER);
         doNothing().when(passengerRepository).deleteById(id);
@@ -280,8 +278,8 @@ class PassengerServiceImplTest {
     }
 
     @Test
-    void deleteTest_IdIsNotValid_ThrowsException() {
-        Long id = PASSENGER1_ID;
+    void deleteTest_InvalidId_ThrowsException() {
+        Long id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id)).thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
@@ -290,7 +288,7 @@ class PassengerServiceImplTest {
                 () -> passengerService.delete(id));
 
         assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
-        assertEquals(args, exception.getArgs());
+        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerRepository);
     }

@@ -1,4 +1,4 @@
-package com.example.passengerservice.constants;
+package com.example.passengerservice.utility.constants;
 
 import com.example.passengerservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
@@ -14,13 +14,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class PassengerServiceTestData {
+public final class PassengerTestData {
 
-    public final static Long PASSENGER1_ID = 1L;
+    public final static Long PASSENGER_ID = 1L;
+    public final static Long INVALID_PASSENGER_ID = -1L;
+    public final static Long NOT_EXIST_PASSENGER_ID = Long.MAX_VALUE;
     public final static int OFFSET = 0;
+    public final static int INVALID_OFFSET = -1;
     public final static int LIMIT = 10;
+    public final static int INVALID_LIMIT = -10;
     public final static int LIMIT_CUT = LIMIT - 5;
-    public final static String EXCEPTION_MESSAGE = "Some exception message";
 
     public final static Passenger PASSENGER = Passenger.builder()
             .id(1L)
@@ -30,10 +33,12 @@ public final class PassengerServiceTestData {
             .rate(BigDecimal.valueOf(4.52))
             .build();
 
-    public final static PassengerRequest PASSENGER_REQUEST = PassengerRequest.builder()
-            .name("John Cena")
-            .email("john@gmail.com")
-            .phone("+375291111111")
+    public final static Passenger PASSENGER2 = Passenger.builder()
+            .id(2L)
+            .name("Leeroy Jenkins")
+            .email("leeroy228@gmail.com")
+            .phone("+375292222222")
+            .rate(BigDecimal.valueOf(4.73))
             .build();
 
     public final static PassengerResponse PASSENGER_RESPONSE = PassengerResponse.builder()
@@ -44,20 +49,48 @@ public final class PassengerServiceTestData {
             .rate(BigDecimal.valueOf(4.52))
             .build();
 
-    public final static Passenger PASSENGER2 = Passenger.builder()
-            .id(1L)
+    public final static PassengerResponse PASSENGER_RESPONSE2 = PassengerResponse.builder()
+            .id(2L)
             .name("Leeroy Jenkins")
             .email("leeroy228@gmail.com")
             .phone("+375292222222")
             .rate(BigDecimal.valueOf(4.73))
             .build();
 
-    public final static PassengerResponse PASSENGER_RESPONSE2 = PassengerResponse.builder()
+    public final static PassengerResponse PASSENGER_RESPONSE_CREATED = PassengerResponse.builder()
+            .name("Pepe the Frog")
+            .email("qwaqwa@gmail.com")
+            .phone("+375293333333")
+            .build();
+
+    public final static PassengerResponse PASSENGER_RESPONSE_UPDATED = PassengerResponse.builder()
             .id(1L)
-            .name("Leeroy Jenkins")
-            .email("leeroy228@gmail.com")
-            .phone("+375292222222")
-            .rate(BigDecimal.valueOf(4.73))
+            .name("Kermit the Frog")
+            .email("john@gmail.com")
+            .phone("+375291111111")
+            .rate(BigDecimal.valueOf(4.52))
+            .build();
+
+    public final static PassengerRequest PASSENGER_REQUEST = PassengerRequest.builder()
+            .name("John Cena")
+            .email("john@gmail.com")
+            .phone("+375291111111")
+            .build();
+    public final static PassengerRequest PASSENGER_REQUEST_CREATED = PassengerRequest.builder()
+            .name("Pepe the Frog")
+            .email("qwaqwa@gmail.com")
+            .phone("+375293333333")
+            .build();
+
+    public final static PassengerRequest PASSENGER_REQUEST_UPDATED = PassengerRequest.builder()
+            .name("Kermit the Frog")
+            .email("john@gmail.com")
+            .phone("+375291111111")
+            .build();
+
+    public final static PassengerRequest INVALID_PASSENGER_REQUEST = PassengerRequest.builder()
+            .name("Kermit the Frog")
+            .email("john@gmail.com")
             .build();
 
     public final static RateChangeEventResponse RATE_CHANGE_EVENT_RESPONSE = RateChangeEventResponse.builder()
@@ -83,7 +116,7 @@ public final class PassengerServiceTestData {
             .passengerList(PASSENGER_RESPONSE_LIST)
             .currentPageNumber(OFFSET)
             .pageLimit(LIMIT)
-            .totalPages(1)
+            .totalPages(PASSENGER_RESPONSE_LIST.size() / LIMIT + 1)
             .totalElements(PASSENGER_RESPONSE_LIST.size())
             .build();
 

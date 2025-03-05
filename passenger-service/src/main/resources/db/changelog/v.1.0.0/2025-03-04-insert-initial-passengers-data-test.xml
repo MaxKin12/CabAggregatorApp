@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-initial-passengers-data" author="MaxKin12">
+        <insert tableName="passengers">
+            <column name="id" value="1"/>
+            <column name="name" value="John Cena"/>
+            <column name="email" value="john@gmail.com"/>
+            <column name="phone" value="+375291111111"/>
+            <column name="rate" value="4.52"/>
+        </insert>
+        <insert tableName="passengers">
+            <column name="id" value="2"/>
+            <column name="name" value="Leeroy Jenkins"/>
+            <column name="email" value="leeroy228@gmail.com"/>
+            <column name="phone" value="+375292222222"/>
+            <column name="rate" value="4.73"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
