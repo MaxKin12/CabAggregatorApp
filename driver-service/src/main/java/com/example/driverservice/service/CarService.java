@@ -13,7 +13,7 @@ public interface CarService {
 
     CarResponse findById(@Positive(message = ID_NEGATIVE) Long id);
 
-    PageResponse<CarResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit);
+    PageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit);
 
     CarResponse create(@Valid CarRequest carRequest);
 

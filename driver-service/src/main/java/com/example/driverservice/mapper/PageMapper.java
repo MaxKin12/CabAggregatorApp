@@ -15,7 +15,7 @@ public interface PageMapper<T extends EntityResponse, G extends DriverEntity> {
     @Mapping(target = "pageLimit", source = "limit")
     @Mapping(target = "totalPages", source = "page.totalPages")
     @Mapping(target = "totalElements", source = "page.totalElements")
-    PageResponse<T> toResponsePage(Page<G> page, int offset, int limit);
+    PageResponse toResponsePage(Page<G> page, int offset, int limit);
 
     @Named("pageToResponseList")
     List<T> pageToResponseList(Page<G> page);

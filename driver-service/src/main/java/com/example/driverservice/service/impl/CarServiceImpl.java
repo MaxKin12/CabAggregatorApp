@@ -40,7 +40,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<CarResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+    public PageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
         limit = validation.cutDownLimit(limit);
         Page<Car> carPage = carRepository.findAll(PageRequest.of(offset, limit));
         return carPageMapper.toResponsePage(carPage, offset, limit);
