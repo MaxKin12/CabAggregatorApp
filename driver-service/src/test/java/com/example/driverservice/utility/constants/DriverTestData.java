@@ -35,7 +35,6 @@ public final class DriverTestData {
             .phone("+375291111111")
             .gender(UserGender.MALE)
             .rate(BigDecimal.valueOf(4.52))
-            .cars(List.of())
             .build();
 
     public final static Driver DRIVER2 = Driver.builder()
@@ -45,7 +44,6 @@ public final class DriverTestData {
             .phone("+375292222222")
             .gender(UserGender.MALE)
             .rate(BigDecimal.valueOf(4.73))
-            .cars(List.of())
             .build();
 
     public final static DriverResponse DRIVER_RESPONSE = DriverResponse.builder()
@@ -73,6 +71,7 @@ public final class DriverTestData {
             .email("qwaqwa@gmail.com")
             .phone("+375293333333")
             .gender(UserGender.MALE.name().toLowerCase())
+            .carIds(List.of())
             .build();
 
     public final static DriverResponse DRIVER_RESPONSE_UPDATED = DriverResponse.builder()

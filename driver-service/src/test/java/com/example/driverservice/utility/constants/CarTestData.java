@@ -63,7 +63,7 @@ public final class CarTestData {
             .brand("Honda")
             .number("1234AB-7")
             .color("Green")
-            .driverId(3L)
+            .driverId(2L)
             .build();
 
     public final static CarResponse CAR_RESPONSE_UPDATED = CarResponse.builder()
@@ -85,7 +85,7 @@ public final class CarTestData {
             .brand("Honda")
             .number("1234AB-7")
             .color("Green")
-            .driverId(3L)
+            .driverId(2L)
             .build();
 
     public final static CarRequest CAR_REQUEST_UPDATED = CarRequest.builder()
@@ -101,7 +101,8 @@ public final class CarTestData {
             .build();
 
     public final static List<CarResponse> CAR_RESPONSE_LIST = List.of(
-            CAR_RESPONSE
+            CAR_RESPONSE,
+            CAR_RESPONSE2
     );
 
     public final static Page<Car> CAR_PAGE = new PageImpl<>(

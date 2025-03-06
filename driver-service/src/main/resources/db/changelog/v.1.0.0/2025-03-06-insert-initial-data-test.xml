@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-initial-drivers-data-test" author="MaxKin12">
+        <insert tableName="drivers">
+            <column name="id" value="1"/>
+            <column name="name" value="John Cena"/>
+            <column name="email" value="john@gmail.com"/>
+            <column name="phone" value="+375291111111"/>
+            <column name="sex" value="1"/>
+            <column name="rate" value="4.52"/>
+        </insert>
+        <insert tableName="drivers">
+            <column name="id" value="2"/>
+            <column name="name" value="Leeroy Jenkins"/>
+            <column name="email" value="leeroy228@gmail.com"/>
+            <column name="phone" value="+375292222222"/>
+            <column name="sex" value="1"/>
+            <column name="rate" value="4.73"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert-initial-cars-data-test" author="MaxKin12">
+        <insert tableName="cars">
+            <column name="id" value="1"/>
+            <column name="brand" value="Toyota"/>
+            <column name="number" value="1234AB-3"/>
+            <column name="color" value="Red"/>
+            <column name="driver_id" value="1"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="2"/>
+            <column name="brand" value="Ford"/>
+            <column name="number" value="1234AB-5"/>
+            <column name="color" value="Blue"/>
+            <column name="driver_id" value="2"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
