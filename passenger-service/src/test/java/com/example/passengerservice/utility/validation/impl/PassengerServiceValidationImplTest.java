@@ -161,4 +161,5 @@ class PassengerServiceValidationImplTest {
         verify(passengerMapper).updatePassengerFromDto(request, passenger);
         verifyNoInteractions(passengerRepository);
     }
+
 }

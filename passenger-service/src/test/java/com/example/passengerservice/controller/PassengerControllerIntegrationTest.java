@@ -19,16 +19,14 @@ import static com.example.passengerservice.utility.constants.PassengerTestData.P
 import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_RESPONSE;
 import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_RESPONSE_CREATED;
 import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_RESPONSE_UPDATED;
-import static com.example.passengerservice.utility.constants.TestDbInitConstants.DB_DOCKER_IMAGE;
-import static com.example.passengerservice.utility.constants.TestDbInitConstants.PROPERTY_DB_PASSWORD;
-import static com.example.passengerservice.utility.constants.TestDbInitConstants.PROPERTY_DB_URL;
-import static com.example.passengerservice.utility.constants.TestDbInitConstants.PROPERTY_DB_USERNAME;
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.port;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.example.passengerservice.configuration.DbContainer;
 import com.example.passengerservice.dto.exception.ExceptionHandlerResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
@@ -41,33 +39,13 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ActiveProfiles("test")
-class PassengerControllerIntegrationTest {
+public class PassengerControllerIntegrationTest extends DbContainer {
 
     @LocalServerPort
     private int curPort;
-
-    @Container
-    private static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>(
-            DockerImageName.parse(DB_DOCKER_IMAGE));
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add(PROPERTY_DB_URL, MYSQL_CONTAINER::getJdbcUrl);
-        registry.add(PROPERTY_DB_USERNAME, MYSQL_CONTAINER::getUsername);
-        registry.add(PROPERTY_DB_PASSWORD, MYSQL_CONTAINER::getPassword);
-    }
 
     @BeforeEach
     void setUp() {
@@ -191,10 +169,10 @@ class PassengerControllerIntegrationTest {
                 .extract()
                 .as(PassengerResponse.class);
 
-        assertEquals(passengerResponse.name(), PASSENGER_RESPONSE_CREATED.name());
-        assertEquals(passengerResponse.email(), PASSENGER_RESPONSE_CREATED.email());
-        assertEquals(passengerResponse.phone(), PASSENGER_RESPONSE_CREATED.phone());
-        assertEquals(passengerResponse.rate(), PASSENGER_RESPONSE_CREATED.rate());
+        assertThat(passengerResponse)
+                .usingRecursiveComparison()
+                .ignoringFields(ID_PARAMETER_NAME)
+                .isEqualTo(PASSENGER_RESPONSE_CREATED);
     }
 
     @Test
@@ -334,4 +312,5 @@ class PassengerControllerIntegrationTest {
         assertNotNull(exception.message());
         assertNotNull(exception.localDateTime());
     }
+
 }
