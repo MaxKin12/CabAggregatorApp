@@ -4,7 +4,9 @@ import static com.example.ridesservice.utility.constants.InternationalizationVal
 import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.DRIVER_ID_NEGATIVE;
 
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 
+@Builder
 public record RideDriverSettingRequest(
 
         @Positive(message = DRIVER_ID_NEGATIVE)

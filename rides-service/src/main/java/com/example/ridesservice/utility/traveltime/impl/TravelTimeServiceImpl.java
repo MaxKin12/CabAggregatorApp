@@ -67,7 +67,7 @@ public class TravelTimeServiceImpl implements TravelTimeService {
         return response.get().getResults().get(0).getLocations().get(0).getProperties().get(0).getDistance();
     }
 
-    private Coordinates getCoordinates(String address) {
+    Coordinates getCoordinates(String address) {
         GeocodingRequest request = GeocodingRequest
                 .builder()
                 .query(address)

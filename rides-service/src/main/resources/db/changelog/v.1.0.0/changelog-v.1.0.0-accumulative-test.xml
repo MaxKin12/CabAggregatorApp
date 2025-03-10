@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="add-tag-1.0.0" author="MaxKin12">
+        <tagDatabase tag="v.1.0.0"/>
+    </changeSet>
+
+    <include file="2025-02-02-create-table-rides.xml" relativeToChangelogFile="true"/>
+    <include file="2025-02-20-create-table-queue-rides.xml" relativeToChangelogFile="true"/>
+    <include file="2025-03-06-insert-initial-rides-data-test.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>
