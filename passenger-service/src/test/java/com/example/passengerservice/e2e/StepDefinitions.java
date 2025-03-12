@@ -1,12 +1,15 @@
 package com.example.passengerservice.e2e;
 
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.CONTROLLER_BASE_URI_DETERMINED;
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.ENDPOINT_WITH_ID;
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.ID_PARAMETER_NAME;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.CONTROLLER_BASE_URI;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ENDPOINT_WITH_ID;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ID_PARAMETER_NAME;
+import static com.example.passengerservice.configuration.constants.SqlConstants.SQL_DELETE_ALL_TEST_DATA;
+import static com.example.passengerservice.configuration.constants.SqlConstants.SQL_INSERT_TEST_ENTITY_DATA;
+import static com.example.passengerservice.configuration.constants.SqlConstants.SQL_INSERT_TEST_ENTITY_DATA_2;
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.port;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.passengerservice.dto.passenger.PassengerRequest;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
@@ -18,22 +21,35 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-@Transactional
+@SpringBootTest
+@RequiredArgsConstructor
 public class StepDefinitions {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JdbcTemplate jdbcTemplate;
+    private final ObjectMapper objectMapper;
     private Long passengerId;
     private Response response;
     private PassengerRequest passengerRequest;
     private PassengerResponse actualResponse;
 
+    @LocalServerPort
+    private int curPort;
+
     @Before
     public void init() {
-        baseURI = CONTROLLER_BASE_URI_DETERMINED;
+        baseURI = CONTROLLER_BASE_URI;
+        port = curPort;
+
+        jdbcTemplate.execute(SQL_DELETE_ALL_TEST_DATA);
+        jdbcTemplate.execute(SQL_INSERT_TEST_ENTITY_DATA);
+        jdbcTemplate.execute(SQL_INSERT_TEST_ENTITY_DATA_2);
     }
 
     @Given("passenger with id {long}")
@@ -106,14 +122,11 @@ public class StepDefinitions {
     @SneakyThrows
     public void bodyEqualsTo(String expectedPassengerJson) {
         PassengerResponse expectedResponse = objectMapper.readValue(expectedPassengerJson, PassengerResponse.class);
-        PassengerResponse actualResponse = response.as(PassengerResponse.class);
+        actualResponse = response.as(PassengerResponse.class);
 
-        assertThat(expectedResponse)
+        assertThat(actualResponse)
                 .usingRecursiveComparison()
-                .ignoringFields(ID_PARAMETER_NAME)
-                .isEqualTo(actualResponse);
-
-        assertEquals(expectedResponse, actualResponse);
+                .isEqualTo(expectedResponse);
     }
 
     @And("body after create operation equals to")
@@ -122,10 +135,10 @@ public class StepDefinitions {
         PassengerResponse expectedResponse = objectMapper.readValue(expectedPassengerJson, PassengerResponse.class);
         actualResponse = response.as(PassengerResponse.class);
 
-        assertThat(expectedResponse)
+        assertThat(actualResponse)
                 .usingRecursiveComparison()
                 .ignoringFields(ID_PARAMETER_NAME)
-                .isEqualTo(actualResponse);
+                .isEqualTo(expectedResponse);
     }
 
     @And("check if created in db")
@@ -136,6 +149,16 @@ public class StepDefinitions {
                 .get(ENDPOINT_WITH_ID)
                 .then()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+    @And("check if deleted in db")
+    public void checkIfDeletedInDb() {
+        given()
+                .pathParam(ID_PARAMETER_NAME, passengerId)
+                .when()
+                .get(ENDPOINT_WITH_ID)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
 }

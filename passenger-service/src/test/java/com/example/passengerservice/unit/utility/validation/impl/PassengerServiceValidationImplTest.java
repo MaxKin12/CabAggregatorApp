@@ -1,16 +1,15 @@
-package com.example.passengerservice.utility.validation.impl;
+package com.example.passengerservice.unit.utility.validation.impl;
 
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.passengerservice.utility.constants.PassengerTestData.*;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.*;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.PASSENGER_NOT_FOUND;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowableOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -25,6 +24,7 @@ import com.example.passengerservice.exception.custom.PassengerNotFoundException;
 import com.example.passengerservice.mapper.PassengerMapper;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
+import com.example.passengerservice.utility.validation.impl.PassengerServiceValidationImpl;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,8 +56,9 @@ class PassengerServiceValidationImplTest {
 
         Passenger result = validation.findByIdOrThrow(id);
 
-        assertNotNull(result);
-        assertEquals(passenger, result);
+        assertThat(result)
+                .isNotNull()
+                .isEqualTo(passenger);
         verify(passengerRepository).findById(id);
     }
 
@@ -68,11 +69,15 @@ class PassengerServiceValidationImplTest {
 
         when(passengerRepository.findById(id)).thenReturn(Optional.empty());
 
-        PassengerNotFoundException exception = assertThrows(PassengerNotFoundException.class,
-                () -> validation.findByIdOrThrow(id));
+        PassengerNotFoundException exception = catchThrowableOfType(
+                PassengerNotFoundException.class,
+                () -> validation.findByIdOrThrow(id)
+        );
 
-        assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("messageKey", PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerRepository).findById(id);
     }
 
@@ -85,7 +90,7 @@ class PassengerServiceValidationImplTest {
 
         int result = validation.cutDownLimit(limit);
 
-        assertEquals(limit, result);
+        assertThat(result).isEqualTo(limit);
         verify(properties).maxPageLimit();
     }
 
@@ -98,7 +103,7 @@ class PassengerServiceValidationImplTest {
 
         int result = validation.cutDownLimit(limit);
 
-        assertEquals(maxLimit, result);
+        assertThat(result).isEqualTo(maxLimit);
         verify(properties, times(2)).maxPageLimit();
     }
 
@@ -110,8 +115,9 @@ class PassengerServiceValidationImplTest {
 
         Passenger result = validation.saveOrThrow(passenger);
 
-        assertNotNull(result);
-        assertEquals(passenger, result);
+        assertThat(result)
+                .isNotNull()
+                .isEqualTo(passenger);
         verify(passengerRepository).save(passenger);
     }
 
@@ -122,11 +128,15 @@ class PassengerServiceValidationImplTest {
 
         when(passengerRepository.save(passenger)).thenThrow(new RuntimeException(EXCEPTION_MESSAGE));
 
-        DbModificationAttemptException exception = assertThrows(DbModificationAttemptException.class,
-                () -> validation.saveOrThrow(passenger));
+        DbModificationAttemptException exception = catchThrowableOfType(
+                DbModificationAttemptException.class,
+                () -> validation.saveOrThrow(passenger)
+        );
 
-        assertEquals(INVALID_ATTEMPT_CHANGE_PASSENGER, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerRepository).save(passenger);
     }
 
@@ -138,7 +148,8 @@ class PassengerServiceValidationImplTest {
         doNothing().when(passengerMapper).updatePassengerFromDto(request, passenger);
         doNothing().when(passengerRepository).flush();
 
-        assertDoesNotThrow(() -> validation.updateOrThrow(passenger, request));
+        assertThatCode(() -> validation.updateOrThrow(passenger, request))
+                .doesNotThrowAnyException();
 
         verify(passengerMapper).updatePassengerFromDto(request, passenger);
         verify(passengerRepository).flush();
@@ -153,11 +164,15 @@ class PassengerServiceValidationImplTest {
         doThrow(new RuntimeException(EXCEPTION_MESSAGE))
                 .when(passengerMapper).updatePassengerFromDto(request, passenger);
 
-        DbModificationAttemptException exception = assertThrows(DbModificationAttemptException.class,
-                () -> validation.updateOrThrow(passenger, request));
+        DbModificationAttemptException exception = catchThrowableOfType(
+                DbModificationAttemptException.class,
+                () -> validation.updateOrThrow(passenger, request)
+        );
 
-        assertEquals(INVALID_ATTEMPT_CHANGE_PASSENGER, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerMapper).updatePassengerFromDto(request, passenger);
         verifyNoInteractions(passengerRepository);
     }

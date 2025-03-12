@@ -8,15 +8,15 @@ Feature: Passenger management in passenger-service
     """
       {
         "id": 1,
-        "name": "alice",
-        "email": "some@email1.com",
-        "phone": "+375291110001",
-        "rate": null
+        "name": "John Cena",
+        "email": "john@gmail.com",
+        "phone": "+375291111111",
+        "rate": 4.52
       }
     """
 
   Scenario: Invalid attempt to find passenger by id
-    Given passenger with id 2000000
+    Given passenger with id 20
     When searching passenger by id
     Then received response has status 404
 
@@ -77,12 +77,12 @@ Feature: Passenger management in passenger-service
         "name": "Kermit the Frog",
         "email": "some@email1.com",
         "phone": "+375291110001",
-        "rate": null
+        "rate": 4.52
       }
     """
 
   Scenario: Invalid attempt to update passenger (invalid id)
-    Given passenger's data for update with id 2000000
+    Given passenger's data for update with id 20
     """
       {
         "name": "Kermit the Frog",
@@ -97,20 +97,21 @@ Feature: Passenger management in passenger-service
     Given passenger's data for update with id 1
     """
       {
-        "name": "Pepe the Frog",
-        "email": "some@gmail2.com",
-        "phone": "+375291110002"
+        "name": "Kermit the Frog",
+        "email": "john@gmail.com",
+        "phone": "+375292222222"
       }
     """
     When updating passenger
     Then received response has status 400
 
   Scenario: Delete passenger
-    Given passenger with id 18
+    Given passenger with id 1
     When deleting passenger
     Then received response has status 204
+    And check if deleted in db
 
   Scenario: Invalid attempt to delete passenger
-    Given passenger with id 2000000
+    Given passenger with id 20
     When deleting passenger
     Then received response has status 404

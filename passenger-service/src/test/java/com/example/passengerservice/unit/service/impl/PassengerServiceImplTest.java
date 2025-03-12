@@ -1,25 +1,24 @@
-package com.example.passengerservice.service.impl;
+package com.example.passengerservice.unit.service.impl;
 
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
-import static com.example.passengerservice.utility.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.passengerservice.utility.constants.PassengerTestData.LIMIT;
-import static com.example.passengerservice.utility.constants.PassengerTestData.LIMIT_CUT;
-import static com.example.passengerservice.utility.constants.PassengerTestData.OFFSET;
-import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER;
-import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_ID;
-import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_PAGE;
-import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_PAGE_RESPONSE;
-import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_REQUEST;
-import static com.example.passengerservice.utility.constants.PassengerTestData.PASSENGER_RESPONSE;
-import static com.example.passengerservice.utility.constants.PassengerTestData.RATE_CHANGE_EVENT_RESPONSE;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
+import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.LIMIT;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.LIMIT_CUT;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.OFFSET;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_ID;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_PAGE;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_PAGE_RESPONSE;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_REQUEST;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_RESPONSE;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.RATE_CHANGE_EVENT_RESPONSE;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.PASSENGER_NOT_FOUND;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowableOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -36,6 +35,7 @@ import com.example.passengerservice.mapper.PassengerMapper;
 import com.example.passengerservice.mapper.PassengerPageMapper;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
+import com.example.passengerservice.service.impl.PassengerServiceImpl;
 import com.example.passengerservice.utility.validation.PassengerServiceValidation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,8 +74,10 @@ class PassengerServiceImplTest {
 
         PassengerResponse result = passengerService.findById(id);
 
-        assertNotNull(result);
-        assertEquals(passengerResponse, result);
+        assertThat(result)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(passengerResponse);
         verify(validation).findByIdOrThrow(id);
         verify(passengerMapper).toResponse(passenger);
     }
@@ -88,11 +90,15 @@ class PassengerServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
-        PassengerNotFoundException exception = assertThrows(PassengerNotFoundException.class,
-                () -> passengerService.findById(id));
+        PassengerNotFoundException exception = catchThrowableOfType(
+                        PassengerNotFoundException.class,
+                        () -> passengerService.findById(id)
+                );
 
-        assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerMapper);
     }
@@ -111,8 +117,10 @@ class PassengerServiceImplTest {
 
         PassengerPageResponse result = passengerService.findAll(offset, limit);
 
-        assertNotNull(result);
-        assertEquals(passengerPageResponse, result);
+        assertThat(result)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(passengerPageResponse);
         verify(validation).cutDownLimit(limit);
         verify(passengerRepository).findAll(pageRequest);
         verify(passengerPageMapper).toResponsePage(passengerPage, offset, limit);
@@ -133,8 +141,10 @@ class PassengerServiceImplTest {
 
         PassengerPageResponse result = passengerService.findAll(offset, limit);
 
-        assertNotNull(result);
-        assertEquals(passengerPageResponse, result);
+        assertThat(result)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(passengerPageResponse);
         verify(validation).cutDownLimit(limit);
         verify(passengerRepository).findAll(pageRequest);
         verify(passengerPageMapper).toResponsePage(passengerPage, offset, limitCut);
@@ -152,8 +162,10 @@ class PassengerServiceImplTest {
 
         PassengerResponse result = passengerService.create(passengerRequest);
 
-        assertNotNull(result);
-        assertEquals(passengerResponse, result);
+        assertThat(result)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(passengerResponse);
         verify(passengerMapper).toPassenger(passengerRequest);
         verify(validation).saveOrThrow(passenger);
         verify(passengerMapper).toResponse(passenger);
@@ -169,11 +181,15 @@ class PassengerServiceImplTest {
         when(validation.saveOrThrow(passenger))
                 .thenThrow(new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_PASSENGER, args));
 
-        DbModificationAttemptException exception = assertThrows(DbModificationAttemptException.class,
-                () -> passengerService.create(passengerRequest));
+        DbModificationAttemptException exception = catchThrowableOfType(
+                DbModificationAttemptException.class,
+                () -> passengerService.create(passengerRequest)
+        );
 
-        assertEquals(INVALID_ATTEMPT_CHANGE_PASSENGER, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerMapper).toPassenger(passengerRequest);
         verify(validation).saveOrThrow(passenger);
     }
@@ -191,8 +207,10 @@ class PassengerServiceImplTest {
 
         PassengerResponse result = passengerService.updatePassenger(passengerRequest, id);
 
-        assertNotNull(result);
-        assertEquals(passengerResponseUpdated, result);
+        assertThat(result)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(passengerResponseUpdated);
         verify(validation).findByIdOrThrow(id);
         verify(validation).updateOrThrow(passenger, passengerRequest);
         verify(passengerMapper).toResponse(passenger);
@@ -206,11 +224,15 @@ class PassengerServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
-        PassengerNotFoundException exception = assertThrows(PassengerNotFoundException.class,
-                () -> passengerService.updatePassenger(PASSENGER_REQUEST, id));
+        PassengerNotFoundException exception = catchThrowableOfType(
+                PassengerNotFoundException.class,
+                () -> passengerService.updatePassenger(PASSENGER_REQUEST, id)
+        );
 
-        assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerMapper);
     }
@@ -227,11 +249,15 @@ class PassengerServiceImplTest {
                 .when(validation)
                 .updateOrThrow(passenger, passengerRequest);
 
-        DbModificationAttemptException exception = assertThrows(DbModificationAttemptException.class,
-                () -> passengerService.updatePassenger(passengerRequest, id));
+        DbModificationAttemptException exception = catchThrowableOfType(
+                DbModificationAttemptException.class,
+                () -> passengerService.updatePassenger(passengerRequest, id)
+        );
 
-        assertEquals(INVALID_ATTEMPT_CHANGE_PASSENGER, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(id);
         verify(validation).updateOrThrow(passenger, passengerRequest);
         verifyNoInteractions(passengerMapper);
@@ -243,7 +269,8 @@ class PassengerServiceImplTest {
 
         when(validation.findByIdOrThrow(event.recipientId())).thenReturn(PASSENGER);
 
-        assertDoesNotThrow(() -> passengerService.updateRate(event));
+        assertThatCode(() -> passengerService.updateRate(event))
+                .doesNotThrowAnyException();
 
         verify(validation).findByIdOrThrow(event.recipientId());
     }
@@ -256,11 +283,15 @@ class PassengerServiceImplTest {
         when(validation.findByIdOrThrow(event.recipientId()))
                 .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
-        PassengerNotFoundException exception = assertThrows(PassengerNotFoundException.class,
-                () -> passengerService.updateRate(event));
+        PassengerNotFoundException exception = catchThrowableOfType(
+                PassengerNotFoundException.class,
+                () -> passengerService.updateRate(event)
+        );
 
-        assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(event.recipientId());
     }
 
@@ -271,7 +302,8 @@ class PassengerServiceImplTest {
         when(validation.findByIdOrThrow(id)).thenReturn(PASSENGER);
         doNothing().when(passengerRepository).deleteById(id);
 
-        assertDoesNotThrow(() -> passengerService.delete(id));
+        assertThatCode(() -> passengerService.delete(id))
+                .doesNotThrowAnyException();
 
         verify(validation).findByIdOrThrow(id);
         verify(passengerRepository).deleteById(id);
@@ -284,11 +316,15 @@ class PassengerServiceImplTest {
 
         when(validation.findByIdOrThrow(id)).thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
-        PassengerNotFoundException exception = assertThrows(PassengerNotFoundException.class,
-                () -> passengerService.delete(id));
+        PassengerNotFoundException exception = catchThrowableOfType(
+                PassengerNotFoundException.class,
+                () -> passengerService.delete(id)
+        );
 
-        assertEquals(PASSENGER_NOT_FOUND, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerRepository);
     }
