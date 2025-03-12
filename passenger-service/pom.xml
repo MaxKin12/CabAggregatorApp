@@ -19,7 +19,6 @@
         <mapstruct.version>1.6.2</mapstruct.version>
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
         <spring-boot-configuration-processor.version>3.4.1</spring-boot-configuration-processor.version>
-        <spring-kafka.version>3.3.3</spring-kafka.version>
     </properties>
 
     <dependencyManagement>
@@ -28,6 +27,13 @@
                 <groupId>io.cucumber</groupId>
                 <artifactId>cucumber-bom</artifactId>
                 <version>7.21.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka-bom</artifactId>
+                <version>3.3.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -93,11 +99,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
             <scope>test</scope>
@@ -140,7 +141,6 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
-            <version>${spring-kafka.version}</version>
         </dependency>
     </dependencies>
 

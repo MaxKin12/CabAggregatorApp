@@ -18,9 +18,9 @@ public final class PassengerTestData {
 
     public final static Long PASSENGER_ID = 1L;
     public final static Long PASSENGER_ID_2 = 2L;
-    public final static Long EVENT_ID = 1L;
     public final static Long INVALID_PASSENGER_ID = -1L;
     public final static Long NOT_EXIST_PASSENGER_ID = Long.MAX_VALUE;
+    public final static Long EVENT_ID = 1L;
 
     public final static BigDecimal PASSENGER_RATE = BigDecimal.valueOf(4.52);
     public final static BigDecimal PASSENGER_RATE_2 = BigDecimal.valueOf(4.73);

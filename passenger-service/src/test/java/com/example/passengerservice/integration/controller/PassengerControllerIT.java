@@ -20,7 +20,7 @@ import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.port;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.passengerservice.configuration.container.MysSqlContainer;
+import com.example.passengerservice.configuration.container.MySqlTestContainer;
 import com.example.passengerservice.dto.exception.ExceptionHandlerResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
@@ -34,12 +34,12 @@ import org.springframework.test.context.jdbc.Sql;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(
         scripts = {
-                "classpath:sql/delete_all_passenger_test_data.sql",
-                "classpath:sql/init_passenger_test_data.sql"
+                "classpath:sql/delete_all_test_data_passenger.sql",
+                "classpath:sql/init_test_data_passenger.sql"
         },
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 )
-class PassengerControllerIT extends MysSqlContainer {
+class PassengerControllerIT extends MySqlTestContainer {
 
     @LocalServerPort
     private int curPort;

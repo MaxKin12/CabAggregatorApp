@@ -10,10 +10,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 @ActiveProfiles("test")
-@Testcontainers
-public class MysSqlContainer {
+public abstract class MySqlTestContainer {
 
-    @Container
     @ServiceConnection
     protected static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>(
             DockerImageName.parse(DB_DOCKER_IMAGE));
