@@ -21,6 +21,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +29,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RequiredArgsConstructor
 public class StepDefinitions {
 
@@ -42,11 +43,14 @@ public class StepDefinitions {
     @LocalServerPort
     private int curPort;
 
-    @Before
-    public void init() {
+    @PostConstruct
+    public void setUp() {
         baseURI = CONTROLLER_BASE_URI;
         port = curPort;
+    }
 
+    @Before
+    public void restoreDbData() {
         jdbcTemplate.execute(SQL_DELETE_ALL_TEST_DATA);
         jdbcTemplate.execute(SQL_INSERT_TEST_ENTITY_DATA);
         jdbcTemplate.execute(SQL_INSERT_TEST_ENTITY_DATA_2);

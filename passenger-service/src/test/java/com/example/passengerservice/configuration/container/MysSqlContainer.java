@@ -1,4 +1,4 @@
-package com.example.passengerservice.configuration;
+package com.example.passengerservice.configuration.container;
 
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.DB_DOCKER_IMAGE;
 

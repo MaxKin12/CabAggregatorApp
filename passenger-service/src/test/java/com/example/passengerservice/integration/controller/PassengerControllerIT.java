@@ -20,7 +20,7 @@ import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.port;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.passengerservice.configuration.MysSqlContainer;
+import com.example.passengerservice.configuration.container.MysSqlContainer;
 import com.example.passengerservice.dto.exception.ExceptionHandlerResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
@@ -39,19 +39,19 @@ import org.springframework.test.context.jdbc.Sql;
         },
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 )
-public class PassengerControllerIT extends MysSqlContainer {
+class PassengerControllerIT extends MysSqlContainer {
 
     @LocalServerPort
     private int curPort;
 
     @PostConstruct
-    public void setUp() {
+    void setUpUri() {
         baseURI = CONTROLLER_BASE_URI;
         port = curPort;
     }
 
     @Test
-    public void getPassenger_ValidId_ReturnsValidResponseEntity() {
+    void getPassenger_ValidId_ReturnsValidResponseEntity() {
         PassengerResponse passengerResponse = ControllerRestAssuredMethods.getPassenger(PASSENGER_ID);
 
         assertThat(passengerResponse)
@@ -60,7 +60,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void getPassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
+    void getPassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .getPassengerException(INVALID_PASSENGER_ID, HttpStatus.BAD_REQUEST);
 
@@ -68,7 +68,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void getPassenger_PassengerNotFound_ReturnsExceptionResponseWithNotFoundStatus() {
+    void getPassenger_PassengerNotFound_ReturnsExceptionResponseWithNotFoundStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .getPassengerException(NOT_EXIST_PASSENGER_ID, HttpStatus.NOT_FOUND);
 
@@ -76,7 +76,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void getAllPassengers_ValidOffsetAndLimitParameters_ReturnsValidResponseEntity() {
+    void getAllPassengers_ValidOffsetAndLimitParameters_ReturnsValidResponseEntity() {
         PassengerPageResponse passengerPageResponse = ControllerRestAssuredMethods.getAllPassengers(OFFSET, LIMIT);
 
         assertThat(passengerPageResponse)
@@ -85,7 +85,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void getAllPassengers_InvalidOffsetParameter_ReturnsExceptionResponseWithBadRequestStatus() {
+    void getAllPassengers_InvalidOffsetParameter_ReturnsExceptionResponseWithBadRequestStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .getAllPassengersException(INVALID_OFFSET, LIMIT, HttpStatus.BAD_REQUEST);
 
@@ -93,7 +93,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void getAllPassengers_InvalidLimitParameter_ReturnsExceptionResponseWithBadRequestStatus() {
+    void getAllPassengers_InvalidLimitParameter_ReturnsExceptionResponseWithBadRequestStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .getAllPassengersException(OFFSET, INVALID_LIMIT, HttpStatus.BAD_REQUEST);
 
@@ -101,7 +101,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void createPassenger_ValidRequest_ReturnsValidResponseEntity() {
+    void createPassenger_ValidRequest_ReturnsValidResponseEntity() {
         PassengerResponse passengerResponse = ControllerRestAssuredMethods.createPassenger(PASSENGER_REQUEST_CREATED);
 
         assertThat(passengerResponse)
@@ -111,7 +111,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void createPassenger_InvalidRequest_ReturnsExceptionResponseWithBadRequestStatus() {
+    void createPassenger_InvalidRequest_ReturnsExceptionResponseWithBadRequestStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .createPassengerException(INVALID_PASSENGER_REQUEST, HttpStatus.BAD_REQUEST);
 
@@ -119,7 +119,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void updatePassenger_ValidRequestAndId_ReturnsValidResponseEntity() {
+    void updatePassenger_ValidRequestAndId_ReturnsValidResponseEntity() {
         PassengerResponse passengerResponse = ControllerRestAssuredMethods
                 .updatePassenger(PASSENGER_REQUEST_UPDATED, PASSENGER_ID);
 
@@ -129,7 +129,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void updatePassenger_InvalidRequest_ReturnsExceptionResponseWithBadRequestStatus() {
+    void updatePassenger_InvalidRequest_ReturnsExceptionResponseWithBadRequestStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .updatePassengerException(INVALID_PASSENGER_REQUEST, PASSENGER_ID, HttpStatus.BAD_REQUEST);
 
@@ -137,7 +137,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void updatePassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
+    void updatePassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .updatePassengerException(PASSENGER_REQUEST_UPDATED, INVALID_PASSENGER_ID, HttpStatus.BAD_REQUEST);
 
@@ -145,7 +145,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void updatePassenger_PassengerNotFound_ReturnsExceptionResponseWithNotFoundStatus() {
+    void updatePassenger_PassengerNotFound_ReturnsExceptionResponseWithNotFoundStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .updatePassengerException(PASSENGER_REQUEST_UPDATED, NOT_EXIST_PASSENGER_ID, HttpStatus.NOT_FOUND);
 
@@ -154,12 +154,12 @@ public class PassengerControllerIT extends MysSqlContainer {
 
 
     @Test
-    public void deletePassenger_ValidId_ReturnsVoid() {
+    void deletePassenger_ValidId_ReturnsVoid() {
         ControllerRestAssuredMethods.deletePassenger(PASSENGER_ID);
     }
 
     @Test
-    public void deletePassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
+    void deletePassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .deletePassengerException(INVALID_PASSENGER_ID, HttpStatus.BAD_REQUEST);
 
@@ -167,7 +167,7 @@ public class PassengerControllerIT extends MysSqlContainer {
     }
 
     @Test
-    public void deletePassenger_PassengerNotFound_ReturnsExceptionResponseWithNotFoundStatus() {
+    void deletePassenger_PassengerNotFound_ReturnsExceptionResponseWithNotFoundStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .deletePassengerException(NOT_EXIST_PASSENGER_ID, HttpStatus.NOT_FOUND);
 
