@@ -11,6 +11,8 @@ import static com.example.driverservice.utility.constants.InternationalizationVa
 import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.NUMBER_TOO_LONG;
 import static com.example.driverservice.utility.constants.RegularExpressionsConstants.CAR_NUMBER_CHECK;
 
+import com.example.driverservice.dto.EntityRequest;
+import com.example.driverservice.dto.EntityResponse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -38,5 +40,5 @@ public record CarRequest(
         @Positive(message = DRIVER_ID_NEGATIVE)
         Long driverId
 
-) {
+) implements EntityRequest {
 }
