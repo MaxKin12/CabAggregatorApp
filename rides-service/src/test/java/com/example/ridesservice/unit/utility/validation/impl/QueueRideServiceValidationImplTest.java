@@ -1,12 +1,10 @@
-package com.example.ridesservice.utility.validation.impl;
+package com.example.ridesservice.unit.utility.validation.impl;
 
-import static com.example.ridesservice.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.ridesservice.constants.RideTestData.RIDE_ID;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_ID;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.QUEUE_INVALID_RIDE_SAVE;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,6 +13,7 @@ import com.example.ridesservice.exception.custom.QueueIsEmptyException;
 import com.example.ridesservice.exception.custom.QueueRideSaveException;
 import com.example.ridesservice.model.QueueRide;
 import com.example.ridesservice.repository.QueueRideRepository;
+import com.example.ridesservice.utility.validation.impl.QueueRideServiceValidationImpl;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,8 +41,8 @@ class QueueRideServiceValidationImplTest {
 
         QueueRide actualQueueRide = queueRideServiceValidation.findQueueOldestRecord();
 
-        assertNotNull(actualQueueRide);
-        assertEquals(expectedQueueRide.getId(), actualQueueRide.getId());
+        assertThat(actualQueueRide).isNotNull();
+        assertThat(actualQueueRide.getId()).isEqualTo(expectedQueueRide.getId());
         verify(queueRideRepository).findTop1ByOrderByChangedAt();
     }
 
@@ -51,7 +50,8 @@ class QueueRideServiceValidationImplTest {
     void findQueueOldestRecord_ShouldThrowQueueIsEmptyException_WhenNoRecordExists() {
         when(queueRideRepository.findTop1ByOrderByChangedAt()).thenReturn(Optional.empty());
 
-        assertThrows(QueueIsEmptyException.class, () -> queueRideServiceValidation.findQueueOldestRecord());
+        assertThatExceptionOfType(QueueIsEmptyException.class)
+                .isThrownBy(() -> queueRideServiceValidation.findQueueOldestRecord());
 
         verify(queueRideRepository).findTop1ByOrderByChangedAt();
     }
@@ -60,7 +60,7 @@ class QueueRideServiceValidationImplTest {
     void saveOrThrow_ShouldSaveQueueRide_WhenSaveIsSuccessful() {
         QueueRide queueRide = new QueueRide();
 
-        assertDoesNotThrow(() -> queueRideServiceValidation.saveOrThrow(queueRide));
+        assertThatNoException().isThrownBy(() -> queueRideServiceValidation.saveOrThrow(queueRide));
 
         verify(queueRideRepository).save(queueRide);
     }
@@ -68,15 +68,16 @@ class QueueRideServiceValidationImplTest {
     @Test
     void saveOrThrow_ShouldThrowQueueRideSaveException_WhenSaveFails() {
         QueueRide queueRide = new QueueRide();
-        String[] args = new String[] {EXCEPTION_MESSAGE};
+        String[] args = new String[] {QUEUE_INVALID_RIDE_SAVE};
 
         doThrow(new QueueRideSaveException(QUEUE_INVALID_RIDE_SAVE, args))
                 .when(queueRideRepository).save(queueRide);
 
-        QueueRideSaveException exception = assertThrows(QueueRideSaveException.class,
-                () -> queueRideServiceValidation.saveOrThrow(queueRide));
+        assertThatExceptionOfType(QueueRideSaveException.class)
+                .isThrownBy(() -> queueRideServiceValidation.saveOrThrow(queueRide))
+                .withMessage(QUEUE_INVALID_RIDE_SAVE)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertEquals(QUEUE_INVALID_RIDE_SAVE, exception.getMessageKey());
         verify(queueRideRepository).save(queueRide);
     }
 

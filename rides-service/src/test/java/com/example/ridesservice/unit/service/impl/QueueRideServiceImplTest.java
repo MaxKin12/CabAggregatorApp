@@ -1,17 +1,19 @@
-package com.example.ridesservice.service.impl;
+package com.example.ridesservice.unit.service.impl;
 
-import static com.example.ridesservice.constants.RideTestData.RIDE;
-import static com.example.ridesservice.constants.RideTestData.RIDE_ID;
-import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.QUEUE_INVALID_RIDE_SAVE;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_ID;
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.QUEUE_IS_EMPTY;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowableOfType;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import com.example.ridesservice.exception.custom.QueueIsEmptyException;
-import com.example.ridesservice.exception.custom.QueueRideSaveException;
 import com.example.ridesservice.model.QueueRide;
-import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.QueueRideRepository;
+import com.example.ridesservice.service.impl.QueueRideServiceImpl;
 import com.example.ridesservice.utility.validation.QueueRideServiceValidation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,8 +45,10 @@ class QueueRideServiceImplTest {
 
         QueueRide result = queueRideService.popRide();
 
-        assertNotNull(result);
-        assertEquals(queueRide, result);
+        assertThat(result)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(queueRide);
         verify(validation).findQueueOldestRecord();
         verify(queueRideRepository).delete(queueRide);
     }
@@ -56,11 +60,16 @@ class QueueRideServiceImplTest {
         when(validation.findQueueOldestRecord())
                 .thenThrow(new QueueIsEmptyException(QUEUE_IS_EMPTY, args));
 
-        QueueIsEmptyException exception = assertThrows(QueueIsEmptyException.class,
-                () -> queueRideService.popRide());
+        QueueIsEmptyException exception = catchThrowableOfType(
+                QueueIsEmptyException.class,
+                () -> queueRideService.popRide()
+        );
 
-        assertEquals(QUEUE_IS_EMPTY, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
+        assertThat(exception)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, QUEUE_IS_EMPTY)
+                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
+
         verify(validation).findQueueOldestRecord();
         verifyNoInteractions(queueRideRepository);
     }

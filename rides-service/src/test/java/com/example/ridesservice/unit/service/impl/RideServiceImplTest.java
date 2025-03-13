@@ -1,25 +1,23 @@
-package com.example.ridesservice.service.impl;
+package com.example.ridesservice.unit.service.impl;
 
-import static com.example.ridesservice.constants.RideTestData.INVALID_RIDE_ID;
-import static com.example.ridesservice.constants.RideTestData.LIMIT;
-import static com.example.ridesservice.constants.RideTestData.LIMIT_CUT;
-import static com.example.ridesservice.constants.RideTestData.OFFSET;
-import static com.example.ridesservice.constants.RideTestData.RIDE;
-import static com.example.ridesservice.constants.RideTestData.RIDE_BOOKING_REQUEST;
-import static com.example.ridesservice.constants.RideTestData.RIDE_ID;
-import static com.example.ridesservice.constants.RideTestData.RIDE_PAGE;
-import static com.example.ridesservice.constants.RideTestData.RIDE_PAGE_RESPONSE;
-import static com.example.ridesservice.constants.RideTestData.RIDE_REQUEST;
-import static com.example.ridesservice.constants.RideTestData.RIDE_RESPONSE;
-import static com.example.ridesservice.constants.RideTestData.RIDE_SETTING_REQUEST;
-import static com.example.ridesservice.constants.RideTestData.RIDE_STATUS_REQUEST;
+import static com.example.ridesservice.configuration.constants.RideTestData.INVALID_RIDE_ID;
+import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT;
+import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT_CUT;
+import static com.example.ridesservice.configuration.constants.RideTestData.OFFSET;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_BOOKING_REQUEST;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_ID;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_PAGE;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_PAGE_RESPONSE;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_REQUEST;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_RESPONSE;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_SETTING_REQUEST;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_STATUS_REQUEST;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.WRONG_STATUS_TRANSITION;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -42,6 +40,7 @@ import com.example.ridesservice.model.QueueRide;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.RideRepository;
 import com.example.ridesservice.service.QueueRideService;
+import com.example.ridesservice.service.impl.RideServiceImpl;
 import com.example.ridesservice.utility.pricecounter.PriceCounter;
 import com.example.ridesservice.utility.validation.RideServiceValidation;
 import java.math.BigDecimal;
@@ -92,8 +91,8 @@ class RideServiceImplTest {
 
         RideResponse result = rideService.findById(id);
 
-        assertNotNull(result);
-        assertEquals(rideResponse, result);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(rideResponse);
         verify(validation).findByIdOrThrow(id);
         verify(rideMapper).toResponse(ride);
     }
@@ -106,11 +105,11 @@ class RideServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new RideNotFoundException(RIDE_NOT_FOUND, args));
 
-        RideNotFoundException exception = assertThrows(RideNotFoundException.class,
-                () -> rideService.findById(id));
+        assertThatExceptionOfType(RideNotFoundException.class)
+                .isThrownBy(() -> rideService.findById(id))
+                .withMessage(RIDE_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertEquals(RIDE_NOT_FOUND, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(rideMapper);
     }
@@ -128,8 +127,8 @@ class RideServiceImplTest {
 
         RidePageResponse result = rideService.findAll(offset, limit);
 
-        assertNotNull(result);
-        assertEquals(ridePageResponse, result);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(ridePageResponse);
         verify(validation).cutDownLimit(limit);
         verify(rideRepository).findAll(PageRequest.of(offset, limit));
         verify(ridePageMapper).toResponsePage(ridePage, offset, limit);
@@ -151,8 +150,8 @@ class RideServiceImplTest {
 
         RidePageResponse result = rideService.findLastPersonRides(personId, limit, personType);
 
-        assertNotNull(result);
-        assertEquals(ridePageResponse, result);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(ridePageResponse);
         verify(validation).cutDownLimit(limit);
         verify(validation).findLastRidesPage(personId, personType, limitCut);
         verify(ridePageMapper).toResponsePage(ridePage, offset, limitCut);
@@ -174,8 +173,8 @@ class RideServiceImplTest {
 
         RideResponse result = rideService.create(rideRequest);
 
-        assertNotNull(result);
-        assertEquals(rideResponse, result);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(rideResponse);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verify(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
         verify(priceCounter).count(rideRequest.pickUpAddress(), rideRequest.destinationAddress());
@@ -191,7 +190,8 @@ class RideServiceImplTest {
         doThrow(new RuntimeException())
                 .when(validation).checkPassengerExistence(rideRequest.passengerId());
 
-        assertThrows(RuntimeException.class, () -> rideService.create(rideRequest));
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> rideService.create(rideRequest));
 
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verifyNoInteractions(priceCounter, rideMapper, rideRepository);
@@ -205,7 +205,8 @@ class RideServiceImplTest {
         doThrow(new RuntimeException())
                 .when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
 
-        assertThrows(RuntimeException.class, () -> rideService.create(rideRequest));
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> rideService.create(rideRequest));
 
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verify(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
@@ -220,7 +221,8 @@ class RideServiceImplTest {
         doThrow(new RuntimeException())
                 .when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
 
-        assertThrows(RuntimeException.class, () -> rideService.create(rideRequest));
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> rideService.create(rideRequest));
 
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verify(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
@@ -243,8 +245,8 @@ class RideServiceImplTest {
 
         RideResponse result = rideService.bookRide(rideRequest);
 
-        assertNotNull(result);
-        assertEquals(rideResponse, result);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(rideResponse);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verify(priceCounter).count(rideRequest.pickUpAddress(), rideRequest.destinationAddress());
         verify(rideBookingMapper).toRide(rideRequest, price);
@@ -260,7 +262,8 @@ class RideServiceImplTest {
         doThrow(new RuntimeException())
                 .when(validation).checkPassengerExistence(rideRequest.passengerId());
 
-        assertThrows(RuntimeException.class, () -> rideService.bookRide(rideRequest));
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> rideService.bookRide(rideRequest));
 
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verifyNoInteractions(priceCounter, rideBookingMapper, rideRepository, queueRideService);
@@ -282,8 +285,8 @@ class RideServiceImplTest {
 
         RideResponse result = rideService.update(rideRequest, id);
 
-        assertNotNull(result);
-        assertEquals(rideResponse, result);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(rideResponse);
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verify(validation).checkCarExistence(rideRequest.carId());
@@ -300,11 +303,11 @@ class RideServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new RideNotFoundException(RIDE_NOT_FOUND, args));
 
-        RideNotFoundException exception = assertThrows(RideNotFoundException.class,
-                () -> rideService.update(RIDE_REQUEST, id));
+        assertThatExceptionOfType(RideNotFoundException.class)
+                .isThrownBy(() -> rideService.update(RIDE_REQUEST, id))
+                .withMessage(RIDE_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertEquals(RIDE_NOT_FOUND, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(rideMapper);
     }
@@ -318,7 +321,8 @@ class RideServiceImplTest {
         doThrow(new RuntimeException())
                 .when(validation).checkPassengerExistence(rideRequest.passengerId());
 
-        assertThrows(RuntimeException.class, () -> rideService.update(rideRequest, id));
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> rideService.update(rideRequest, id));
 
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
@@ -335,7 +339,8 @@ class RideServiceImplTest {
         doThrow(new RuntimeException())
                 .when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
 
-        assertThrows(RuntimeException.class, () -> rideService.update(rideRequest, id));
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> rideService.update(rideRequest, id));
 
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
@@ -353,7 +358,8 @@ class RideServiceImplTest {
         doThrow(new RuntimeException())
                 .when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
 
-        assertThrows(RuntimeException.class, () -> rideService.update(rideRequest, id));
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> rideService.update(rideRequest, id));
 
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
@@ -379,8 +385,8 @@ class RideServiceImplTest {
 
         RideResponse result = rideService.setDriverToRide(rideRequest);
 
-        assertNotNull(result);
-        assertEquals(rideResponse, result);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(rideResponse);
         verify(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
         verify(queueRideService).popRide();
         verify(validation).findByIdOrThrow(RIDE_ID);
@@ -402,8 +408,8 @@ class RideServiceImplTest {
 
         RideResponse result = rideService.updateStatus(rideRequest, id);
 
-        assertNotNull(result);
-        assertEquals(rideResponse, result);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(rideResponse);
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkStatusTransitionAllowed(ride, rideRequest);
         verify(validation).updateStatusOrThrow(ride, rideRequest);
@@ -420,11 +426,11 @@ class RideServiceImplTest {
         doThrow(new WrongStatusTransitionException(WRONG_STATUS_TRANSITION, args))
                 .when(validation).checkStatusTransitionAllowed(RIDE, rideRequest);
 
-        WrongStatusTransitionException exception = assertThrows(WrongStatusTransitionException.class,
-                () -> rideService.updateStatus(rideRequest, id));
+        assertThatExceptionOfType(WrongStatusTransitionException.class)
+                .isThrownBy(() -> rideService.updateStatus(rideRequest, id))
+                .withMessage(WRONG_STATUS_TRANSITION)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertEquals(WRONG_STATUS_TRANSITION, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkStatusTransitionAllowed(RIDE, rideRequest);
         verifyNoInteractions(rideMapper);
@@ -437,7 +443,7 @@ class RideServiceImplTest {
         when(validation.findByIdOrThrow(id)).thenReturn(RIDE);
         doNothing().when(rideRepository).deleteById(id);
 
-        assertDoesNotThrow(() -> rideService.delete(id));
+        assertThatNoException().isThrownBy(() -> rideService.delete(id));
 
         verify(validation).findByIdOrThrow(id);
         verify(rideRepository).deleteById(id);
@@ -451,13 +457,13 @@ class RideServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new RideNotFoundException(RIDE_NOT_FOUND, args));
 
-        RideNotFoundException exception = assertThrows(RideNotFoundException.class,
-                () -> rideService.delete(id));
+        assertThatExceptionOfType(RideNotFoundException.class)
+                .isThrownBy(() -> rideService.delete(id))
+                .withMessage(RIDE_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertEquals(RIDE_NOT_FOUND, exception.getMessageKey());
-        assertArrayEquals(args, exception.getArgs());
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(rideRepository);
     }
-    
+
 }

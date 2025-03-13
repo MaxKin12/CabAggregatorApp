@@ -1,16 +1,10 @@
-package com.example.ridesservice.client;
+package com.example.ridesservice.client.driver;
 
-import com.example.ridesservice.client.decoder.ExternalServiceClientDecoder;
 import com.example.ridesservice.client.dto.CarResponse;
 import com.example.ridesservice.client.dto.DriverResponse;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(
-        name = "driver-client",
-        configuration = {ExternalServiceClientDecoder.class}
-)
 public interface DriverClient {
 
     @GetMapping("/drivers/{id}")

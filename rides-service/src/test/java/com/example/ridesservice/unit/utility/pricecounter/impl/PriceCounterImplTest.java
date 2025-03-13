@@ -1,6 +1,6 @@
-package com.example.ridesservice.utility.pricecounter.impl;
+package com.example.ridesservice.unit.utility.pricecounter.impl;
 
-import static com.example.ridesservice.constants.RideTestData.RIDE;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE;
 import static com.example.ridesservice.utility.constants.PriceCounterConstants.METERS_IN_KILOMETER;
 import static com.example.ridesservice.utility.constants.PriceCounterConstants.PRICE_DECIMAL_SCALE;
 import static com.example.ridesservice.utility.constants.PriceCounterConstants.PRICE_FOR_KILOMETER;
@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import com.example.ridesservice.exception.custom.TimetravelRequestException;
+import com.example.ridesservice.utility.pricecounter.impl.PriceCounterImpl;
 import com.example.ridesservice.utility.traveltime.TravelTimeService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
