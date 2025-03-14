@@ -1,9 +1,11 @@
 package com.example.ridesservice.unit.service.impl;
 
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
 import static com.example.ridesservice.configuration.constants.RideTestData.INVALID_RIDE_ID;
 import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT;
 import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT_CUT;
 import static com.example.ridesservice.configuration.constants.RideTestData.OFFSET;
+import static com.example.ridesservice.configuration.constants.RideTestData.PRICE;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_BOOKING_REQUEST;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_ID;
@@ -13,6 +15,7 @@ import static com.example.ridesservice.configuration.constants.RideTestData.RIDE
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_RESPONSE;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_SETTING_REQUEST;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_STATUS_REQUEST;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.EXTERNAL_SERVICE_ERROR;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.WRONG_STATUS_TRANSITION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.example.ridesservice.client.exception.ExternalServiceEntityNotFoundException;
 import com.example.ridesservice.dto.ride.request.RideBookingRequest;
 import com.example.ridesservice.dto.ride.request.RideDriverSettingRequest;
 import com.example.ridesservice.dto.ride.request.RideRequest;
@@ -162,7 +166,7 @@ class RideServiceImplTest {
         RideRequest rideRequest = RIDE_REQUEST;
         Ride ride = RIDE;
         RideResponse rideResponse = RIDE_RESPONSE;
-        BigDecimal price = BigDecimal.valueOf(17.5);
+        BigDecimal price = PRICE;
 
         doNothing().when(validation).checkPassengerExistence(rideRequest.passengerId());
         doNothing().when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
@@ -186,43 +190,33 @@ class RideServiceImplTest {
     @Test
     void createTest_InvalidPassengerId_ThrowsException() {
         RideRequest rideRequest = RIDE_REQUEST;
+        String[] args = new String[]{EXCEPTION_MESSAGE};
 
-        doThrow(new RuntimeException())
+        doThrow(new ExternalServiceEntityNotFoundException(EXTERNAL_SERVICE_ERROR, args))
                 .when(validation).checkPassengerExistence(rideRequest.passengerId());
 
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> rideService.create(rideRequest));
+        assertThatExceptionOfType(ExternalServiceEntityNotFoundException.class)
+                .isThrownBy(() -> rideService.create(rideRequest))
+                .withMessage(EXTERNAL_SERVICE_ERROR)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verifyNoInteractions(priceCounter, rideMapper, rideRepository);
     }
 
     @Test
-    void createTest_InvalidDriverId_ThrowsException() {
+    void createTest_InvalidDriverOrCarId_ThrowsException() {
         RideRequest rideRequest = RIDE_REQUEST;
+        String[] args = new String[]{EXCEPTION_MESSAGE};
 
         doNothing().when(validation).checkPassengerExistence(rideRequest.passengerId());
-        doThrow(new RuntimeException())
+        doThrow(new ExternalServiceEntityNotFoundException(EXTERNAL_SERVICE_ERROR, args))
                 .when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
 
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> rideService.create(rideRequest));
-
-        verify(validation).checkPassengerExistence(rideRequest.passengerId());
-        verify(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
-        verifyNoInteractions(priceCounter, rideMapper, rideRepository);
-    }
-
-    @Test
-    void createTest_InvalidCarId_ThrowsException() {
-        RideRequest rideRequest = RIDE_REQUEST;
-
-        doNothing().when(validation).checkPassengerExistence(rideRequest.passengerId());
-        doThrow(new RuntimeException())
-                .when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
-
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> rideService.create(rideRequest));
+        assertThatExceptionOfType(ExternalServiceEntityNotFoundException.class)
+                .isThrownBy(() -> rideService.create(rideRequest))
+                .withMessage(EXTERNAL_SERVICE_ERROR)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verify(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
@@ -234,7 +228,7 @@ class RideServiceImplTest {
         RideBookingRequest rideRequest = RIDE_BOOKING_REQUEST;
         Ride ride = RIDE;
         RideResponse rideResponse = RIDE_RESPONSE;
-        BigDecimal price = BigDecimal.valueOf(17.5);
+        BigDecimal price = PRICE;
 
         doNothing().when(validation).checkPassengerExistence(rideRequest.passengerId());
         when(priceCounter.count(rideRequest.pickUpAddress(), rideRequest.destinationAddress())).thenReturn(price);
@@ -258,12 +252,15 @@ class RideServiceImplTest {
     @Test
     void bookRideTest_InvalidPassengerId_ThrowsException() {
         RideBookingRequest rideRequest = RIDE_BOOKING_REQUEST;
+        String[] args = new String[]{EXCEPTION_MESSAGE};
 
-        doThrow(new RuntimeException())
+        doThrow(new ExternalServiceEntityNotFoundException(EXTERNAL_SERVICE_ERROR, args))
                 .when(validation).checkPassengerExistence(rideRequest.passengerId());
 
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> rideService.bookRide(rideRequest));
+        assertThatExceptionOfType(ExternalServiceEntityNotFoundException.class)
+                .isThrownBy(() -> rideService.bookRide(rideRequest))
+                .withMessage(EXTERNAL_SERVICE_ERROR)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
         verifyNoInteractions(priceCounter, rideBookingMapper, rideRepository, queueRideService);
@@ -316,13 +313,16 @@ class RideServiceImplTest {
     void updateTest_InvalidPassengerId_ThrowsException() {
         Long id = RIDE_ID;
         RideRequest rideRequest = RIDE_REQUEST;
+        String[] args = new String[]{EXCEPTION_MESSAGE};
 
         when(validation.findByIdOrThrow(id)).thenReturn(RIDE);
-        doThrow(new RuntimeException())
+        doThrow(new RideNotFoundException(EXTERNAL_SERVICE_ERROR, args))
                 .when(validation).checkPassengerExistence(rideRequest.passengerId());
 
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> rideService.update(rideRequest, id));
+        assertThatExceptionOfType(RideNotFoundException.class)
+                .isThrownBy(() -> rideService.update(RIDE_REQUEST, id))
+                .withMessage(EXTERNAL_SERVICE_ERROR)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
@@ -333,14 +333,17 @@ class RideServiceImplTest {
     void updateTest_InvalidDriverId_ThrowsException() {
         Long id = RIDE_ID;
         RideRequest rideRequest = RIDE_REQUEST;
+        String[] args = new String[]{EXCEPTION_MESSAGE};
 
         when(validation.findByIdOrThrow(id)).thenReturn(RIDE);
         doNothing().when(validation).checkPassengerExistence(rideRequest.passengerId());
-        doThrow(new RuntimeException())
+        doThrow(new RideNotFoundException(RIDE_NOT_FOUND, args))
                 .when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
 
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> rideService.update(rideRequest, id));
+        assertThatExceptionOfType(RideNotFoundException.class)
+                .isThrownBy(() -> rideService.update(rideRequest, id))
+                .withMessage(RIDE_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());
@@ -352,14 +355,17 @@ class RideServiceImplTest {
     void updateTest_InvalidCarId_ThrowsException() {
         Long id = RIDE_ID;
         RideRequest rideRequest = RIDE_REQUEST;
+        String[] args = new String[]{EXCEPTION_MESSAGE};
 
         when(validation.findByIdOrThrow(id)).thenReturn(RIDE);
         doNothing().when(validation).checkPassengerExistence(rideRequest.passengerId());
-        doThrow(new RuntimeException())
+        doThrow(new RideNotFoundException(EXTERNAL_SERVICE_ERROR, args))
                 .when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
 
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> rideService.update(rideRequest, id));
+        assertThatExceptionOfType(RideNotFoundException.class)
+                .isThrownBy(() -> rideService.update(rideRequest, id))
+                .withMessage(EXTERNAL_SERVICE_ERROR)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).findByIdOrThrow(id);
         verify(validation).checkPassengerExistence(rideRequest.passengerId());

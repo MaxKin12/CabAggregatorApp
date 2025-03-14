@@ -1,12 +1,16 @@
 package com.example.ridesservice.unit.utility.pricecounter.impl;
 
-import static com.example.ridesservice.configuration.constants.RideTestData.RIDE;
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.TEST_DISTANCE;
+import static com.example.ridesservice.configuration.constants.RideTestData.DESTINATION_ADDRESS;
+import static com.example.ridesservice.configuration.constants.RideTestData.PICK_UP_ADDRESS;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.TIMETRAVEL_REQUEST_EXCEPTION;
 import static com.example.ridesservice.utility.constants.PriceCounterConstants.METERS_IN_KILOMETER;
 import static com.example.ridesservice.utility.constants.PriceCounterConstants.PRICE_DECIMAL_SCALE;
 import static com.example.ridesservice.utility.constants.PriceCounterConstants.PRICE_FOR_KILOMETER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.example.ridesservice.exception.custom.TimetravelRequestException;
 import com.example.ridesservice.utility.pricecounter.impl.PriceCounterImpl;
@@ -30,9 +34,9 @@ class PriceCounterImplTest {
 
     @Test
     void countTest_ValidAddresses_ReturnsCorrectPrice() {
-        String departureAddress = RIDE.getPickUpAddress();
-        String arrivalAddress = RIDE.getDestinationAddress();
-        int distanceInMeters = 5000;
+        String departureAddress = PICK_UP_ADDRESS;
+        String arrivalAddress = DESTINATION_ADDRESS;
+        int distanceInMeters = TEST_DISTANCE;
         BigDecimal expectedPrice = BigDecimal.valueOf((double)
                         (distanceInMeters / METERS_IN_KILOMETER + 1) * PRICE_FOR_KILOMETER)
                 .setScale(PRICE_DECIMAL_SCALE, RoundingMode.CEILING);
@@ -41,7 +45,7 @@ class PriceCounterImplTest {
 
         BigDecimal result = priceCounter.count(departureAddress, arrivalAddress);
 
-        assertEquals(expectedPrice, result);
+        assertThat(result).isEqualTo(expectedPrice);
         verify(travelTimeService).countDistance(departureAddress, arrivalAddress);
     }
 
@@ -49,11 +53,15 @@ class PriceCounterImplTest {
     void countTest_NullAddresses_ThrowsException() {
         String departureAddress = null;
         String arrivalAddress = null;
+        String[] args = new String[]{departureAddress, arrivalAddress};
 
         when(travelTimeService.countDistance(departureAddress, arrivalAddress))
-                .thenThrow(new TimetravelRequestException("Addresses cannot be null"));
+                .thenThrow(new TimetravelRequestException(TIMETRAVEL_REQUEST_EXCEPTION, args));
 
-        assertThrows(TimetravelRequestException.class, () -> priceCounter.count(departureAddress, arrivalAddress));
+        assertThatExceptionOfType(TimetravelRequestException.class)
+                .isThrownBy(() -> priceCounter.count(departureAddress, arrivalAddress))
+                .withMessage(TIMETRAVEL_REQUEST_EXCEPTION)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(travelTimeService).countDistance(departureAddress, arrivalAddress);
     }

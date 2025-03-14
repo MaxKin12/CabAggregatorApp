@@ -1,11 +1,34 @@
 package com.example.ridesservice.unit.utility.validation.impl;
 
-import static com.example.ridesservice.configuration.constants.RideTestData.*;
-import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.*;
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
+import static com.example.ridesservice.configuration.constants.RideTestData.CAR_ID;
+import static com.example.ridesservice.configuration.constants.RideTestData.CAR_ID_2;
+import static com.example.ridesservice.configuration.constants.RideTestData.DRIVER_ID;
+import static com.example.ridesservice.configuration.constants.RideTestData.INVALID_RIDE_ID;
+import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT;
+import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT_CUT;
+import static com.example.ridesservice.configuration.constants.RideTestData.PASSENGER_ID;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_ID;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_PAGE;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_REQUEST_UPDATED;
+import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_STATUS_REQUEST;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.DRIVER_NOT_CONTAINS_CAR;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RIDE;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
+import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.WRONG_STATUS_TRANSITION;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import com.example.ridesservice.client.driver.DriverClient;
 import com.example.ridesservice.client.passenger.PassengerClient;
@@ -24,18 +47,15 @@ import com.example.ridesservice.mapper.RideMapper;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.RideRepository;
 import com.example.ridesservice.utility.validation.impl.RideServiceValidationImpl;
-import org.assertj.core.api.AssertionsForClassTypes;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import java.util.List;
-import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 class RideServiceValidationImplTest {
@@ -67,7 +87,7 @@ class RideServiceValidationImplTest {
 
         int result = validation.cutDownLimit(limit);
 
-        AssertionsForClassTypes.assertThat(result).isEqualTo(limit);
+        assertThat(result).isEqualTo(limit);
         verify(properties).maxPageLimit();
     }
 
@@ -80,7 +100,7 @@ class RideServiceValidationImplTest {
 
         int result = validation.cutDownLimit(limit);
 
-        AssertionsForClassTypes.assertThat(result).isEqualTo(maxLimit);
+        assertThat(result).isEqualTo(maxLimit);
         verify(properties, times(2)).maxPageLimit();
     }
 
@@ -104,10 +124,10 @@ class RideServiceValidationImplTest {
 
         when(rideRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> validation.findByIdOrThrow(id))
-                .isInstanceOf(RideNotFoundException.class)
-                .hasFieldOrPropertyWithValue("messageKey", RIDE_NOT_FOUND)
-                .hasFieldOrPropertyWithValue("args", args);
+        assertThatExceptionOfType(RideNotFoundException.class)
+                .isThrownBy(() -> validation.findByIdOrThrow(id))
+                .withMessage(RIDE_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(rideRepository).findById(id);
     }
@@ -116,8 +136,8 @@ class RideServiceValidationImplTest {
     void findLastRidesPageTest_Passenger_ReturnsPage() {
         Long passengerId = PASSENGER_ID;
         PersonType personType = PersonType.PASSENGER;
+        Page<Ride> ridePage = RIDE_PAGE;
 
-        Page<Ride> ridePage = new PageImpl<>(List.of(RIDE, RIDE2));
         when(rideRepository.findByPassengerId(any(PageRequest.class), eq(passengerId))).thenReturn(ridePage);
 
         Page<Ride> result = validation.findLastRidesPage(passengerId, personType, LIMIT);
@@ -130,8 +150,8 @@ class RideServiceValidationImplTest {
     void findLastRidesPageTest_Driver_ReturnsPage() {
         Long driverId = DRIVER_ID;
         PersonType personType = PersonType.DRIVER;
+        Page<Ride> ridePage = RIDE_PAGE;
 
-        Page<Ride> ridePage = new PageImpl<>(List.of(RIDE, RIDE2));
         when(rideRepository.findByDriverId(any(PageRequest.class), eq(driverId))).thenReturn(ridePage);
 
         Page<Ride> result = validation.findLastRidesPage(driverId, personType, LIMIT);
@@ -155,14 +175,15 @@ class RideServiceValidationImplTest {
     @Test
     void saveOrThrowTest_InvalidRide_ThrowsException() {
         Ride ride = RIDE;
-        String[] args = new String[]{"create", "Database error"};
+        String[] args = new String[]{ATTEMPT_CHANGE_CREATE, INVALID_ATTEMPT_CHANGE_RIDE};
 
-        when(rideRepository.save(ride)).thenThrow(new RuntimeException("Database error"));
+        doThrow(new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_RIDE, args))
+                .when(rideRepository).save(ride);
 
-        assertThatThrownBy(() -> validation.saveOrThrow(ride))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue("messageKey", INVALID_ATTEMPT_CHANGE_RIDE)
-                .hasFieldOrPropertyWithValue("args", args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.saveOrThrow(ride))
+                .withMessage(INVALID_ATTEMPT_CHANGE_RIDE)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(rideRepository).save(ride);
     }
@@ -185,15 +206,15 @@ class RideServiceValidationImplTest {
     void updateOrThrowTest_InvalidRide_ThrowsException() {
         Ride ride = RIDE;
         RideRequest request = RIDE_REQUEST_UPDATED;
-        String[] args = new String[]{"update", "Database error"};
+        String[] args = new String[]{ATTEMPT_CHANGE_UPDATE, INVALID_ATTEMPT_CHANGE_RIDE};
 
-        doThrow(new RuntimeException("Database error"))
+        doThrow(new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_RIDE, args))
                 .when(rideMapper).updateRideFromDto(request, ride);
 
-        assertThatThrownBy(() -> validation.updateOrThrow(ride, request))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue("messageKey", INVALID_ATTEMPT_CHANGE_RIDE)
-                .hasFieldOrPropertyWithValue("args", args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.updateOrThrow(ride, request))
+                .withMessage(INVALID_ATTEMPT_CHANGE_RIDE)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(rideMapper).updateRideFromDto(request, ride);
         verifyNoInteractions(rideRepository);
@@ -235,15 +256,16 @@ class RideServiceValidationImplTest {
         Long carId = INVALID_RIDE_ID;
         DriverResponse driverResponse = DriverResponse.builder()
                 .id(driverId)
-                .carIds(List.of(2L))
+                .carIds(List.of(CAR_ID_2))
                 .build();
+        String[] args = new String[]{driverResponse.id().toString(), carId.toString()};
 
         when(driverClient.getDriverById(driverId)).thenReturn(driverResponse);
 
-        assertThatThrownBy(() -> validation.checkDriverExistenceAndCarOwning(driverId, carId))
-                .isInstanceOf(DriverNotContainsCarException.class)
-                .hasFieldOrPropertyWithValue("messageKey", DRIVER_NOT_CONTAINS_CAR)
-                .hasFieldOrPropertyWithValue("args", new String[]{driverId.toString(), carId.toString()});
+        assertThatExceptionOfType(DriverNotContainsCarException.class)
+                .isThrownBy(() -> validation.checkDriverExistenceAndCarOwning(driverId, carId))
+                .withMessage(DRIVER_NOT_CONTAINS_CAR)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(driverClient).getDriverById(driverId);
     }
@@ -262,12 +284,13 @@ class RideServiceValidationImplTest {
     void checkStatusTransitionAllowedTest_InvalidTransition_ThrowsException() {
         Ride ride = RIDE;
         RideStatusRequest request = RIDE_STATUS_REQUEST;
-
         ride.setStatus(RideStatus.COMPLETED);
+        String[] args = new String[]{};
 
-        assertThatThrownBy(() -> validation.checkStatusTransitionAllowed(ride, request))
-                .isInstanceOf(WrongStatusTransitionException.class);
-
+        assertThatExceptionOfType(WrongStatusTransitionException.class)
+                .isThrownBy(() -> validation.checkStatusTransitionAllowed(ride, request))
+                .withMessage(WRONG_STATUS_TRANSITION)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
     }
 
 }

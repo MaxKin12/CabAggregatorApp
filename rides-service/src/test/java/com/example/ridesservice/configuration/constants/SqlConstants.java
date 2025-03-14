@@ -19,6 +19,7 @@ import static com.example.ridesservice.configuration.constants.RideTestData.RIDE
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_STATUS_CANCELLED;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_STATUS_COMPLETED;
 
+import com.example.ridesservice.enums.RideStatus;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -27,7 +28,7 @@ public final class SqlConstants {
 
     public final static String SQL_DELETE_ALL_TEST_DATA = "delete from rides;";
     public final static String SQL_INSERT_TEST_DATA =
-            "insert into passengers (id, passenger_id, driver_id, car_id, pick_up_address, destination_address," +
+            "insert into rides (id, passenger_id, driver_id, car_id, pick_up_address, destination_address," +
                     "status, order_time, price) values (" +
                     RIDE_ID + ", " +
                     PASSENGER_ID + ", " +
@@ -35,11 +36,11 @@ public final class SqlConstants {
                     CAR_ID + ", '" +
                     PICK_UP_ADDRESS + "', '" +
                     DESTINATION_ADDRESS + "', " +
-                    RIDE_STATUS_COMPLETED + ", '" +
+                    RideStatus.COMPLETED.getCode() + ", '" +
                     ORDER_TIME + "', " +
                     PRICE + ");";
     public final static String SQL_INSERT_TEST_DATA_2 =
-            "insert into passengers (id, passenger_id, driver_id, cari_id, pick_up_address, destination_address," +
+            "insert into rides (id, passenger_id, driver_id, car_id, pick_up_address, destination_address," +
                     "status, order_time, price) values (" +
                     RIDE_ID_2 + ", " +
                     PASSENGER_ID_2 + ", " +
@@ -47,7 +48,7 @@ public final class SqlConstants {
                     CAR_ID_2 + ", '" +
                     PICK_UP_ADDRESS_2 + "', '" +
                     DESTINATION_ADDRESS_2 + "', " +
-                    RIDE_STATUS_CANCELLED + ", '" +
+                    RideStatus.CANCELLED.getCode() + ", '" +
                     ORDER_TIME_2 + "', " +
                     PRICE_2 + ");";
 

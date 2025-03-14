@@ -32,9 +32,8 @@ class QueueRideServiceValidationImplTest {
 
     @Test
     void findQueueOldestRecord_ShouldReturnOldestRecord_WhenRecordExists() {
-        QueueRide expectedQueueRide = QueueRide
-                .builder()
-                .id(RIDE_ID)
+        QueueRide expectedQueueRide = QueueRide.builder()
+                .rideId(RIDE_ID)
                 .build();
 
         when(queueRideRepository.findTop1ByOrderByChangedAt()).thenReturn(Optional.of(expectedQueueRide));
@@ -42,7 +41,7 @@ class QueueRideServiceValidationImplTest {
         QueueRide actualQueueRide = queueRideServiceValidation.findQueueOldestRecord();
 
         assertThat(actualQueueRide).isNotNull();
-        assertThat(actualQueueRide.getId()).isEqualTo(expectedQueueRide.getId());
+        assertThat(actualQueueRide.getRideId()).isEqualTo(expectedQueueRide.getRideId());
         verify(queueRideRepository).findTop1ByOrderByChangedAt();
     }
 

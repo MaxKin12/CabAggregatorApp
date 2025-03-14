@@ -1,10 +1,10 @@
 package com.example.ridesservice.unit.service.impl;
 
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_ARGS_FIELD;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_ID;
-import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.QUEUE_IS_EMPTY;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowableOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -60,16 +60,10 @@ class QueueRideServiceImplTest {
         when(validation.findQueueOldestRecord())
                 .thenThrow(new QueueIsEmptyException(QUEUE_IS_EMPTY, args));
 
-        QueueIsEmptyException exception = catchThrowableOfType(
-                QueueIsEmptyException.class,
-                () -> queueRideService.popRide()
-        );
-
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, QUEUE_IS_EMPTY)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
-
+        assertThatThrownBy(() -> queueRideService.popRide())
+                .isInstanceOf(QueueIsEmptyException.class)
+                .hasMessage(QUEUE_IS_EMPTY)
+                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
         verify(validation).findQueueOldestRecord();
         verifyNoInteractions(queueRideRepository);
     }
