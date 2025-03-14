@@ -1,5 +1,6 @@
 package com.example.ridesservice.unit.enums;
 
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.INVALID_ENUM_CODE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.util.Optional;
@@ -21,7 +22,7 @@ public class RideStatusTest {
 
     @Test
     void testCodeToUserGender_InvalidCode() {
-        Optional<RideStatus> result = RideStatus.codeToRideStatus(999);
+        Optional<RideStatus> result = RideStatus.codeToRideStatus(INVALID_ENUM_CODE);
         assertThat(result.isPresent()).isFalse();
     }
 

@@ -381,7 +381,7 @@ class RideServiceImplTest {
 
         doNothing().when(validation).checkDriverExistenceAndCarOwning(rideRequest.driverId(), rideRequest.carId());
         when(queueRideService.popRide()).thenReturn(QueueRide.builder()
-                .id(1L)
+                .id(RIDE_ID)
                 .rideId(ride.getId())
                 .changedAt(LocalDateTime.now())
                 .build());

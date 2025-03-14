@@ -28,5 +28,6 @@ public final class GeneralUtilityConstants {
     public final static String EXCEPTION_ARGS_FIELD = "args";
     public final static String EXCEPTION_MESSAGE = "Some exception message";
     public final static Integer TEST_DISTANCE = 5000;
+    public final static Integer INVALID_ENUM_CODE = 9999;
 
 }

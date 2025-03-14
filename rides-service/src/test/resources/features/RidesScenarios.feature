@@ -1,4 +1,4 @@
-Feature: Passenger management in passenger-service
+Feature: Ride management in rides-service
 
   Scenario: Full ride-booking lifecycle
     Given passenger with id 1 and driver with id 1 and car with id 1

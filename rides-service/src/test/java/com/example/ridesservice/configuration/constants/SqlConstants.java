@@ -16,8 +16,6 @@ import static com.example.ridesservice.configuration.constants.RideTestData.PRIC
 import static com.example.ridesservice.configuration.constants.RideTestData.PRICE_2;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_ID;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_ID_2;
-import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_STATUS_CANCELLED;
-import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_STATUS_COMPLETED;
 
 import com.example.ridesservice.enums.RideStatus;
 import lombok.AccessLevel;

@@ -1,5 +1,6 @@
 package com.example.ridesservice.unit.enums.converter;
 
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.INVALID_ENUM_CODE;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ENUM_ARGUMENT;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -39,7 +40,7 @@ public class StatusConverterTest {
 
     @Test
     void convertToEntityAttributeTest_InvalidCode_ThrowsException() {
-        Integer invalidCode = 999;
+        Integer invalidCode = INVALID_ENUM_CODE;
         String[] args = new String[] {invalidCode.toString()};
 
         assertThatExceptionOfType(IllegalEnumArgumentException.class)
