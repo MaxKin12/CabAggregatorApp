@@ -7,11 +7,11 @@ import static com.example.ratesservice.utility.constants.InternationalizationExc
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.RATE_ALREADY_EXISTS;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.RATE_NOT_FOUND;
 
-import com.example.ratesservice.client.DriverClient;
-import com.example.ratesservice.client.PassengerClient;
-import com.example.ratesservice.client.RidesClient;
+import com.example.ratesservice.client.driver.DriverClient;
 import com.example.ratesservice.client.dto.RidesResponse;
 import com.example.ratesservice.client.exception.InvalidRideContentException;
+import com.example.ratesservice.client.passenger.PassengerClient;
+import com.example.ratesservice.client.rides.RidesClient;
 import com.example.ratesservice.configuration.properties.RateServiceProperties;
 import com.example.ratesservice.dto.rate.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;

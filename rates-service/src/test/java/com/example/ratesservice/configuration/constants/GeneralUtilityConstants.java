@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 public final class GeneralUtilityConstants {
 
     public final static String DB_DOCKER_IMAGE = "mysql:latest";
-    public final static String CONTROLLER_BASE_URI = "http://localhost/api/v1/rides";
-    public final static String GET_PASSENGER_REQUEST_URL = "/";
+    public final static String CONTROLLER_BASE_URI = "http://localhost/api/v1/rates";
+    public final static String GET_PASSENGER_REQUEST_URL = "/passengers/";
     public final static String GET_DRIVER_REQUEST_URL = "/drivers/";
-    public final static String GET_CAR_REQUEST_URL = "/cars/";
+    public final static String GET_RIDES_REQUEST_URL = "/rides/";
     public final static String ENDPOINT_WITH_ID = "/{id}";
     public final static String ENDPOINT_WITH_PASSENGER_ID = "/passenger/{id}";
+    public final static String ENDPOINT_WITH_PASSENGERS = "/passengers";
+    public final static String ENDPOINT_WITH_DRIVERS = "/drivers";
     public final static String ENDPOINT_FOR_BOOKING = "/booking";
     public final static String ENDPOINT_FOR_SETTING_DRIVER = "/accepting";
     public final static String ENDPOINT_FOR_STATUS_UPDATING = "/{id}/status";

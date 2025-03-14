@@ -29,7 +29,7 @@ public final class RateTestData {
     public final static Long INVALID_RATE_ID = -1L;
     public final static Long NOT_EXIST_RATE_ID = Long.MAX_VALUE;
     public final static Long RIDE_ID = 1L;
-    public final static Long RIDE_ID_CREATED = 2L;
+    public final static Long RIDE_ID_CREATED = 1L;
     public final static Long PASSENGER_ID = 1L;
     public final static Long DRIVER_ID = 1L;
     public final static Long DRIVER_ID_2 = 2L;
@@ -39,6 +39,7 @@ public final class RateTestData {
     public final static Integer VALUE_2 = 0;
     public final static Integer VALUE_CREATED = 3;
     public final static String RECIPIENT = RecipientType.DRIVER.name().toLowerCase(Locale.ROOT);
+    public final static String RECIPIENT_CREATED = RecipientType.PASSENGER.name().toLowerCase(Locale.ROOT);
     public final static String COMMENT = "So cool driver!";
     public final static String COMMENT_2 = "Rude passenger...";
     public final static String COMMENT_UPDATED = "Updated comment...";
@@ -96,9 +97,10 @@ public final class RateTestData {
     public final static RateResponse RATE_RESPONSE_CREATED = RateResponse.builder()
             .rideId(RIDE_ID_CREATED)
             .passengerId(PASSENGER_ID)
-            .driverId(DRIVER_ID_2)
-            .recipient(RECIPIENT)
+            .driverId(DRIVER_ID)
+            .recipient(RECIPIENT_CREATED)
             .value(VALUE_CREATED)
+            .comment(COMMENT)
             .build();
 
     public final static RateResponse RATE_RESPONSE_UPDATED = RateResponse.builder()
@@ -137,8 +139,8 @@ public final class RateTestData {
     public final static RateRequest RATE_REQUEST_CREATED = RateRequest.builder()
             .rideId(RIDE_ID_CREATED)
             .passengerId(PASSENGER_ID)
-            .driverId(DRIVER_ID_2)
-            .recipient(RECIPIENT)
+            .driverId(DRIVER_ID)
+            .recipient(RECIPIENT_CREATED)
             .value(VALUE_CREATED)
             .comment(COMMENT)
             .build();
@@ -153,6 +155,10 @@ public final class RateTestData {
             .passengerId(PASSENGER_ID)
             .driverId(DRIVER_ID)
             .recipient(RECIPIENT)
+            .build();
+
+    public final static RateUpdateRequest INVALID_RATE_REQUEST_UPDATED = RateUpdateRequest.builder()
+            .comment(COMMENT_UPDATED)
             .build();
 
     public final static RateChangeEvent RATE_CHANGE_EVENT = RateChangeEvent.builder()
@@ -188,6 +194,14 @@ public final class RateTestData {
             .pageLimit(LIMIT)
             .totalPages(RATE_RESPONSE_LIST.size() / LIMIT + 1)
             .totalElements(RATE_RESPONSE_LIST.size())
+            .build();
+
+    public final static RatePageResponse RATE_PAGE_RESPONSE_DRIVERS = RatePageResponse.builder()
+            .rateList(List.of())
+            .currentPageNumber(OFFSET)
+            .pageLimit(LIMIT)
+            .totalPages(0)
+            .totalElements(0)
             .build();
 
 }

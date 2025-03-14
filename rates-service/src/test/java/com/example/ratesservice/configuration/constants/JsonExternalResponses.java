@@ -26,13 +26,17 @@ public final class JsonExternalResponses {
                 "carIds": [1]
             }
             """;
-    public final static String CAR_JSON_RESPONSE = """
+    public final static String RIDE_JSON_RESPONSE = """
             {
                 "id": 1,
-                "brand": "Toyota",
-                "number": "1234AB-3",
-                "color": "Red",
-                "driverId": 1
+                "passengerId": 1,
+                "driverId": 1,
+                "carId": 1,
+                "pickUpAddress": "Независимости 4, Минск",
+                "destinationAddress": "Гикало 9, Минск",
+                "status": "completed",
+                "orderTime": "2025-02-02T15:00:00",
+                "price": 17.50
             }
             """;
 
