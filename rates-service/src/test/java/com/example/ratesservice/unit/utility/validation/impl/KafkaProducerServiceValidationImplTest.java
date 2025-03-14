@@ -7,10 +7,8 @@ import static com.example.ratesservice.utility.constants.InternationalizationExc
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import com.example.ratesservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.ratesservice.exception.custom.KafkaSendException;
@@ -47,14 +45,12 @@ class KafkaProducerServiceValidationImplTest {
         RateChangeEventResponse event = RATE_CHANGE_EVENT_RESPONSE;
         String[] args = new String[]{EXCEPTION_MESSAGE};
 
-        doThrow(new RuntimeException(EXCEPTION_MESSAGE)).when(kafkaTemplate).send(any(), any());
+        when(kafkaTemplate.send(topic, event)).thenThrow(new RuntimeException(EXCEPTION_MESSAGE));
 
         assertThatExceptionOfType(KafkaSendException.class)
                 .isThrownBy(() -> kafkaProducerServiceValidation.sendOrThrow(topic, event))
                 .withMessage(KAFKA_INVALID_SEND)
                 .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
-
-        assertThrows(KafkaSendException.class, () -> kafkaProducerServiceValidation.sendOrThrow(topic, event));
     }
 
 }

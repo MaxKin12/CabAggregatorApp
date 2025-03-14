@@ -32,16 +32,19 @@ import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.port;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.ratesservice.configuration.KafkaProducerConfig;
 import com.example.ratesservice.configuration.container.MySqlTestContainer;
 import com.example.ratesservice.dto.exception.ExceptionHandlerResponse;
 import com.example.ratesservice.dto.rate.RatePageResponse;
 import com.example.ratesservice.dto.rate.RateResponse;
+import com.example.ratesservice.utility.validation.KafkaProducerServiceValidation;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -57,6 +60,12 @@ class RateControllerIT extends MySqlTestContainer {
 
     @LocalServerPort
     private int curPort;
+
+    @MockitoBean
+    protected KafkaProducerConfig kafkaProducerConfig;
+
+    @MockitoBean
+    protected KafkaProducerServiceValidation kafkaProducer;
 
     @PostConstruct
     void setUpUri() {

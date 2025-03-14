@@ -8,13 +8,11 @@ import com.example.ratesservice.dto.rate.RateResponse;
 import com.example.ratesservice.dto.rate.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.model.Rate;
-
+import com.example.ratesservice.model.RateChangeEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Locale;
-
-import com.example.ratesservice.model.RateChangeEvent;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,7 +30,6 @@ public final class RateTestData {
     public final static Long RIDE_ID_CREATED = 1L;
     public final static Long PASSENGER_ID = 1L;
     public final static Long DRIVER_ID = 1L;
-    public final static Long DRIVER_ID_2 = 2L;
     public final static Long EVENT_ID = 1L;
 
     public final static Integer VALUE = 5;
@@ -125,15 +122,6 @@ public final class RateTestData {
             .recipient(RECIPIENT)
             .value(VALUE)
             .comment(COMMENT)
-            .build();
-
-    public final static RateRequest RATE_REQUEST2 = RateRequest.builder()
-            .rideId(RIDE_ID)
-            .passengerId(PASSENGER_ID)
-            .driverId(DRIVER_ID)
-            .recipient(RECIPIENT)
-            .value(VALUE_2)
-            .comment(COMMENT_2)
             .build();
 
     public final static RateRequest RATE_REQUEST_CREATED = RateRequest.builder()
