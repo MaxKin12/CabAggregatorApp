@@ -3,13 +3,16 @@ package com.example.passengerservice.unit.utility.validation.impl;
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
-import static com.example.passengerservice.configuration.constants.PassengerTestData.*;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.LIMIT;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.LIMIT_CUT;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_ID;
+import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_REQUEST;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.PASSENGER_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowableOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -69,15 +72,11 @@ class PassengerServiceValidationImplTest {
 
         when(passengerRepository.findById(id)).thenReturn(Optional.empty());
 
-        PassengerNotFoundException exception = catchThrowableOfType(
-                PassengerNotFoundException.class,
-                () -> validation.findByIdOrThrow(id)
-        );
+        assertThatExceptionOfType(PassengerNotFoundException.class)
+                .isThrownBy(() -> validation.findByIdOrThrow(id))
+                .withMessage(PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue("messageKey", PASSENGER_NOT_FOUND)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerRepository).findById(id);
     }
 
@@ -128,15 +127,11 @@ class PassengerServiceValidationImplTest {
 
         when(passengerRepository.save(passenger)).thenThrow(new RuntimeException(EXCEPTION_MESSAGE));
 
-        DbModificationAttemptException exception = catchThrowableOfType(
-                DbModificationAttemptException.class,
-                () -> validation.saveOrThrow(passenger)
-        );
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.saveOrThrow(passenger))
+                .withMessage(INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerRepository).save(passenger);
     }
 
@@ -164,15 +159,11 @@ class PassengerServiceValidationImplTest {
         doThrow(new RuntimeException(EXCEPTION_MESSAGE))
                 .when(passengerMapper).updatePassengerFromDto(request, passenger);
 
-        DbModificationAttemptException exception = catchThrowableOfType(
-                DbModificationAttemptException.class,
-                () -> validation.updateOrThrow(passenger, request)
-        );
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.updateOrThrow(passenger, request))
+                .withMessage(INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerMapper).updatePassengerFromDto(request, passenger);
         verifyNoInteractions(passengerRepository);
     }

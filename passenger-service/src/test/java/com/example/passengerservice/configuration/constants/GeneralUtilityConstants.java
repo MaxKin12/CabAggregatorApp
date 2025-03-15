@@ -14,7 +14,6 @@ public final class GeneralUtilityConstants {
     public final static String ATTEMPT_CHANGE_UPDATE = "update";
     public final static String OFFSET_PARAMETER_NAME = "offset";
     public final static String LIMIT_PARAMETER_NAME = "limit";
-    public final static String EXCEPTION_MESSAGE_KEY_FIELD = "messageKey";
     public final static String EXCEPTION_MESSAGE = "Some exception message";
 
 }

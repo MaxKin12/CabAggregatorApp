@@ -2,15 +2,14 @@ package com.example.passengerservice.unit.utility.validation.impl;
 
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.PASSENGER_NOT_FOUND;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_ID;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.RATE_CHANGE_EVENT_RESPONSE;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowableOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -59,15 +58,11 @@ class KafkaConsumerServiceValidationImplTest {
 
         when(passengerRepository.findById(id)).thenReturn(Optional.empty());
 
-        PassengerNotFoundException exception = catchThrowableOfType(
-                PassengerNotFoundException.class,
-                () -> validation.findByIdOrThrow(id)
-        );
+        assertThatExceptionOfType(PassengerNotFoundException.class)
+                .isThrownBy(() -> validation.findByIdOrThrow(id))
+                .withMessage(PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerRepository).findById(id);
     }
 
@@ -87,15 +82,10 @@ class KafkaConsumerServiceValidationImplTest {
 
         doThrow(new RuntimeException(EXCEPTION_MESSAGE)).when(passengerRepository).flush();
 
-        DbModificationAttemptException exception = catchThrowableOfType(
-                DbModificationAttemptException.class,
-                () -> validation.updateOrThrow(PASSENGER, RATE_CHANGE_EVENT_RESPONSE)
-        );
-
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.updateOrThrow(PASSENGER, RATE_CHANGE_EVENT_RESPONSE))
+                .withMessage(INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(passengerRepository).flush();
     }

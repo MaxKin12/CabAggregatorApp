@@ -57,19 +57,19 @@ public class StepDefinitions {
     }
 
     @Given("passenger with id {long}")
-    public void findPassengerById(Long id) {
+    public void givenPassengerWithId(Long id) {
         passengerId = id;
     }
 
     @Given("passenger's data for signing up")
     @SneakyThrows
-    public void signingPassengerData(String createPassengerJson) {
+    public void givenSigningPassengerData(String createPassengerJson) {
         passengerRequest = objectMapper.readValue(createPassengerJson, PassengerRequest.class);
     }
 
     @Given("passenger's data for update with id {long}")
     @SneakyThrows
-    public void updatedPassengerData(Long id, String updatePassengerJson) {
+    public void givenUpdatedPassengerData(Long id, String updatePassengerJson) {
         passengerId = id;
         passengerRequest = objectMapper.readValue(updatePassengerJson, PassengerRequest.class);
     }
@@ -90,7 +90,7 @@ public class StepDefinitions {
     }
 
     @When("saving passenger")
-    public void passengerGetSaved() {
+    public void savePassenger() {
         response = given()
                 .contentType(ContentType.JSON)
                 .body(passengerRequest)
@@ -99,7 +99,7 @@ public class StepDefinitions {
     }
 
     @When("updating passenger")
-    public void passengerUpdated() {
+    public void updatePassenger() {
         response = given()
                 .pathParam(ID_PARAMETER_NAME, passengerId)
                 .contentType(ContentType.JSON)
@@ -109,7 +109,7 @@ public class StepDefinitions {
     }
 
     @When("deleting passenger")
-    public void passengerDeleted() {
+    public void deletePassenger() {
         response = given()
                 .pathParam(ID_PARAMETER_NAME, passengerId)
                 .when()

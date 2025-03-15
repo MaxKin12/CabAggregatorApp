@@ -20,15 +20,18 @@ import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.port;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.passengerservice.configuration.KafkaConsumerConfig;
 import com.example.passengerservice.configuration.container.MySqlTestContainer;
 import com.example.passengerservice.dto.exception.ExceptionHandlerResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
+import com.example.passengerservice.kafka.KafkaListenerService;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -40,6 +43,12 @@ import org.springframework.test.context.jdbc.Sql;
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 )
 class PassengerControllerIT extends MySqlTestContainer {
+
+    @MockitoBean
+    protected KafkaConsumerConfig kafkaConsumerConfig;
+
+    @MockitoBean
+    protected KafkaListenerService kafkaConsumer;
 
     @LocalServerPort
     private int curPort;

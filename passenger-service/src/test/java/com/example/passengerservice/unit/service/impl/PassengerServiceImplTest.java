@@ -3,7 +3,6 @@ package com.example.passengerservice.unit.service.impl;
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.LIMIT;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.LIMIT_CUT;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.OFFSET;
@@ -16,9 +15,9 @@ import static com.example.passengerservice.configuration.constants.PassengerTest
 import static com.example.passengerservice.configuration.constants.PassengerTestData.RATE_CHANGE_EVENT_RESPONSE;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_PASSENGER;
 import static com.example.passengerservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.PASSENGER_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowableOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -90,15 +89,11 @@ class PassengerServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
-        PassengerNotFoundException exception = catchThrowableOfType(
-                        PassengerNotFoundException.class,
-                        () -> passengerService.findById(id)
-                );
+        assertThatExceptionOfType(PassengerNotFoundException.class)
+                .isThrownBy(() -> passengerService.findById(id))
+                .withMessage(PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerMapper);
     }
@@ -181,15 +176,11 @@ class PassengerServiceImplTest {
         when(validation.saveOrThrow(passenger))
                 .thenThrow(new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_PASSENGER, args));
 
-        DbModificationAttemptException exception = catchThrowableOfType(
-                DbModificationAttemptException.class,
-                () -> passengerService.create(passengerRequest)
-        );
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> passengerService.create(passengerRequest))
+                .withMessage(INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(passengerMapper).toPassenger(passengerRequest);
         verify(validation).saveOrThrow(passenger);
     }
@@ -224,15 +215,11 @@ class PassengerServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
-        PassengerNotFoundException exception = catchThrowableOfType(
-                PassengerNotFoundException.class,
-                () -> passengerService.updatePassenger(PASSENGER_REQUEST, id)
-        );
+        assertThatExceptionOfType(PassengerNotFoundException.class)
+                .isThrownBy(() -> passengerService.updatePassenger(PASSENGER_REQUEST, id))
+                .withMessage(PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerMapper);
     }
@@ -249,15 +236,11 @@ class PassengerServiceImplTest {
                 .when(validation)
                 .updateOrThrow(passenger, passengerRequest);
 
-        DbModificationAttemptException exception = catchThrowableOfType(
-                DbModificationAttemptException.class,
-                () -> passengerService.updatePassenger(passengerRequest, id)
-        );
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> passengerService.updatePassenger(passengerRequest, id))
+                .withMessage(INVALID_ATTEMPT_CHANGE_PASSENGER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_PASSENGER)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(id);
         verify(validation).updateOrThrow(passenger, passengerRequest);
         verifyNoInteractions(passengerMapper);
@@ -283,15 +266,11 @@ class PassengerServiceImplTest {
         when(validation.findByIdOrThrow(event.recipientId()))
                 .thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
-        PassengerNotFoundException exception = catchThrowableOfType(
-                PassengerNotFoundException.class,
-                () -> passengerService.updateRate(event)
-        );
+        assertThatExceptionOfType(PassengerNotFoundException.class)
+                .isThrownBy(() -> passengerService.updateRate(event))
+                .withMessage(PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(event.recipientId());
     }
 
@@ -316,15 +295,11 @@ class PassengerServiceImplTest {
 
         when(validation.findByIdOrThrow(id)).thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));
 
-        PassengerNotFoundException exception = catchThrowableOfType(
-                PassengerNotFoundException.class,
-                () -> passengerService.delete(id)
-        );
+        assertThatExceptionOfType(PassengerNotFoundException.class)
+                .isThrownBy(() -> passengerService.delete(id))
+                .withMessage(PASSENGER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
-        assertThat(exception)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, PASSENGER_NOT_FOUND)
-                .satisfies(e -> assertThat(e.getArgs()).containsExactly(args));
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(passengerRepository);
     }
