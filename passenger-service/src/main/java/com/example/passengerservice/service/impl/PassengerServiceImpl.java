@@ -69,7 +69,6 @@ public class PassengerServiceImpl implements PassengerService {
     public void updateRate(RateChangeEventResponse event) {
         Passenger passenger = validation.findByIdOrThrow(event.recipientId());
         passenger.setRate(event.rate());
-        passengerRepository.save(passenger);
     }
 
     @Override
