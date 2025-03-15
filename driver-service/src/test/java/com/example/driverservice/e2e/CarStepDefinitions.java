@@ -64,19 +64,19 @@ public class CarStepDefinitions {
     }
 
     @Given("car with id {long}")
-    public void findCarById(Long id) {
+    public void givenCarWithId(Long id) {
         carId = id;
     }
 
     @Given("car's data for signing up")
     @SneakyThrows
-    public void signingUpCarData(String createCarJson) {
+    public void givenSigningUpCarData(String createCarJson) {
         carRequest = objectMapper.readValue(createCarJson, CarRequest.class);
     }
 
     @Given("car's data for update with id {long}")
     @SneakyThrows
-    public void updatedCarData(Long id, String updateCarJson) {
+    public void givenUpdatedCarData(Long id, String updateCarJson) {
         carId = id;
         carRequest = objectMapper.readValue(updateCarJson, CarRequest.class);
     }
@@ -97,7 +97,7 @@ public class CarStepDefinitions {
     }
 
     @When("saving car")
-    public void carGetSaved() {
+    public void saveCar() {
         response = given()
                 .contentType(ContentType.JSON)
                 .body(carRequest)
@@ -106,7 +106,7 @@ public class CarStepDefinitions {
     }
 
     @When("updating car")
-    public void carUpdated() {
+    public void updateCar() {
         response = given()
                 .pathParam(ID_PARAMETER_NAME, carId)
                 .contentType(ContentType.JSON)
@@ -116,7 +116,7 @@ public class CarStepDefinitions {
     }
 
     @When("deleting car")
-    public void carDeleted() {
+    public void deleteCar() {
         response = given()
                 .pathParam(ID_PARAMETER_NAME, carId)
                 .when()

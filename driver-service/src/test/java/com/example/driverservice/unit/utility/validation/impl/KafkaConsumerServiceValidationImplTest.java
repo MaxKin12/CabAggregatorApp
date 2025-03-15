@@ -8,7 +8,7 @@ import static com.example.driverservice.configuration.constants.GeneralUtilityCo
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.DRIVER_NOT_FOUND;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -56,10 +56,10 @@ class KafkaConsumerServiceValidationImplTest {
 
         when(driverRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> validation.findByIdOrThrow(id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasFieldOrPropertyWithValue("messageKey", DRIVER_NOT_FOUND)
-                .hasFieldOrPropertyWithValue("args", args);
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> validation.findByIdOrThrow(id))
+                .withMessage(DRIVER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(driverRepository).findById(id);
     }
@@ -79,10 +79,10 @@ class KafkaConsumerServiceValidationImplTest {
 
         doThrow(new RuntimeException(EXCEPTION_MESSAGE)).when(driverRepository).flush();
 
-        assertThatThrownBy(() -> validation.updateOrThrow(DRIVER, RATE_CHANGE_EVENT_RESPONSE))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue("messageKey", INVALID_ATTEMPT_CHANGE_DRIVER)
-                .hasFieldOrPropertyWithValue("args", args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.updateOrThrow(DRIVER, RATE_CHANGE_EVENT_RESPONSE))
+                .withMessage(INVALID_ATTEMPT_CHANGE_DRIVER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(driverRepository).flush();
     }

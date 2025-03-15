@@ -11,13 +11,11 @@ import static com.example.driverservice.configuration.constants.DriverTestData.L
 import static com.example.driverservice.configuration.constants.DriverTestData.OFFSET;
 import static com.example.driverservice.configuration.constants.DriverTestData.RATE_CHANGE_EVENT_RESPONSE;
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
-import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_ARGS_FIELD;
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.DRIVER_NOT_FOUND;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -89,10 +87,10 @@ class DriverServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new EntityNotFoundException(DRIVER_NOT_FOUND, args));
 
-        assertThatThrownBy(() -> driverService.findById(id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, DRIVER_NOT_FOUND)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> driverService.findById(id))
+                .withMessage(DRIVER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(driverMapper);
@@ -170,10 +168,10 @@ class DriverServiceImplTest {
         when(validation.saveOrThrow(driver))
                 .thenThrow(new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_DRIVER, args));
 
-        assertThatThrownBy(() -> driverService.create(driverRequest))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_DRIVER)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> driverService.create(driverRequest))
+                .withMessage(INVALID_ATTEMPT_CHANGE_DRIVER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(driverMapper).toDriver(driverRequest);
         verify(validation).saveOrThrow(driver);
@@ -207,10 +205,10 @@ class DriverServiceImplTest {
         when(validation.findByIdOrThrow(id))
                 .thenThrow(new EntityNotFoundException(DRIVER_NOT_FOUND, args));
 
-        assertThatThrownBy(() -> driverService.updateDriver(DRIVER_REQUEST, id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, DRIVER_NOT_FOUND)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> driverService.updateDriver(DRIVER_REQUEST, id))
+                .withMessage(DRIVER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(driverMapper);
@@ -228,10 +226,10 @@ class DriverServiceImplTest {
                 .when(validation)
                 .updateOrThrow(driver, driverRequest);
 
-        assertThatThrownBy(() -> driverService.updateDriver(driverRequest, id))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_DRIVER)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> driverService.updateDriver(driverRequest, id))
+                .withMessage(INVALID_ATTEMPT_CHANGE_DRIVER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).findByIdOrThrow(id);
         verify(validation).updateOrThrow(driver, driverRequest);
@@ -258,10 +256,10 @@ class DriverServiceImplTest {
         when(validation.findByIdOrThrow(event.recipientId()))
                 .thenThrow(new EntityNotFoundException(DRIVER_NOT_FOUND, args));
 
-        assertThatThrownBy(() -> driverService.updateRate(event))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, DRIVER_NOT_FOUND)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> driverService.updateRate(event))
+                .withMessage(DRIVER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).findByIdOrThrow(event.recipientId());
     }
@@ -286,10 +284,10 @@ class DriverServiceImplTest {
 
         when(validation.findByIdOrThrow(id)).thenThrow(new EntityNotFoundException(DRIVER_NOT_FOUND, args));
 
-        assertThatThrownBy(() -> driverService.delete(id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, DRIVER_NOT_FOUND)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> driverService.delete(id))
+                .withMessage(DRIVER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(validation).findByIdOrThrow(id);
         verifyNoInteractions(driverRepository);

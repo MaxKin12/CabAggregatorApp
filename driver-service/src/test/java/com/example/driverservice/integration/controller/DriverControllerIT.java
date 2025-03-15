@@ -19,14 +19,17 @@ import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.port;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.driverservice.configuration.KafkaConsumerConfig;
 import com.example.driverservice.configuration.container.MySqlTestContainer;
 import com.example.driverservice.dto.exception.ExceptionHandlerResponse;
 import com.example.driverservice.dto.driver.DriverResponse;
+import com.example.driverservice.kafka.KafkaListenerService;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -40,6 +43,12 @@ import org.springframework.test.context.jdbc.Sql;
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 )
 public class DriverControllerIT extends MySqlTestContainer {
+
+    @MockitoBean
+    protected KafkaConsumerConfig kafkaProducerConfig;
+
+    @MockitoBean
+    protected KafkaListenerService kafkaListener;
 
     @LocalServerPort
     private int curPort;

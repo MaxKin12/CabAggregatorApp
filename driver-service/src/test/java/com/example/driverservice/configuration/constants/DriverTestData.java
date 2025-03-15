@@ -1,5 +1,8 @@
 package com.example.driverservice.configuration.constants;
 
+import static com.example.driverservice.configuration.constants.CarTestData.CAR_ID;
+import static com.example.driverservice.configuration.constants.CarTestData.CAR_ID_2;
+
 import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
@@ -13,9 +16,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import static com.example.driverservice.configuration.constants.CarTestData.CAR_ID;
-import static com.example.driverservice.configuration.constants.CarTestData.CAR_ID_2;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DriverTestData {

@@ -1,11 +1,11 @@
 package com.example.driverservice.configuration.container;
 
+import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.DB_DOCKER_IMAGE;
+
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
-
-import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.DB_DOCKER_IMAGE;
 
 @ActiveProfiles("test")
 public abstract class MySqlTestContainer {

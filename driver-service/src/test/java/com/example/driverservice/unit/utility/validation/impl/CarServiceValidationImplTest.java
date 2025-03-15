@@ -7,18 +7,16 @@ import static com.example.driverservice.configuration.constants.CarTestData.LIMI
 import static com.example.driverservice.configuration.constants.CarTestData.LIMIT_CUT;
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
-import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_ARGS_FIELD;
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.CAR_NOT_FOUND;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_CAR;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.mockito.Mockito.times;
 
@@ -72,10 +70,10 @@ class CarServiceValidationImplTest {
 
         when(carRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> validation.findByIdOrThrow(id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, CAR_NOT_FOUND)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> validation.findByIdOrThrow(id))
+                .withMessage(CAR_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(carRepository).findById(id);
     }
@@ -125,10 +123,10 @@ class CarServiceValidationImplTest {
 
         when(carRepository.save(car)).thenThrow(new RuntimeException(EXCEPTION_MESSAGE));
 
-        assertThatThrownBy(() -> validation.saveOrThrow(car))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_CAR)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.saveOrThrow(car))
+                .withMessage(INVALID_ATTEMPT_CHANGE_CAR)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(carRepository).save(car);
     }
@@ -156,10 +154,10 @@ class CarServiceValidationImplTest {
         doThrow(new RuntimeException(EXCEPTION_MESSAGE))
                 .when(carMapper).updateCarFromDto(request, car);
 
-        assertThatThrownBy(() -> validation.updateOrThrow(car, request))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_CAR)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.updateOrThrow(car, request))
+                .withMessage(INVALID_ATTEMPT_CHANGE_CAR)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(carMapper).updateCarFromDto(request, car);
         verifyNoInteractions(carRepository);

@@ -64,19 +64,19 @@ public class DriverStepDefinitions {
     }
 
     @Given("driver with id {long}")
-    public void findDriverById(Long id) {
+    public void givenDriverWithId(Long id) {
         driverId = id;
     }
 
     @Given("driver's data for signing up")
     @SneakyThrows
-    public void signingDriverData(String createDriverJson) {
+    public void givenSigningDriverData(String createDriverJson) {
         driverRequest = objectMapper.readValue(createDriverJson, DriverRequest.class);
     }
 
     @Given("driver's data for update with id {long}")
     @SneakyThrows
-    public void updatedDriverData(Long id, String updateDriverJson) {
+    public void givenUpdatedDriverData(Long id, String updateDriverJson) {
         driverId = id;
         driverRequest = objectMapper.readValue(updateDriverJson, DriverRequest.class);
     }
@@ -97,7 +97,7 @@ public class DriverStepDefinitions {
     }
 
     @When("saving driver")
-    public void driverGetSaved() {
+    public void saveDriver() {
         response = given()
                 .contentType(ContentType.JSON)
                 .body(driverRequest)
@@ -106,7 +106,7 @@ public class DriverStepDefinitions {
     }
 
     @When("updating driver")
-    public void driverUpdated() {
+    public void updateDriver() {
         response = given()
                 .pathParam(ID_PARAMETER_NAME, driverId)
                 .contentType(ContentType.JSON)
@@ -116,7 +116,7 @@ public class DriverStepDefinitions {
     }
 
     @When("deleting driver")
-    public void driverDeleted() {
+    public void deleteDriver() {
         response = given()
                 .pathParam(ID_PARAMETER_NAME, driverId)
                 .when()

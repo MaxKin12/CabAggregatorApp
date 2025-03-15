@@ -7,18 +7,16 @@ import static com.example.driverservice.configuration.constants.DriverTestData.L
 import static com.example.driverservice.configuration.constants.DriverTestData.LIMIT_CUT;
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_CREATE;
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.ATTEMPT_CHANGE_UPDATE;
-import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_ARGS_FIELD;
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE;
-import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.EXCEPTION_MESSAGE_KEY_FIELD;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.DRIVER_NOT_FOUND;
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_DRIVER;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.mockito.Mockito.times;
 
@@ -72,10 +70,10 @@ class DriverServiceValidationImplTest {
 
         when(driverRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> validation.findByIdOrThrow(id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, DRIVER_NOT_FOUND)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> validation.findByIdOrThrow(id))
+                .withMessage(DRIVER_NOT_FOUND)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(driverRepository).findById(id);
     }
@@ -125,10 +123,10 @@ class DriverServiceValidationImplTest {
 
         when(driverRepository.save(driver)).thenThrow(new RuntimeException(EXCEPTION_MESSAGE));
 
-        assertThatThrownBy(() -> validation.saveOrThrow(driver))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_DRIVER)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.saveOrThrow(driver))
+                .withMessage(INVALID_ATTEMPT_CHANGE_DRIVER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(driverRepository).save(driver);
     }
@@ -156,10 +154,10 @@ class DriverServiceValidationImplTest {
         doThrow(new RuntimeException(EXCEPTION_MESSAGE))
                 .when(driverMapper).updateDriverFromDto(request, driver);
 
-        assertThatThrownBy(() -> validation.updateOrThrow(driver, request))
-                .isInstanceOf(DbModificationAttemptException.class)
-                .hasFieldOrPropertyWithValue(EXCEPTION_MESSAGE_KEY_FIELD, INVALID_ATTEMPT_CHANGE_DRIVER)
-                .hasFieldOrPropertyWithValue(EXCEPTION_ARGS_FIELD, args);
+        assertThatExceptionOfType(DbModificationAttemptException.class)
+                .isThrownBy(() -> validation.updateOrThrow(driver, request))
+                .withMessage(INVALID_ATTEMPT_CHANGE_DRIVER)
+                .satisfies(e -> assertThat(e.getArgs()).isEqualTo(args));
 
         verify(driverMapper).updateDriverFromDto(request, driver);
         verifyNoInteractions(driverRepository);
