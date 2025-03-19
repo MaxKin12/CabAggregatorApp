@@ -3,6 +3,7 @@ package com.example.ratesservice.utility.validation.impl;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.DRIVER_RATE_LIST_IS_EMPTY;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_ATTEMPT_CHANGE_RATE;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_RIDE_CONTENT;
+import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_RIDE_STATUS;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.PASSENGER_RATE_LIST_IS_EMPTY;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.RATE_ALREADY_EXISTS;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.RATE_NOT_FOUND;
@@ -89,9 +90,11 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     @Override
     public void checkRidesRules(RidesResponse ridesResponse, Rate rate) {
         if (!Objects.equals(ridesResponse.passengerId(), rate.getPassengerId())
-                || !Objects.equals(ridesResponse.driverId(), rate.getDriverId())
-                || !Objects.equals(ridesResponse.status(), "completed")) {
+                || !Objects.equals(ridesResponse.driverId(), rate.getDriverId())) {
             throw new InvalidRideContentException(INVALID_RIDE_CONTENT);
+        }
+        if (!Objects.equals(ridesResponse.status(), "completed")) {
+            throw new InvalidRideContentException(INVALID_RIDE_STATUS);
         }
     }
 

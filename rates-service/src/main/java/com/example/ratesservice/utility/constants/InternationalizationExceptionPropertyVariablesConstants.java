@@ -15,6 +15,7 @@ public final class InternationalizationExceptionPropertyVariablesConstants {
     public static final String INTERNAL_SERVICE_ERROR = "exception.internal.service.error";
     public static final String EXTERNAL_SERVICE_ERROR = "exception.openfeign.external-service.error";
     public static final String INVALID_RIDE_CONTENT = "exception.openfeign.invalid.ride.content";
+    public static final String INVALID_RIDE_STATUS = "exception.openfeign.invalid.ride.status";
     public static final String KAFKA_INVALID_SEND = "exception.kafka.invalid.send";
 
 }
