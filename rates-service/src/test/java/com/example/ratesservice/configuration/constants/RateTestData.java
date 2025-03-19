@@ -27,6 +27,7 @@ public final class RateTestData {
     public final static Long INVALID_RATE_ID = -1L;
     public final static Long NOT_EXIST_RATE_ID = Long.MAX_VALUE;
     public final static Long RIDE_ID = 1L;
+    public final static Long RIDE_ID_2 = 2L;
     public final static Long RIDE_ID_CREATED = 1L;
     public final static Long PASSENGER_ID = 1L;
     public final static Long DRIVER_ID = 1L;
