@@ -1,0 +1,45 @@
+services:
+  rides-service:
+    container_name: rides-service
+    build:
+      context: ../rides-service
+      dockerfile: ../docker/Dockerfile
+      args:
+        SERVICE_NAME: rides-service
+    environment:
+      DB_RIDE_URL: jdbc:mysql://rides-db:3306/ride_service
+      DB_RIDE_USERNAME: user
+      DB_RIDE_PASSWORD: ${DB_RIDE_PASSWORD}
+      ACTIVE_PROFILES: dev
+      PAGE_RESPONSE_LIMIT_SIZE: 50
+      TIMETRAVEL_APPID: ${TIMETRAVEL_APPID}
+      TIMETRAVEL_APIKEY: ${TIMETRAVEL_APIKEY}
+    ports:
+      - 8083:8083
+    depends_on:
+      my-sql-rides-db:
+        condition: service_healthy
+        restart: true
+
+  my-sql-rides-db:
+    container_name: rides-db
+    image: mysql:9.2
+    restart: always
+    environment:
+      MYSQL_DATABASE: ride_service
+      MYSQL_USER: user
+      MYSQL_PASSWORD: ${DB_RIDE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_RIDE_ROOT_PASSWORD}
+    volumes:
+      - db-data:/data
+    ports:
+      - 3333:3306
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306"]
+      interval: 3s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+volumes:
+  db-data:
