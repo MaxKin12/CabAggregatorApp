@@ -23,6 +23,7 @@ public class FeignClientDecoderValidationImpl implements FeignClientDecoderValid
     public ExternalServiceExceptionHandlerResponse getExceptionResponse(Response response) {
         try (InputStream body = response.body().asInputStream()) {
             ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
             return mapper.readValue(body, ExternalServiceExceptionHandlerResponse.class);
         } catch (IOException e) {
             log.error("Failed attempt to read feign exception response body", e);

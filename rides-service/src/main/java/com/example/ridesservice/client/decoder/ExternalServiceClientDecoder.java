@@ -24,8 +24,8 @@ public class ExternalServiceClientDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
         ExternalServiceExceptionHandlerResponse exceptionResponse = validation.getExceptionResponse(response);
-        log.error("Feign exception: from method - {}; code - {}; message - {}", methodKey,
-                exceptionResponse.message(), exceptionResponse.statusCode());
+        log.error("Feign exception: from method - {}; code - {}; message - {}; time = {}", methodKey,
+                exceptionResponse.message(), exceptionResponse.statusCode(), exceptionResponse.localDateTime());
 
         HttpStatus responseStatue = validation.getResponseStatusOrThrow(response);
         return switch (responseStatue) {
