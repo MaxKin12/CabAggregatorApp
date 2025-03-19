@@ -10,15 +10,18 @@ import static com.example.ridesservice.configuration.constants.GeneralUtilityCon
 import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.GET_DRIVER_REQUEST_URL;
 import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.GET_PASSENGER_REQUEST_URL;
 import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.ID_PARAMETER_NAME;
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.LAST_RIDES_RETURN_AMOUNT;
+import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.LIMIT_PARAMETER_NAME;
 import static com.example.ridesservice.configuration.constants.GeneralUtilityConstants.STATUS_PARAMETER_NAME;
 import static com.example.ridesservice.configuration.constants.JsonExternalResponses.CAR_JSON_RESPONSE;
 import static com.example.ridesservice.configuration.constants.JsonExternalResponses.DRIVER_JSON_RESPONSE;
 import static com.example.ridesservice.configuration.constants.JsonExternalResponses.PASSENGER_JSON_RESPONSE;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_BOOKING_REQUEST;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_SETTING_REQUEST;
+import static com.example.ridesservice.configuration.constants.SqlConstants.INSERT_DATA_PARAMS;
+import static com.example.ridesservice.configuration.constants.SqlConstants.INSERT_DATA_PARAMS_2;
 import static com.example.ridesservice.configuration.constants.SqlConstants.SQL_DELETE_ALL_TEST_DATA;
 import static com.example.ridesservice.configuration.constants.SqlConstants.SQL_INSERT_TEST_DATA;
-import static com.example.ridesservice.configuration.constants.SqlConstants.SQL_INSERT_TEST_DATA_2;
 import static com.example.ridesservice.configuration.wiremock.WireMockStubs.setGetResponseStub;
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
@@ -41,12 +44,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RequiredArgsConstructor
 public class StepDefinitions {
 
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private Response response;
     private Long rideId;
     private Long passengerId;
@@ -63,8 +68,8 @@ public class StepDefinitions {
     @Before
     public void restoreDbData() {
         jdbcTemplate.execute(SQL_DELETE_ALL_TEST_DATA);
-        jdbcTemplate.execute(SQL_INSERT_TEST_DATA);
-        jdbcTemplate.execute(SQL_INSERT_TEST_DATA_2);
+        namedParameterJdbcTemplate.update(SQL_INSERT_TEST_DATA, INSERT_DATA_PARAMS);
+        namedParameterJdbcTemplate.update(SQL_INSERT_TEST_DATA, INSERT_DATA_PARAMS_2);
     }
 
     @Given("passenger with id {long} and driver with id {long} and car with id {long}")
@@ -138,7 +143,7 @@ public class StepDefinitions {
     @When("the passenger search for the last ride")
     public void thePassengerSearchForTheLastRide() {
         response = given()
-                .queryParam("limit", 1)
+                .queryParam(LIMIT_PARAMETER_NAME, LAST_RIDES_RETURN_AMOUNT)
                 .pathParam(ID_PARAMETER_NAME, passengerId)
                 .when()
                 .get(ENDPOINT_WITH_PASSENGER_ID);

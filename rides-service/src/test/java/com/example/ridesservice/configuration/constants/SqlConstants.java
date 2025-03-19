@@ -20,34 +20,40 @@ import static com.example.ridesservice.configuration.constants.RideTestData.RIDE
 import com.example.ridesservice.enums.RideStatus;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SqlConstants {
 
     public final static String SQL_DELETE_ALL_TEST_DATA = "delete from rides;";
+
     public final static String SQL_INSERT_TEST_DATA =
-            "insert into rides (id, passenger_id, driver_id, car_id, pick_up_address, destination_address," +
-                    "status, order_time, price) values (" +
-                    RIDE_ID + ", " +
-                    PASSENGER_ID + ", " +
-                    DRIVER_ID + ", " +
-                    CAR_ID + ", '" +
-                    PICK_UP_ADDRESS + "', '" +
-                    DESTINATION_ADDRESS + "', " +
-                    RideStatus.COMPLETED.getCode() + ", '" +
-                    ORDER_TIME + "', " +
-                    PRICE + ");";
-    public final static String SQL_INSERT_TEST_DATA_2 =
-            "insert into rides (id, passenger_id, driver_id, car_id, pick_up_address, destination_address," +
-                    "status, order_time, price) values (" +
-                    RIDE_ID_2 + ", " +
-                    PASSENGER_ID_2 + ", " +
-                    DRIVER_ID_2 + ", " +
-                    CAR_ID_2 + ", '" +
-                    PICK_UP_ADDRESS_2 + "', '" +
-                    DESTINATION_ADDRESS_2 + "', " +
-                    RideStatus.CANCELLED.getCode() + ", '" +
-                    ORDER_TIME_2 + "', " +
-                    PRICE_2 + ");";
+        "insert into rides" +
+        "(id, passenger_id, driver_id, car_id, pick_up_address, destination_address, status, order_time, price)" +
+        "values" +
+        "(:id, :passengerId, :driverId, :carId, :pickUpAddress, :destinationAddress, :status, :orderTime, :price);";
+
+    public final static SqlParameterSource INSERT_DATA_PARAMS = new MapSqlParameterSource()
+            .addValue("id", RIDE_ID)
+            .addValue("passengerId", PASSENGER_ID)
+            .addValue("driverId", DRIVER_ID)
+            .addValue("carId", CAR_ID)
+            .addValue("pickUpAddress", PICK_UP_ADDRESS)
+            .addValue("destinationAddress", DESTINATION_ADDRESS)
+            .addValue("status", RideStatus.COMPLETED.getCode())
+            .addValue("orderTime", ORDER_TIME)
+            .addValue("price", PRICE);
+
+    public final static SqlParameterSource INSERT_DATA_PARAMS_2 = new MapSqlParameterSource()
+            .addValue("id", RIDE_ID_2)
+            .addValue("passengerId", PASSENGER_ID_2)
+            .addValue("driverId", DRIVER_ID_2)
+            .addValue("carId", CAR_ID_2)
+            .addValue("pickUpAddress", PICK_UP_ADDRESS_2)
+            .addValue("destinationAddress", DESTINATION_ADDRESS_2)
+            .addValue("status", RideStatus.CANCELLED.getCode())
+            .addValue("orderTime", ORDER_TIME_2)
+            .addValue("price", PRICE_2);
 
 }
