@@ -4,10 +4,10 @@ import static com.example.ridesservice.utility.constants.InternationalizationExc
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_CHANGE_RIDE;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
 
-import com.example.ridesservice.client.DriverClient;
-import com.example.ridesservice.client.PassengerClient;
+import com.example.ridesservice.client.driver.DriverClient;
 import com.example.ridesservice.client.dto.DriverResponse;
 import com.example.ridesservice.client.exception.DriverNotContainsCarException;
+import com.example.ridesservice.client.passenger.PassengerClient;
 import com.example.ridesservice.configuration.properties.RideServiceProperties;
 import com.example.ridesservice.dto.ride.request.RideDriverSettingRequest;
 import com.example.ridesservice.dto.ride.request.RideRequest;
