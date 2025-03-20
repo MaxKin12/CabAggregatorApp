@@ -1,4 +1,56 @@
 services:
+  passenger-service:
+    container_name: passenger-service
+    build:
+      context: ../passenger-service
+      dockerfile: ../docker/Dockerfile
+      args:
+        SERVICE_NAME: passenger-service
+    networks:
+      - app-net
+    environment:
+      DB_PASSENGER_URL: jdbc:mysql://passenger-db:3306/passenger_service
+      DB_PASSENGER_USERNAME: user
+      DB_PASSENGER_PASSWORD: ${DB_PASSENGER_PASSWORD}
+      ACTIVE_PROFILES: dev
+      PAGE_RESPONSE_LIMIT_SIZE: 50
+      KAFKA_URL: kafka:9092
+    ports:
+      - 8081:8081
+    depends_on:
+      my-sql-passenger-db:
+        condition: service_healthy
+        restart: true
+      kafka:
+        condition: service_healthy
+        restart: true
+
+  driver-service:
+    container_name: driver-service
+    build:
+      context: ../driver-service
+      dockerfile: ../docker/Dockerfile
+      args:
+        SERVICE_NAME: driver-service
+    networks:
+      - app-net
+    environment:
+      DB_DRIVER_URL: jdbc:mysql://driver-db:3306/driver_service
+      DB_DRIVER_USERNAME: user
+      DB_DRIVER_PASSWORD: ${DB_DRIVER_PASSWORD}
+      ACTIVE_PROFILES: dev
+      PAGE_RESPONSE_LIMIT_SIZE: 50
+      KAFKA_URL: kafka:9092
+    ports:
+      - 8082:8082
+    depends_on:
+      my-sql-driver-db:
+        condition: service_healthy
+        restart: true
+      kafka:
+        condition: service_healthy
+        restart: true
+
   rides-service:
     container_name: rides-service
     build:
@@ -6,11 +58,16 @@ services:
       dockerfile: ../docker/Dockerfile
       args:
         SERVICE_NAME: rides-service
+    networks:
+      - app-net
     environment:
       DB_RIDE_URL: jdbc:mysql://rides-db:3306/ride_service
       DB_RIDE_USERNAME: user
       DB_RIDE_PASSWORD: ${DB_RIDE_PASSWORD}
       ACTIVE_PROFILES: dev
+      BASE_URI_PASSENGER: http://passenger-service
+      BASE_URI_DRIVER: http://driver-service
+      BASE_URI_RIDES: http://rides-service
       PAGE_RESPONSE_LIMIT_SIZE: 50
       TIMETRAVEL_APPID: ${TIMETRAVEL_APPID}
       TIMETRAVEL_APIKEY: ${TIMETRAVEL_APIKEY}
@@ -21,25 +78,162 @@ services:
         condition: service_healthy
         restart: true
 
+  rates-service:
+    container_name: rates-service
+    build:
+      context: ../rates-service
+      dockerfile: ../docker/Dockerfile
+      args:
+        SERVICE_NAME: rates-service
+    networks:
+      - app-net
+    environment:
+      DB_RATE_URL: jdbc:mysql://rates-db:3306/rates_service
+      DB_RATE_USERNAME: user
+      DB_RATE_PASSWORD: ${DB_RATES_PASSWORD}
+      ACTIVE_PROFILES: dev
+      BASE_URI_PASSENGER: http://passenger-service
+      BASE_URI_DRIVER: http://driver-service
+      BASE_URI_RIDES: http://rides-service
+      PAGE_RESPONSE_LIMIT_SIZE: 50
+      LAST_RIDES_COUNT_FOR_AVERAGE_RATE: 5
+      KAFKA_URL: kafka:9092
+    ports:
+      - 8084:8084
+    depends_on:
+      my-sql-rates-db:
+        condition: service_healthy
+        restart: true
+      kafka:
+        condition: service_healthy
+        restart: true
+
+  my-sql-passenger-db:
+    container_name: passenger-db
+    image: mysql:9.2
+    restart: always
+    networks:
+      - app-net
+    environment:
+      MYSQL_DATABASE: passenger_service
+      MYSQL_USER: user
+      MYSQL_PASSWORD: ${DB_PASSENGER_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSENGER_ROOT_PASSWORD}
+    volumes:
+      - passenger-db-data:/data
+    ports:
+      - 3330:3306
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
+      interval: 3s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  my-sql-driver-db:
+    container_name: driver-db
+    image: mysql:9.2
+    restart: always
+    networks:
+      - app-net
+    environment:
+      MYSQL_DATABASE: driver_service
+      MYSQL_USER: user
+      MYSQL_PASSWORD: ${DB_DRIVER_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_DRIVER_ROOT_PASSWORD}
+    volumes:
+      - driver-db-data:/data
+    ports:
+      - 3331:3306
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
+      interval: 3s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
   my-sql-rides-db:
     container_name: rides-db
     image: mysql:9.2
     restart: always
+    networks:
+      - app-net
     environment:
       MYSQL_DATABASE: ride_service
       MYSQL_USER: user
       MYSQL_PASSWORD: ${DB_RIDE_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_RIDE_ROOT_PASSWORD}
     volumes:
-      - db-data:/data
+      - rides-db-data:/data
     ports:
-      - 3333:3306
+      - 3332:3306
     healthcheck:
-      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306"]
+      test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 3s
       retries: 5
       start_period: 30s
       timeout: 10s
 
+  my-sql-rates-db:
+    container_name: rates-db
+    image: mysql:9.2
+    restart: always
+    networks:
+      - app-net
+    environment:
+      MYSQL_DATABASE: rates_service
+      MYSQL_USER: user
+      MYSQL_PASSWORD: ${DB_RATES_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_RATES_ROOT_PASSWORD}
+    volumes:
+      - rates-db-data:/data
+    ports:
+      - 3333:3306
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
+      interval: 3s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - 2181:2181
+    networks:
+      - app-net
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - 9092:9092
+    networks:
+      - app-net
+    environment:
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    healthcheck:
+      test: nc -z localhost 9092 || exit -1
+      interval: 5s
+      retries: 2
+      start_period: 30s
+      timeout: 10s
+
+networks:
+  app-net:
+
 volumes:
-  db-data:
+  passenger-db-data:
+  driver-db-data:
+  rides-db-data:
+  rates-db-data:
