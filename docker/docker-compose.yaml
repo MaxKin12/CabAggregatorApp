@@ -15,6 +15,7 @@ services:
       ACTIVE_PROFILES: dev
       PAGE_RESPONSE_LIMIT_SIZE: 50
       KAFKA_URL: kafka:9092
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
     ports:
       - 8081:8081
     depends_on:
@@ -41,6 +42,7 @@ services:
       ACTIVE_PROFILES: dev
       PAGE_RESPONSE_LIMIT_SIZE: 50
       KAFKA_URL: kafka:9092
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
     ports:
       - 8082:8082
     depends_on:
@@ -71,6 +73,7 @@ services:
       PAGE_RESPONSE_LIMIT_SIZE: 50
       TIMETRAVEL_APPID: ${TIMETRAVEL_APPID}
       TIMETRAVEL_APIKEY: ${TIMETRAVEL_APIKEY}
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
     ports:
       - 8083:8083
     depends_on:
@@ -98,6 +101,7 @@ services:
       PAGE_RESPONSE_LIMIT_SIZE: 50
       LAST_RIDES_COUNT_FOR_AVERAGE_RATE: 5
       KAFKA_URL: kafka:9092
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
     ports:
       - 8084:8084
     depends_on:
@@ -107,6 +111,41 @@ services:
       kafka:
         condition: service_healthy
         restart: true
+
+  gateway-service:
+    container_name: gateway-service
+    build:
+      context: ../gateway-service
+      dockerfile: ../docker/Dockerfile
+      args:
+        SERVICE_NAME: gateway-service
+    environment:
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+    networks:
+      - app-net
+    ports:
+      - 8080:8080
+    depends_on:
+      eureka-service:
+        condition: service_healthy
+
+  eureka-service:
+    container_name: eureka-service
+    build:
+      context: ../eureka-service
+      dockerfile: ../docker/Dockerfile
+      args:
+        SERVICE_NAME: eureka-service
+    networks:
+      - app-net
+    ports:
+      - 8761:8761
+    healthcheck:
+      test: nc -z localhost 8761 || exit -1
+      interval: 5s
+      retries: 2
+      start_period: 30s
+      timeout: 10s
 
   my-sql-passenger-db:
     container_name: passenger-db
