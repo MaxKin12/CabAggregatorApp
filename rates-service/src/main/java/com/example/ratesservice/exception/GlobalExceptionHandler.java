@@ -7,6 +7,7 @@ import com.example.ratesservice.client.exception.ExternalServiceEntityNotFoundEx
 import com.example.ratesservice.client.exception.InvalidRideContentException;
 import com.example.ratesservice.dto.exception.ExceptionHandlerResponse;
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
+import com.example.ratesservice.exception.custom.FeignClientTemporarilyUnavailable;
 import com.example.ratesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
 import com.example.ratesservice.exception.custom.RateListIsEmptyException;
@@ -49,11 +50,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
+            FeignClientTemporarilyUnavailable.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleUnavailableServiceExceptions(Exception e) {
+        return getExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+
+    @ExceptionHandler({
         Exception.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
         return getExceptionResponse(
-                new MessageSourceException(INTERNAL_SERVICE_ERROR, e.getMessage()),
+                new MessageSourceException(INTERNAL_SERVICE_ERROR, getExceptionMessage(e)),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
