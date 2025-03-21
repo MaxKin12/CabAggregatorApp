@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @SQLDelete(sql = "update drivers set deleted_at=current_timestamp() where id=?")
 @SQLRestriction("deleted_at is null")
 public class Driver implements DriverEntity {

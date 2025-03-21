@@ -31,11 +31,11 @@ public class CarController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<CarResponse>> getAllCars(
+    public ResponseEntity<PageResponse> getAllCars(
             @RequestParam(name = "offset", defaultValue = "0") Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        PageResponse<CarResponse> carPageResponse = carService.findAll(offset, limit);
+        PageResponse carPageResponse = carService.findAll(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(carPageResponse);
     }
 

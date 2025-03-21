@@ -11,13 +11,17 @@ import static com.example.driverservice.utility.constants.InternationalizationVa
 import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.PHONE_TOO_LONG;
 import static com.example.driverservice.utility.constants.RegularExpressionsConstants.PHONE_NUMBER_CHECK;
 
+import com.example.driverservice.dto.EntityRequest;
+import com.example.driverservice.dto.EntityResponse;
 import com.example.driverservice.enums.UserGender;
 import com.example.driverservice.enums.annotation.UserGenderValidation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
+@Builder
 public record DriverRequest(
 
         @NotBlank(message = NAME_BLANK)
@@ -38,5 +42,5 @@ public record DriverRequest(
         @UserGenderValidation(enumClass = UserGender.class)
         String gender
 
-) {
+) implements EntityRequest {
 }

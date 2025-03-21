@@ -31,11 +31,11 @@ public class DriverController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<DriverResponse>> getAllDrivers(
+    public ResponseEntity<PageResponse> getAllDrivers(
             @RequestParam(name = "offset", defaultValue = "0") Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
-        PageResponse<DriverResponse> driverPageResponse = driverService.findAll(offset, limit);
+        PageResponse driverPageResponse = driverService.findAll(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(driverPageResponse);
     }
 

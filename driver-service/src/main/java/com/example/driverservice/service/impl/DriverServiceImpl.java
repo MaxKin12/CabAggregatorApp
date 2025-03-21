@@ -41,7 +41,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<DriverResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
+    public PageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit) {
         limit = validation.cutDownLimit(limit);
         Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(offset, limit));
         return driverPageMapper.toResponsePage(driverPage, offset, limit);
@@ -69,7 +69,6 @@ public class DriverServiceImpl implements DriverService {
     public void updateRate(RateChangeEventResponse event) {
         Driver driver = validation.findByIdOrThrow(event.recipientId());
         driver.setRate(event.rate());
-        driverRepository.save(driver);
     }
 
     @Override

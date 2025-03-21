@@ -2,10 +2,12 @@ package com.example.driverservice.dto.page;
 
 import com.example.driverservice.dto.EntityResponse;
 import java.util.List;
+import lombok.Builder;
 
-public record PageResponse<T extends EntityResponse>(
+@Builder
+public record PageResponse(
 
-        List<T> list,
+        List<? extends EntityResponse> list,
         int currentPageNumber,
         int pageLimit,
         int totalPages,

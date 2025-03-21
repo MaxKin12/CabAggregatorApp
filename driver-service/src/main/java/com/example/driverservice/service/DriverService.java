@@ -14,7 +14,7 @@ public interface DriverService {
 
     DriverResponse findById(@Positive(message = ID_NEGATIVE) Long id);
 
-    PageResponse<DriverResponse> findAll(@Min(0) Integer offset, @Min(1) Integer limit);
+    PageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit);
 
     DriverResponse create(@Valid DriverRequest driverRequest);
 
