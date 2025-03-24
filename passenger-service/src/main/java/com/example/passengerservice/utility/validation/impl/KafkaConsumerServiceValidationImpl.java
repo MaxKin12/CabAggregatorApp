@@ -21,7 +21,7 @@ public class KafkaConsumerServiceValidationImpl implements KafkaConsumerServiceV
     @Override
     public Passenger findByIdOrThrow(Long id) {
         return passengerRepository.findById(id)
-                .orElseThrow(() -> new PassengerNotFoundException(PASSENGER_NOT_FOUND, String.valueOf(id)));
+                .orElseThrow(() -> new PassengerNotFoundException(PASSENGER_NOT_FOUND, id.toString()));
     }
 
     @Override
