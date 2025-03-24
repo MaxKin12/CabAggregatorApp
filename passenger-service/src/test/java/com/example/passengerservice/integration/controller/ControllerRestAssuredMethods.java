@@ -11,6 +11,7 @@ import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,109 +20,77 @@ import org.springframework.http.HttpStatus;
 public final class ControllerRestAssuredMethods {
 
     public static PassengerResponse getPassenger(Long id) {
-        return given()
+        Response response = given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
-                .get(ENDPOINT_WITH_ID)
-                .then()
-                .statusCode(HttpStatus.OK.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(PassengerResponse.class);
+                .get(ENDPOINT_WITH_ID);
+        return getResponse(response, HttpStatus.OK, PassengerResponse.class);
     }
 
     public static ExceptionHandlerResponse getPassengerException(Long id, HttpStatus httpStatus) {
-        return given()
+        Response response = given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
-                .get(ENDPOINT_WITH_ID)
-                .then()
-                .statusCode(httpStatus.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(ExceptionHandlerResponse.class);
+                .get(ENDPOINT_WITH_ID);
+        return getResponse(response, httpStatus, ExceptionHandlerResponse.class);
     }
 
     public static PassengerPageResponse getAllPassengers(int offset, int limit) {
-        return given()
+        Response response = given()
                 .queryParam(OFFSET_PARAMETER_NAME, offset)
                 .queryParam(LIMIT_PARAMETER_NAME, limit)
                 .when()
-                .get()
-                .then()
-                .statusCode(HttpStatus.OK.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(PassengerPageResponse.class);
+                .get();
+        return getResponse(response, HttpStatus.OK, PassengerPageResponse.class);
     }
 
     public static ExceptionHandlerResponse getAllPassengersException(int offset, int limit, HttpStatus httpStatus) {
-        return given()
+        Response response = given()
                 .queryParam(OFFSET_PARAMETER_NAME, offset)
                 .queryParam(LIMIT_PARAMETER_NAME, limit)
                 .when()
-                .get()
-                .then()
-                .statusCode(httpStatus.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(ExceptionHandlerResponse.class);
+                .get();
+        return getResponse(response, httpStatus, ExceptionHandlerResponse.class);
     }
 
     public static PassengerResponse createPassenger(PassengerRequest passengerRequest) {
-        return given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(passengerRequest)
                 .when()
-                .post()
-                .then()
-                .statusCode(HttpStatus.CREATED.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(PassengerResponse.class);
+                .post();
+        return getResponse(response, HttpStatus.CREATED, PassengerResponse.class);
     }
 
     public static ExceptionHandlerResponse createPassengerException(PassengerRequest passengerRequest,
                                                                     HttpStatus httpStatus) {
-        return given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(passengerRequest)
                 .when()
-                .post()
-                .then()
-                .statusCode(httpStatus.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(ExceptionHandlerResponse.class);
+                .post();
+        return getResponse(response, httpStatus, ExceptionHandlerResponse.class);
     }
 
     public static PassengerResponse updatePassenger(PassengerRequest passengerRequest, Long id) {
-        return given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(passengerRequest)
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
-                .patch(ENDPOINT_WITH_ID)
-                .then()
-                .statusCode(HttpStatus.OK.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(PassengerResponse.class);
+                .patch(ENDPOINT_WITH_ID);
+        return getResponse(response, HttpStatus.OK, PassengerResponse.class);
     }
 
     public static ExceptionHandlerResponse updatePassengerException(PassengerRequest passengerRequest,
                                                                     Long id, HttpStatus httpStatus) {
-        return given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(passengerRequest)
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
-                .patch(ENDPOINT_WITH_ID)
-                .then()
-                .statusCode(httpStatus.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(ExceptionHandlerResponse.class);
+                .patch(ENDPOINT_WITH_ID);
+        return getResponse(response, httpStatus, ExceptionHandlerResponse.class);
     }
 
     public static void deletePassenger(Long id) {
@@ -134,15 +103,20 @@ public final class ControllerRestAssuredMethods {
     }
 
     public static ExceptionHandlerResponse deletePassengerException(Long id, HttpStatus httpStatus) {
-        return given()
+        Response response = given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
-                .delete(ENDPOINT_WITH_ID)
+                .delete(ENDPOINT_WITH_ID);
+        return getResponse(response, httpStatus, ExceptionHandlerResponse.class);
+    }
+
+    private static <T> T getResponse(Response response, HttpStatus httpStatus, Class<T> clazz) {
+        return response
                 .then()
                 .statusCode(httpStatus.value())
                 .contentType(ContentType.JSON)
                 .extract()
-                .as(ExceptionHandlerResponse.class);
+                .as(clazz);
     }
 
 }

@@ -15,7 +15,7 @@ import static com.example.passengerservice.configuration.constants.PassengerTest
 import static com.example.passengerservice.configuration.constants.PassengerTestData.PASSENGER_RATE_2;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class SqlConstants {
+public final class RestoreDbSqlConstants {
 
     public final static String SQL_DELETE_ALL_TEST_DATA = "delete from test.passengers;";
     public final static String SQL_INSERT_TEST_ENTITY_DATA =
