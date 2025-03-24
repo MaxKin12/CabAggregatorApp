@@ -25,6 +25,9 @@ services:
       kafka:
         condition: service_healthy
         restart: true
+      gateway-service:
+        condition: service_healthy
+        restart: true
 
   driver-service:
     container_name: driver-service
@@ -50,6 +53,9 @@ services:
         condition: service_healthy
         restart: true
       kafka:
+        condition: service_healthy
+        restart: true
+      gateway-service:
         condition: service_healthy
         restart: true
 
@@ -78,6 +84,9 @@ services:
       - 8083
     depends_on:
       my-sql-rides-db:
+        condition: service_healthy
+        restart: true
+      gateway-service:
         condition: service_healthy
         restart: true
 
@@ -111,6 +120,9 @@ services:
       kafka:
         condition: service_healthy
         restart: true
+      gateway-service:
+        condition: service_healthy
+        restart: true
 
   gateway-service:
     container_name: gateway-service
@@ -128,6 +140,12 @@ services:
     depends_on:
       eureka-service:
         condition: service_healthy
+    healthcheck:
+      test: curl -f http://gateway-service:8080/actuator/health
+      interval: 5s
+      retries: 2
+      start_period: 30s
+      timeout: 10s
 
   eureka-service:
     container_name: eureka-service
@@ -141,7 +159,7 @@ services:
     ports:
       - 8761:8761
     healthcheck:
-      test: nc -z localhost 8761 || exit -1
+      test: curl -f http://eureka-service:8761/actuator/health
       interval: 5s
       retries: 2
       start_period: 30s
@@ -238,6 +256,8 @@ services:
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
+    volumes:
+      - zookeeper-data:/data
     expose:
       - 2181
     networks:
@@ -246,12 +266,6 @@ services:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    healthcheck:
-      test: nc -z localhost 2181 || exit -1
-      interval: 5s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
 
   kafka:
     container_name: kafka
@@ -269,15 +283,11 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-    depends_on:
-      zookeeper:
-        condition: service_healthy
-        restart: true
     healthcheck:
       test: nc -z localhost 9092 || exit -1
       interval: 5s
       retries: 5
-      start_period: 30s
+      start_period: 60s
       timeout: 10s
 
 networks:
@@ -289,3 +299,4 @@ volumes:
   rides-db-data:
   rates-db-data:
   kafka-data:
+  zookeeper-data:
