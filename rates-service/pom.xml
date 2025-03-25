@@ -4,9 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.example</groupId>
-        <artifactId>main-service</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>${spring-boot.version}</version>
+        <relativePath/>
     </parent>
 
     <artifactId>rates-service</artifactId>
@@ -16,14 +17,17 @@
 
     <properties>
         <java.version>17</java.version>
+        <spring-boot.version>3.4.1</spring-boot.version>
         <jackson-bom.version>2.18.3</jackson-bom.version>
         <spring-cloud-dependencies.version>2024.0.0</spring-cloud-dependencies.version>
         <cucumber-bom.version>7.21.1</cucumber-bom.version>
         <spring-kafka-bom.version>3.3.3</spring-kafka-bom.version>
+
         <mapstruct.version>1.6.2</mapstruct.version>
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
-        <spring-boot-configuration-processor.version>3.4.1</spring-boot-configuration-processor.version>
         <shedlock-spring.version>6.3.0</shedlock-spring.version>
+        <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
+        <checkstyle.version>10.14.1</checkstyle.version>
     </properties>
 
     <dependencyManagement>
@@ -83,16 +87,16 @@
             <version>${springdoc-openapi-starter.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <dependency>
@@ -162,6 +166,10 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
@@ -228,10 +236,36 @@
                         <path>
                             <groupId>org.springframework.boot</groupId>
                             <artifactId>spring-boot-configuration-processor</artifactId>
-                            <version>${spring-boot-configuration-processor.version}</version>
+                            <version>${spring-boot.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>src/main/resources/checkstyle.xml</configLocation>
+                    <inputEncoding>UTF-8</inputEncoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
