@@ -61,6 +61,7 @@ public class GlobalExceptionHandler {
         Exception.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
+        e.printStackTrace();
         return getExceptionResponse(
                 new MessageSourceException(INTERNAL_SERVICE_ERROR, getExceptionMessage(e)),
                 HttpStatus.INTERNAL_SERVER_ERROR
