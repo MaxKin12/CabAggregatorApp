@@ -5,7 +5,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Profile;
 
 @FeignClient(
-        name = "passenger-client",
+        name = "passenger-service",
+        path = "/api/v1/passengers",
         configuration = {ExternalServiceClientDecoder.class}
 )
 @Profile("dev")

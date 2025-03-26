@@ -15,13 +15,17 @@ services:
       ACTIVE_PROFILES: dev
       PAGE_RESPONSE_LIMIT_SIZE: 50
       KAFKA_URL: kafka:9092
-    ports:
-      - 8081:8081
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+    expose:
+      - 8081
     depends_on:
       my-sql-passenger-db:
         condition: service_healthy
         restart: true
       kafka:
+        condition: service_healthy
+        restart: true
+      gateway-service:
         condition: service_healthy
         restart: true
 
@@ -41,13 +45,17 @@ services:
       ACTIVE_PROFILES: dev
       PAGE_RESPONSE_LIMIT_SIZE: 50
       KAFKA_URL: kafka:9092
-    ports:
-      - 8082:8082
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+    expose:
+      - 8082
     depends_on:
       my-sql-driver-db:
         condition: service_healthy
         restart: true
       kafka:
+        condition: service_healthy
+        restart: true
+      gateway-service:
         condition: service_healthy
         restart: true
 
@@ -71,10 +79,14 @@ services:
       PAGE_RESPONSE_LIMIT_SIZE: 50
       TIMETRAVEL_APPID: ${TIMETRAVEL_APPID}
       TIMETRAVEL_APIKEY: ${TIMETRAVEL_APIKEY}
-    ports:
-      - 8083:8083
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+    expose:
+      - 8083
     depends_on:
       my-sql-rides-db:
+        condition: service_healthy
+        restart: true
+      gateway-service:
         condition: service_healthy
         restart: true
 
@@ -98,8 +110,9 @@ services:
       PAGE_RESPONSE_LIMIT_SIZE: 50
       LAST_RIDES_COUNT_FOR_AVERAGE_RATE: 5
       KAFKA_URL: kafka:9092
-    ports:
-      - 8084:8084
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+    expose:
+      - 8084
     depends_on:
       my-sql-rates-db:
         condition: service_healthy
@@ -107,6 +120,50 @@ services:
       kafka:
         condition: service_healthy
         restart: true
+      gateway-service:
+        condition: service_healthy
+        restart: true
+
+  gateway-service:
+    container_name: gateway-service
+    build:
+      context: ../gateway-service
+      dockerfile: ../docker/Dockerfile
+      args:
+        SERVICE_NAME: gateway-service
+    environment:
+      EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+    networks:
+      - app-net
+    ports:
+      - 8080:8080
+    depends_on:
+      eureka-service:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f http://gateway-service:8080/actuator/health
+      interval: 5s
+      retries: 2
+      start_period: 30s
+      timeout: 10s
+
+  eureka-service:
+    container_name: eureka-service
+    build:
+      context: ../eureka-service
+      dockerfile: ../docker/Dockerfile
+      args:
+        SERVICE_NAME: eureka-service
+    networks:
+      - app-net
+    ports:
+      - 8761:8761
+    healthcheck:
+      test: curl -f http://eureka-service:8761/actuator/health
+      interval: 5s
+      retries: 2
+      start_period: 30s
+      timeout: 10s
 
   my-sql-passenger-db:
     container_name: passenger-db
@@ -121,8 +178,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSENGER_ROOT_PASSWORD}
     volumes:
       - passenger-db-data:/data
-    ports:
-      - 3330:3306
+    expose:
+      - 3306
     healthcheck:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
@@ -143,8 +200,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_DRIVER_ROOT_PASSWORD}
     volumes:
       - driver-db-data:/data
-    ports:
-      - 3331:3306
+    expose:
+      - 3306
     healthcheck:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
@@ -165,8 +222,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_RIDE_ROOT_PASSWORD}
     volumes:
       - rides-db-data:/data
-    ports:
-      - 3332:3306
+    expose:
+      - 3306
     healthcheck:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
@@ -187,8 +244,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_RATES_ROOT_PASSWORD}
     volumes:
       - rates-db-data:/data
-    ports:
-      - 3333:3306
+    expose:
+      - 3306
     healthcheck:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
@@ -199,26 +256,24 @@ services:
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
-    ports:
-      - 2181:2181
+    volumes:
+      - zookeeper-data:/data
+    expose:
+      - 2181
     networks:
       - app-net
     environment:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    healthcheck:
-      test: nc -z localhost 2181 || exit -1
-      interval: 5s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
 
   kafka:
     container_name: kafka
     image: confluentinc/cp-kafka:latest
-    ports:
-      - 9092:9092
+    volumes:
+      - kafka-data:/data
+    expose:
+      - 9092
     networks:
       - app-net
     environment:
@@ -228,15 +283,11 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-    depends_on:
-      zookeeper:
-        condition: service_healthy
-        restart: true
     healthcheck:
       test: nc -z localhost 9092 || exit -1
       interval: 5s
       retries: 5
-      start_period: 30s
+      start_period: 60s
       timeout: 10s
 
 networks:
@@ -247,3 +298,5 @@ volumes:
   driver-db-data:
   rides-db-data:
   rates-db-data:
+  kafka-data:
+  zookeeper-data:

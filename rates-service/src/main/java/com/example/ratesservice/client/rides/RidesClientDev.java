@@ -5,7 +5,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Profile;
 
 @FeignClient(
-        name = "rides-client",
+        name = "rides-service",
+        path = "/api/v1/rides",
         configuration = {ExternalServiceClientDecoder.class}
 )
 @Profile("dev")
