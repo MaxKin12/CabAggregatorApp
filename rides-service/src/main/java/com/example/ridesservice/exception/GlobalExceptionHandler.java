@@ -7,6 +7,7 @@ import com.example.ridesservice.client.exception.ExternalServiceClientBadRequest
 import com.example.ridesservice.client.exception.ExternalServiceEntityNotFoundException;
 import com.example.ridesservice.dto.exception.ExceptionHandlerResponse;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
+import com.example.ridesservice.exception.custom.FeignClientTemporarilyUnavailable;
 import com.example.ridesservice.exception.custom.IllegalEnumArgumentException;
 import com.example.ridesservice.exception.custom.RideNotContainsDriverException;
 import com.example.ridesservice.exception.custom.RideNotFoundException;
@@ -51,11 +52,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
+        FeignClientTemporarilyUnavailable.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleUnavailableServiceExceptions(Exception e) {
+        return getExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler({
         Exception.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
         return getExceptionResponse(
-                new MessageSourceException(INTERNAL_SERVER_ERROR, e.getMessage()),
+                new MessageSourceException(INTERNAL_SERVER_ERROR, getExceptionMessage(e)),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }

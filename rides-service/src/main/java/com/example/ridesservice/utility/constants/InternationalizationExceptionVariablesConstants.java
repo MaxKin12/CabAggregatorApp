@@ -18,5 +18,8 @@ public final class InternationalizationExceptionVariablesConstants {
     public static final String ADDRESS_TOO_FAR = "exception.timetravel.address.too.far";
     public static final String DRIVER_NOT_CONTAINS_CAR = "exception.openfeign.driver.not.contains.car";
     public static final String EXTERNAL_SERVICE_ERROR = "exception.openfeign.external-service.error";
+    public static final String SERVICE_UNAVAILABLE = "exception.openfeign.service.unavailable";
+    public static final String PASSENGER_SERVICE_IN_OPENED_STATE = "exception.openfeign.passenger-service.opened";
+    public static final String DRIVER_SERVICE_IN_OPENED_STATE = "exception.openfeign.driver-service.opened";
 
 }

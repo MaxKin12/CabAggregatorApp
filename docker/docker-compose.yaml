@@ -184,7 +184,7 @@ services:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
       retries: 5
-      start_period: 30s
+      start_period: 60s
       timeout: 10s
 
   my-sql-driver-db:
@@ -206,7 +206,7 @@ services:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
       retries: 5
-      start_period: 30s
+      start_period: 60s
       timeout: 10s
 
   my-sql-rides-db:
@@ -228,7 +228,7 @@ services:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
       retries: 5
-      start_period: 30s
+      start_period: 60s
       timeout: 10s
 
   my-sql-rates-db:
@@ -250,7 +250,7 @@ services:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
       retries: 5
-      start_period: 30s
+      start_period: 60s
       timeout: 10s
 
   zookeeper:

@@ -7,7 +7,6 @@ import com.example.ratesservice.client.exception.ExternalServiceUnknownInternalS
 import com.example.ratesservice.utility.validation.FeignClientDecoderValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
-import java.io.IOException;
 import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +24,8 @@ public class FeignClientDecoderValidationImpl implements FeignClientDecoderValid
             ObjectMapper mapper = new ObjectMapper();
             mapper.findAndRegisterModules();
             return mapper.readValue(body, ExternalServiceExceptionHandlerResponse.class);
-        } catch (IOException e) {
-            log.error("Failed attempt to read feign exception response body", e);
-            throw new ExternalServiceUnknownInternalServerError(EXTERNAL_SERVICE_ERROR, e.getMessage());
+        } catch (Exception e) {
+            return null;
         }
     }
 

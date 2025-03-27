@@ -16,6 +16,10 @@ public final class InternationalizationExceptionPropertyVariablesConstants {
     public static final String EXTERNAL_SERVICE_ERROR = "exception.openfeign.external-service.error";
     public static final String INVALID_RIDE_CONTENT = "exception.openfeign.invalid.ride.content";
     public static final String INVALID_RIDE_STATUS = "exception.openfeign.invalid.ride.status";
+    public static final String SERVICE_UNAVAILABLE = "exception.openfeign.service.unavailable";
+    public static final String PASSENGER_SERVICE_IN_OPENED_STATE = "exception.openfeign.passenger-service.opened";
+    public static final String DRIVER_SERVICE_IN_OPENED_STATE = "exception.openfeign.driver-service.opened";
+    public static final String RIDES_SERVICE_IN_OPENED_STATE = "exception.openfeign.rides-service.opened";
     public static final String KAFKA_INVALID_SEND = "exception.kafka.invalid.send";
 
 }
