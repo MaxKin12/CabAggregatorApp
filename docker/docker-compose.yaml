@@ -143,8 +143,8 @@ services:
     healthcheck:
       test: curl -f http://gateway-service:8080/actuator/health
       interval: 5s
-      retries: 2
-      start_period: 30s
+      retries: 5
+      start_period: 60s
       timeout: 10s
 
   eureka-service:
@@ -161,8 +161,8 @@ services:
     healthcheck:
       test: curl -f http://eureka-service:8761/actuator/health
       interval: 5s
-      retries: 2
-      start_period: 30s
+      retries: 5
+      start_period: 60s
       timeout: 10s
 
   my-sql-passenger-db:
@@ -289,6 +289,31 @@ services:
       retries: 5
       start_period: 60s
       timeout: 10s
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:11.6.0
+    volumes:
+      - ./grafana:/var/lib/grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    depends_on:
+      - victoria-metrics
+
+  victoria-metrics:
+    container_name: victoria-metrics
+    image: victoriametrics/victoria-metrics:v1.114.0
+    volumes:
+      - ./victoria-metrics/promscrape.yaml:/victoria-metrics/promscrape.yaml
+    ports:
+      - 8428:8428
+    networks:
+      - app-net
+    command:
+      - '--promscrape.config=/victoria-metrics/promscrape.yaml'
 
 networks:
   app-net:
