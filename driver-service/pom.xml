@@ -22,6 +22,7 @@
         <spring-cloud-dependencies.version>2024.0.0</spring-cloud-dependencies.version>
         <cucumber-bom.version>7.21.1</cucumber-bom.version>
         <spring-kafka-bom.version>3.3.3</spring-kafka-bom.version>
+        <micrometer-bom.version>1.14.4</micrometer-bom.version>
 
         <mapstruct.version>1.6.2</mapstruct.version>
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
@@ -55,7 +56,7 @@
             <dependency>
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-bom</artifactId>
-                <version>1.14.4</version>
+                <version>${micrometer-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
