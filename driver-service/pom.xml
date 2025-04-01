@@ -25,6 +25,8 @@
         <micrometer-bom.version>1.14.4</micrometer-bom.version>
 
         <mapstruct.version>1.6.2</mapstruct.version>
+        <loki.version>1.6.0</loki.version>
+        <janino.version>3.1.12</janino.version>
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
         <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
         <checkstyle.version>10.14.1</checkstyle.version>
@@ -193,6 +195,16 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.loki4j</groupId>
+            <artifactId>loki-logback-appender</artifactId>
+            <version>${loki.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>${janino.version}</version>
         </dependency>
     </dependencies>
 
