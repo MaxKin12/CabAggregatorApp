@@ -20,6 +20,7 @@
         <java.version>17</java.version>
         <spring-boot.version>3.4.1</spring-boot.version>
         <spring-cloud-dependencies.version>2024.0.0</spring-cloud-dependencies.version>
+        <micrometer-bom.version>1.14.4</micrometer-bom.version>
 
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
         <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
@@ -32,6 +33,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-bom</artifactId>
+                <version>${micrometer-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -70,6 +78,11 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
     </dependencies>
 
