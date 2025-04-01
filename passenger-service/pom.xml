@@ -56,7 +56,7 @@
             <dependency>
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-bom</artifactId>
-                <version>1.14.4</version>
+                <version>${micrometer-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
