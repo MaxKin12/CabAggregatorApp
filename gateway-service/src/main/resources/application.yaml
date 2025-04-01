@@ -23,6 +23,9 @@ spring:
           uri: lb://rates-service
           predicates:
             - Path=/api/v1/rates/**
+  zipkin:
+    enabled: true
+    base-url: http://tempo:9411
 
 eureka:
   client:
@@ -36,3 +39,10 @@ management:
         include:
           - health
           - prometheus
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://localhost:9411/api/v2/spans}
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0

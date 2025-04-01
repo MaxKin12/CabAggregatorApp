@@ -21,6 +21,8 @@
         <spring-boot.version>3.4.1</spring-boot.version>
         <spring-cloud-dependencies.version>2024.0.0</spring-cloud-dependencies.version>
         <micrometer-bom.version>1.14.4</micrometer-bom.version>
+        <micrometer-tracing-bom.version>1.4.3</micrometer-tracing-bom.version>
+        <opentelemetry-bom.version>1.43.0</opentelemetry-bom.version>
 
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
         <loki.version>1.6.0</loki.version>
@@ -42,6 +44,20 @@
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-bom</artifactId>
                 <version>${micrometer-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bom</artifactId>
+                <version>${micrometer-tracing-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${opentelemetry-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -99,6 +115,18 @@
             <groupId>org.codehaus.janino</groupId>
             <artifactId>janino</artifactId>
             <version>${janino.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-zipkin</artifactId>
         </dependency>
     </dependencies>
 

@@ -17,6 +17,7 @@ services:
       KAFKA_URL: kafka:9092
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
       LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     expose:
       - 8081
     depends_on:
@@ -48,6 +49,7 @@ services:
       KAFKA_URL: kafka:9092
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
       LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     expose:
       - 8082
     depends_on:
@@ -83,6 +85,7 @@ services:
       TIMETRAVEL_APIKEY: ${TIMETRAVEL_APIKEY}
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
       LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     expose:
       - 8083
     depends_on:
@@ -115,6 +118,7 @@ services:
       KAFKA_URL: kafka:9092
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
       LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     expose:
       - 8084
     depends_on:
@@ -138,6 +142,7 @@ services:
     environment:
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
       LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     networks:
       - app-net
     ports:
@@ -161,6 +166,7 @@ services:
         SERVICE_NAME: eureka-service
     environment:
       LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     networks:
       - app-net
     ports:
@@ -339,6 +345,23 @@ services:
     command:
       - '--config.file=/etc/loki/loki-config.yaml'
       - '--config.expand-env=true'
+
+  tempo:
+    container_name: tempo
+    image: grafana/tempo:main-4fb2b6e
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml
+    ports:
+      - 3200:3200
+      - 9095:9095
+      - 4317:4317
+      - 4318:4318
+      - 9411:9411
+      - 14268:14268
+    networks:
+      - app-net
+    command:
+      - '--config.file=/etc/tempo.yaml'
 
 networks:
   app-net:

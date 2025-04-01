@@ -24,6 +24,8 @@
         <cucumber-bom.version>7.21.1</cucumber-bom.version>
         <resilience4j.version>2.3.0</resilience4j.version>
         <micrometer-bom.version>1.14.4</micrometer-bom.version>
+        <micrometer-tracing-bom.version>1.4.3</micrometer-tracing-bom.version>
+        <opentelemetry-bom.version>1.43.0</opentelemetry-bom.version>
 
         <mapstruct.version>1.6.2</mapstruct.version>
         <loki.version>1.6.0</loki.version>
@@ -224,6 +226,18 @@
             <groupId>org.codehaus.janino</groupId>
             <artifactId>janino</artifactId>
             <version>${janino.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-zipkin</artifactId>
         </dependency>
     </dependencies>
 
