@@ -15,19 +15,19 @@
                         <pattern>app=gateway-service,host=${HOSTNAME},level=%level</pattern>
                     </label>
                     <message>
-                        <pattern>l=%level h=${HOSTNAME} c=%logger{20} t=%thread | %msg %ex</pattern>
+                        <pattern>l=%level h=${HOSTNAME} c=%logger{20} t=%thread | [traceId=%X{traceId}, spanId=%X{spanId}] | %msg %ex</pattern>
                     </message>
                     <sortByTime>true</sortByTime>
                 </format>
             </appender>
 
-            <root level="info">
+            <root level="info" additivity="false">
                 <appender-ref ref="CONSOLE"/>
                 <appender-ref ref="LOKI"/>
             </root>
         </then>
         <else>
-            <root level="info">
+            <root level="info" additivity="false">
                 <appender-ref ref="CONSOLE"/>
             </root>
         </else>
