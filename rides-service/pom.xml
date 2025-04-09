@@ -32,6 +32,7 @@
         <mapstruct.version>1.6.2</mapstruct.version>
         <loki.version>1.6.0</loki.version>
         <janino.version>3.1.12</janino.version>
+        <datasource-micrometer.version>1.1.0</datasource-micrometer.version>
         <springdoc-openapi-starter.version>2.8.3</springdoc-openapi-starter.version>
         <traveltime-sdk-version>2.0.0</traveltime-sdk-version>
         <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
@@ -253,17 +254,9 @@
             <artifactId>feign-micrometer</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-sdk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-jdbc</artifactId>
-            <version>${opentelemetry-jdbc.version}</version>
+            <groupId>net.ttddyy.observation</groupId>
+            <artifactId>datasource-micrometer-spring-boot</artifactId>
+            <version>${datasource-micrometer.version}</version>
         </dependency>
     </dependencies>
 
