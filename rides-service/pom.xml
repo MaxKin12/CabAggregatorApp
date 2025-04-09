@@ -26,6 +26,8 @@
         <micrometer-bom.version>1.14.4</micrometer-bom.version>
         <micrometer-tracing-bom.version>1.4.3</micrometer-tracing-bom.version>
         <opentelemetry-bom.version>1.43.0</opentelemetry-bom.version>
+        <feign-bom.version>13.6</feign-bom.version>
+        <opentelemetry-jdbc.version>2.3.0-alpha</opentelemetry-jdbc.version>
 
         <mapstruct.version>1.6.2</mapstruct.version>
         <loki.version>1.6.0</loki.version>
@@ -69,6 +71,13 @@
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-bom</artifactId>
                 <version>${micrometer-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-bom</artifactId>
+                <version>${feign-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -238,6 +247,23 @@
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-micrometer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-jdbc</artifactId>
+            <version>${opentelemetry-jdbc.version}</version>
         </dependency>
     </dependencies>
 
