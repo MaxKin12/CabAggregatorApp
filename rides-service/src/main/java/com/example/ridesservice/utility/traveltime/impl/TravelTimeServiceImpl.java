@@ -22,10 +22,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.geojson.LngLatAlt;
 import org.springframework.stereotype.Service;
 
+import static com.example.ridesservice.utility.constants.LogMessagesTemplate.TRAVEL_TIME_RESPONSE_LOG_TEMPLATE;
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class TravelTimeServiceImpl implements TravelTimeService {
 
@@ -64,7 +68,9 @@ public class TravelTimeServiceImpl implements TravelTimeService {
         validation.checkIfFilterExceptionThrown(response);
         validation.checkIfUnreachable(response, departureAddress, arrivalAddress);
 
-        return response.get().getResults().get(0).getLocations().get(0).getProperties().get(0).getDistance();
+        int distance = response.get().getResults().get(0).getLocations().get(0).getProperties().get(0).getDistance();
+        log.info(TRAVEL_TIME_RESPONSE_LOG_TEMPLATE, distance);
+        return distance;
     }
 
     private Coordinates getCoordinates(String address) {

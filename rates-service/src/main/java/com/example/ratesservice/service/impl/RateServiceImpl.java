@@ -1,6 +1,8 @@
 package com.example.ratesservice.service.impl;
 
 import static com.example.ratesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
+import static com.example.ratesservice.utility.constants.LogMessagesTemplate.EVENT_EXTRACTED_LOG_TEMPLATE;
+import static com.example.ratesservice.utility.constants.LogMessagesTemplate.EVENT_PLACED_LOG_TEMPLATE;
 
 import com.example.ratesservice.client.dto.RidesResponse;
 import com.example.ratesservice.dto.rate.RateAverageResponse;
@@ -26,6 +28,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
+@Slf4j
 @Validated
 @RequiredArgsConstructor
 public class RateServiceImpl implements RateService {
@@ -126,6 +130,7 @@ public class RateServiceImpl implements RateService {
                 .rate(rateAverageResponse.averageValue())
                 .build();
         rateEventsRepository.save(event);
+        log.info(EVENT_PLACED_LOG_TEMPLATE, recipientType, event);
     }
 
 }

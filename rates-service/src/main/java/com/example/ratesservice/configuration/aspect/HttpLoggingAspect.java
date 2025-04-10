@@ -64,7 +64,7 @@ public class HttpLoggingAspect {
         HttpServletRequest httpRequest = getCurrentHttpRequest();
         ResponseEntity<?> response = (ResponseEntity<?>) result;
         String responseBody = serializeToJson(response);
-        log.info(EXCEPTION_RESPONSE_LOG_TEMPLATE,
+        log.warn(EXCEPTION_RESPONSE_LOG_TEMPLATE,
                 httpRequest.getMethod(),
                 response.getStatusCode(),
                 httpRequest.getRequestURI(),
@@ -73,7 +73,9 @@ public class HttpLoggingAspect {
     }
 
     @AfterReturning(
-            pointcut = "@within(org.springframework.cloud.openfeign.FeignClient))",
+            pointcut = "(within(com.example.ratesservice.client.driver.DriverClient+)" +
+                    "|| within(com.example.ratesservice.client.passenger.PassengerClient+)" +
+                    "|| within(com.example.ratesservice.client.rides.RidesClient+))",
             returning = "result"
     )
     public Object logFeignClientRequest(
