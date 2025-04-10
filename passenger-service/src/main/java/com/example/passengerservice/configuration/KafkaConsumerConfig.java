@@ -38,6 +38,7 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, RateChangeEventResponse> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, RateChangeEventResponse> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
+        factory.getContainerProperties().setObservationEnabled(true);
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
