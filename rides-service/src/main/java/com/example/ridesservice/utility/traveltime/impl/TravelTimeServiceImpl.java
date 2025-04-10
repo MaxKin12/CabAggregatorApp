@@ -1,5 +1,7 @@
 package com.example.ridesservice.utility.traveltime.impl;
 
+import static com.example.ridesservice.utility.constants.LogMessagesTemplate.TRAVEL_TIME_RESPONSE_LOG_TEMPLATE;
+
 import com.example.ridesservice.configuration.properties.TimetravelRouteProperties;
 import com.example.ridesservice.utility.traveltime.TravelTimeService;
 import com.example.ridesservice.utility.validation.TravelTimeServiceValidation;
@@ -25,8 +27,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geojson.LngLatAlt;
 import org.springframework.stereotype.Service;
-
-import static com.example.ridesservice.utility.constants.LogMessagesTemplate.TRAVEL_TIME_RESPONSE_LOG_TEMPLATE;
 
 @Service
 @Slf4j

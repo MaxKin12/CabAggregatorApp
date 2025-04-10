@@ -1,10 +1,10 @@
 package com.example.driverservice.configuration.aspect;
 
 import static com.example.driverservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.INVALID_SERIALISATION_ATTEMPT;
-import static com.example.driverservice.utility.constants.LogMessagesTemplate.SERIALISATION_DELIMITER;
 import static com.example.driverservice.utility.constants.LogMessagesTemplate.EXCEPTION_RESPONSE_LOG_TEMPLATE;
 import static com.example.driverservice.utility.constants.LogMessagesTemplate.REQUEST_LOG_TEMPLATE;
 import static com.example.driverservice.utility.constants.LogMessagesTemplate.RESPONSE_LOG_TEMPLATE;
+import static com.example.driverservice.utility.constants.LogMessagesTemplate.SERIALISATION_DELIMITER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
