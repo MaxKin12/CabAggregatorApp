@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class InternationalizationExceptionPropertyVariablesConstants {
 
+    public static final String INVALID_SERIALISATION_ATTEMPT = "invalid.serialisation.attempt";
     public static final String RATE_NOT_FOUND = "exception.rate.not.found";
     public static final String PASSENGER_RATE_LIST_IS_EMPTY = "exception.passenger.rate.list.is.empty";
     public static final String DRIVER_RATE_LIST_IS_EMPTY = "exception.driver.rate.list.is.empty";

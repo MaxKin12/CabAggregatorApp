@@ -1,6 +1,7 @@
 package com.example.ratesservice.utility.validation.impl;
 
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.KAFKA_INVALID_SEND;
+import static com.example.ratesservice.utility.constants.LogMessagesTemplate.KAFKA_PRODUCER_EVENT_TO_TOPIC_LOG_TEMPLATE;
 
 import com.example.ratesservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.ratesservice.exception.custom.KafkaSendException;
@@ -21,8 +22,8 @@ public class KafkaProducerServiceValidationImpl implements KafkaProducerServiceV
     public void sendOrThrow(String topic, RateChangeEventResponse event) {
         try {
             kafkaTemplate.send(topic, event);
+            log.info(KAFKA_PRODUCER_EVENT_TO_TOPIC_LOG_TEMPLATE, topic, event);
         } catch (Exception e) {
-            log.error("Failed attempt to send kafka message to topic {}", topic, e);
             throw new KafkaSendException(KAFKA_INVALID_SEND, e.getMessage());
         }
     }

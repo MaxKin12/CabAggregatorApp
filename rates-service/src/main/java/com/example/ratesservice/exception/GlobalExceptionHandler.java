@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            FeignClientTemporarilyUnavailable.class
+        FeignClientTemporarilyUnavailable.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleUnavailableServiceExceptions(Exception e) {
         return getExceptionResponse(e, HttpStatus.SERVICE_UNAVAILABLE);

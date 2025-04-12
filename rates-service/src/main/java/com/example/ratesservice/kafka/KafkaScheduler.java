@@ -1,5 +1,6 @@
 package com.example.ratesservice.kafka;
 
+import static com.example.ratesservice.utility.constants.LogMessagesTemplate.EVENT_EXTRACTED_LOG_TEMPLATE;
 import static com.example.ratesservice.utility.constants.SchedulePropertyVariablesConstants.FIXED_DELAY;
 import static com.example.ratesservice.utility.constants.SchedulePropertyVariablesConstants.LOCK_AT_LEAST_FOR;
 import static com.example.ratesservice.utility.constants.SchedulePropertyVariablesConstants.LOCK_AT_MOST_FOR;
@@ -12,6 +13,7 @@ import com.example.ratesservice.model.RateChangeEvent;
 import com.example.ratesservice.repository.RateEventsRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 @EnableConfigurationProperties(KafkaProperties.class)
 public class KafkaScheduler {
@@ -39,6 +42,7 @@ public class KafkaScheduler {
                 Pageable.ofSize(kafkaProperties.schedulerProcessingBatchSize())
         );
         for (RateChangeEvent event : events) {
+            log.info(EVENT_EXTRACTED_LOG_TEMPLATE, RecipientType.PASSENGER, event);
             producerService.sendAndDeleteMessage(kafkaProperties.topicPassenger(), event);
         }
     }
@@ -55,6 +59,7 @@ public class KafkaScheduler {
                 Pageable.ofSize(kafkaProperties.schedulerProcessingBatchSize())
         );
         for (RateChangeEvent event : events) {
+            log.info(EVENT_EXTRACTED_LOG_TEMPLATE, RecipientType.DRIVER, event);
             producerService.sendAndDeleteMessage(kafkaProperties.topicDriver(), event);
         }
     }

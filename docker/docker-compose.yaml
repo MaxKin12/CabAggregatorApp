@@ -16,6 +16,8 @@ services:
       PAGE_RESPONSE_LIMIT_SIZE: 50
       KAFKA_URL: kafka:9092
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+      LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     expose:
       - 8081
     depends_on:
@@ -46,6 +48,8 @@ services:
       PAGE_RESPONSE_LIMIT_SIZE: 50
       KAFKA_URL: kafka:9092
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+      LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     expose:
       - 8082
     depends_on:
@@ -80,6 +84,8 @@ services:
       TIMETRAVEL_APPID: ${TIMETRAVEL_APPID}
       TIMETRAVEL_APIKEY: ${TIMETRAVEL_APIKEY}
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+      LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     expose:
       - 8083
     depends_on:
@@ -111,6 +117,8 @@ services:
       LAST_RIDES_COUNT_FOR_AVERAGE_RATE: 5
       KAFKA_URL: kafka:9092
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+      LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     expose:
       - 8084
     depends_on:
@@ -133,6 +141,8 @@ services:
         SERVICE_NAME: gateway-service
     environment:
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
+      LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     networks:
       - app-net
     ports:
@@ -154,6 +164,9 @@ services:
       dockerfile: ../docker/Dockerfile
       args:
         SERVICE_NAME: eureka-service
+    environment:
+      LOKI_URL: http://loki:3100
+      ZIPKIN_URL: http://tempo:9411/api/v2/spans
     networks:
       - app-net
     ports:
@@ -302,8 +315,9 @@ services:
     environment:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
       - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_NAME=MainOrg
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-lokiexplore-app/grafana-lokiexplore-app-latest.zip;grafana-lokiexplore-app
     depends_on:
       - victoria-metrics
 
@@ -318,6 +332,36 @@ services:
       - app-net
     command:
       - '--promscrape.config=/victoria-metrics/promscrape.yaml'
+
+  loki:
+    container_name: loki
+    image: grafana/loki:main-b4abbf4
+    volumes:
+      - ./loki:/etc/loki
+    ports:
+      - 3100:3100
+    networks:
+      - app-net
+    command:
+      - '--config.file=/etc/loki/loki-config.yaml'
+      - '--config.expand-env=true'
+
+  tempo:
+    container_name: tempo
+    image: grafana/tempo:main-4fb2b6e
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml
+    ports:
+      - 3200:3200
+      - 9095:9095
+      - 4317:4317
+      - 4318:4318
+      - 9411:9411
+      - 14268:14268
+    networks:
+      - app-net
+    command:
+      - '--config.file=/etc/tempo.yaml'
 
 networks:
   app-net:
