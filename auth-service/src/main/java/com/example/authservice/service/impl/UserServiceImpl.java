@@ -32,7 +32,6 @@ import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
@@ -103,7 +102,7 @@ public class UserServiceImpl implements UserService {
                             .stream()
                             .findFirst()
                             .orElse(null);
-                    return userMapper.toResponseFromRequest(personRequest, createdUser.getId());
+                    return userMapper.toResponseFromRequest(personRequest, UUID.fromString(createdUser.getId()));
                 }
             case 403:
                 throw new ForbiddenAccessException(FORBIDDEN_ATTEMPT_TO_CREATE_USER);
@@ -119,7 +118,7 @@ public class UserServiceImpl implements UserService {
         PersonResponse personResponse = createUser(personRequest);
         log.info("User {} with role {} created", personRequest.username(), role);
         ExternalEntityRequest externalResponse = userMapper
-                .toExternalFromRequest(personRequest, personResponse.id().toString());
+                .toExternalFromRequest(personRequest, personResponse.id());
 
         switch (role) {
             case PASSENGER -> passengerClient.createPassenger(externalResponse);
@@ -142,13 +141,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public PersonResponse updateUser(UUID userId, PersonRequest updateRequest) {
         UserResource userResource = getUserResource(userId.toString());
-        UserRepresentation user = userResource.toRepresentation();
 
+        List<RoleRepresentation> roleRepresentationList = userResource.roles().getAll().getRealmMappings();
+        if (roleRepresentationList.contains(getRoleRepresentation(PASSENGER.toString().toLowerCase()))) {
+            passengerClient.updatePassenger(userMapper.toExternalFromRequest(updateRequest, userId), userId);
+        }
+        if (roleRepresentationList.contains(getRoleRepresentation(DRIVER.toString().toLowerCase()))) {
+            driverClient.updateDriver(userMapper.toExternalFromRequest(updateRequest, userId), userId);
+        }
+
+        UserRepresentation user = userResource.toRepresentation();
         user.setUsername(updateRequest.username());
         user.setEmail(updateRequest.email());
         user.setFirstName(updateRequest.name());
         user.setEmailVerified(true);
-
         if (updateRequest.password() != null && !updateRequest.password().isEmpty()) {
             CredentialRepresentation credentials = new CredentialRepresentation();
             credentials.setType(CredentialRepresentation.PASSWORD);
@@ -159,8 +165,7 @@ public class UserServiceImpl implements UserService {
 
         userResource.update(user);
         UserRepresentation updatedUser = userResource.toRepresentation();
-        return PersonResponse
-                .builder()
+        return PersonResponse.builder()
                 .id(UUID.fromString(updatedUser.getId()))
                 .username(updatedUser.getUsername())
                 .name(updatedUser.getFirstName())
@@ -173,9 +178,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deactivateUser(UUID userId) {
         UserResource userResource = getUserResource(userId.toString());
-        UserRepresentation user = userResource.toRepresentation();
-        user.setEnabled(false);
-        userResource.update(user);
 
         List<RoleRepresentation> roleRepresentationList = userResource.roles().getAll().getRealmMappings();
         if (roleRepresentationList.contains(getRoleRepresentation(PASSENGER.toString().toLowerCase()))) {
@@ -184,6 +186,10 @@ public class UserServiceImpl implements UserService {
         if (roleRepresentationList.contains(getRoleRepresentation(DRIVER.toString().toLowerCase()))) {
             driverClient.deleteDriver(userId);
         }
+
+        UserRepresentation user = userResource.toRepresentation();
+        user.setEnabled(false);
+        userResource.update(user);
     }
 
     @Override
