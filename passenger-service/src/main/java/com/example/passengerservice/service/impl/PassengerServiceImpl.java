@@ -1,7 +1,5 @@
 package com.example.passengerservice.service.impl;
 
-import static com.example.passengerservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
-
 import com.example.passengerservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;
@@ -14,15 +12,13 @@ import com.example.passengerservice.service.PassengerService;
 import com.example.passengerservice.utility.validation.PassengerServiceValidation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-
-import java.util.UUID;
 
 @Service
 @Validated
@@ -53,6 +49,9 @@ public class PassengerServiceImpl implements PassengerService {
     @Transactional
     public PassengerResponse create(@Valid PassengerRequest passengerRequest) {
         Passenger passenger = passengerMapper.toPassenger(passengerRequest);
+        if (passenger.getId() == null) {
+            passenger.setId(UUID.randomUUID());
+        }
         Passenger savedPassenger = validation.saveOrThrow(passenger);
         return passengerMapper.toResponse(savedPassenger);
     }

@@ -1,15 +1,11 @@
 package com.example.passengerservice.service;
 
-import static com.example.passengerservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
-
 import com.example.passengerservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
-
 import java.util.UUID;
 
 public interface PassengerService {
@@ -24,6 +20,6 @@ public interface PassengerService {
 
     void updateRate(RateChangeEventResponse event);
 
-    void delete(@Positive(message = ID_NEGATIVE) UUID id);
+    void delete(UUID id);
 
 }

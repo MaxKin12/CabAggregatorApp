@@ -3,6 +3,8 @@ package com.example.driverservice.dto.car;
 import com.example.driverservice.dto.EntityResponse;
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
 public record CarResponse(
 
@@ -10,7 +12,7 @@ public record CarResponse(
         String brand,
         String number,
         String color,
-        Long driverId
+        UUID driverId
 
 ) implements EntityResponse {
 }

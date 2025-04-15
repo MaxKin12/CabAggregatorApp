@@ -112,3 +112,6 @@ resilience4j:
       default:
         limitRefreshPeriod: 60s
         limitForPeriod: 5
+    instances:
+      loginRestRequest:
+        base-config: default

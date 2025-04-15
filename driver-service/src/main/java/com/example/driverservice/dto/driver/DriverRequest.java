@@ -18,10 +18,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.UUID;
 import lombok.Builder;
-
 @Builder
 public record DriverRequest(
+
+        UUID id,
 
         @NotBlank(message = NAME_BLANK)
         @Size(max = 50, message = NAME_TOO_LONG)

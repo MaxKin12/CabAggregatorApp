@@ -29,7 +29,6 @@ import org.hibernate.annotations.SQLRestriction;
 public class Passenger {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 

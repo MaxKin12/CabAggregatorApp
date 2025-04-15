@@ -21,6 +21,7 @@ import com.example.driverservice.model.entity.Driver;
 import com.example.driverservice.repository.DriverRepository;
 import com.example.driverservice.utility.validation.impl.KafkaConsumerServiceValidationImpl;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +39,7 @@ class KafkaConsumerServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_ValidId_ReturnsDriver() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
         Driver driver = DRIVER;
 
         when(driverRepository.findById(id)).thenReturn(Optional.of(driver));
@@ -51,7 +52,7 @@ class KafkaConsumerServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_InvalidId_ThrowsException() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
         String[] args = new String[] {id.toString()};
 
         when(driverRepository.findById(id)).thenReturn(Optional.empty());

@@ -24,7 +24,6 @@ import com.example.driverservice.configuration.container.MySqlTestContainer;
 import com.example.driverservice.dto.exception.ExceptionHandlerResponse;
 import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.kafka.KafkaListenerService;
-import com.example.driverservice.utility.validation.KafkaConsumerServiceValidation;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

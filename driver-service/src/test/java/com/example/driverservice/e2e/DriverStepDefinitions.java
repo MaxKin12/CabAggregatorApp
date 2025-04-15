@@ -26,6 +26,7 @@ import io.cucumber.java.en.When;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import jakarta.annotation.PostConstruct;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,7 +40,7 @@ public class DriverStepDefinitions {
 
     private final JdbcTemplate jdbcTemplate;
     private final ObjectMapper objectMapper;
-    private Long driverId;
+    private UUID driverId;
     private Response response;
     private DriverRequest driverRequest;
     private DriverResponse actualResponse;
@@ -63,9 +64,9 @@ public class DriverStepDefinitions {
         jdbcTemplate.execute(SQL_INSERT_TEST_ENTITY_DATA_CARS_2);
     }
 
-    @Given("driver with id {long}")
-    public void givenDriverWithId(Long id) {
-        driverId = id;
+    @Given("driver with id {string}")
+    public void givenDriverWithId(String id) {
+        driverId = UUID.fromString(id);
     }
 
     @Given("driver's data for signing up")
@@ -74,10 +75,10 @@ public class DriverStepDefinitions {
         driverRequest = objectMapper.readValue(createDriverJson, DriverRequest.class);
     }
 
-    @Given("driver's data for update with id {long}")
+    @Given("driver's data for update with id {string}")
     @SneakyThrows
-    public void givenUpdatedDriverData(Long id, String updateDriverJson) {
-        driverId = id;
+    public void givenUpdatedDriverData(String id, String updateDriverJson) {
+        driverId = UUID.fromString(id);
         driverRequest = objectMapper.readValue(updateDriverJson, DriverRequest.class);
     }
 

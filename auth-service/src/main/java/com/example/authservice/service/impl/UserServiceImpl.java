@@ -1,12 +1,12 @@
 package com.example.authservice.service.impl;
 
+import static com.example.authservice.enums.PersonType.DRIVER;
+import static com.example.authservice.enums.PersonType.PASSENGER;
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.DUPLICATE_USER_DATA;
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.FORBIDDEN_ATTEMPT_TO_ASSIGN_ROLE;
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.FORBIDDEN_ATTEMPT_TO_CREATE_USER;
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_TO_ASSIGN_ROLE;
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_TO_CREATE_USER;
-import static com.example.authservice.utility.constants.RoleConstants.DRIVER;
-import static com.example.authservice.utility.constants.RoleConstants.PASSENGER;
 
 import com.example.authservice.client.DriverClient;
 import com.example.authservice.client.PassengerClient;
@@ -19,6 +19,7 @@ import com.example.authservice.dto.user.UserLoginRequest;
 import com.example.authservice.dto.user.UserPageResponse;
 import com.example.authservice.dto.person.PersonRequest;
 import com.example.authservice.dto.user.UserResponse;
+import com.example.authservice.enums.PersonType;
 import com.example.authservice.exception.custom.DuplicateUsersException;
 import com.example.authservice.exception.custom.ForbiddenAccessException;
 import com.example.authservice.exception.custom.InvalidRoleAssignmentException;
@@ -30,6 +31,8 @@ import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
@@ -112,20 +115,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PersonResponse createPerson(PersonRequest personRequest, String role) {
+    public PersonResponse createPerson(PersonRequest personRequest, PersonType role) {
         PersonResponse personResponse = createUser(personRequest);
         log.info("User {} with role {} created", personRequest.username(), role);
-        ExternalEntityRequest externalResponse = userMapper.toExternalFromRequest(personRequest, personResponse.id());
+        ExternalEntityRequest externalResponse = userMapper
+                .toExternalFromRequest(personRequest, personResponse.id().toString());
 
-//        switch (role) {
-//            case PASSENGER -> passengerClient.createPassenger(externalResponse);
-//            case DRIVER -> driverClient.createDriver(externalResponse);
-//        }
+        switch (role) {
+            case PASSENGER -> passengerClient.createPassenger(externalResponse);
+            case DRIVER -> driverClient.createDriver(externalResponse);
+        }
 
         try {
             switch (role) {
-                case PASSENGER -> assignRole(personResponse.id(), PASSENGER);
-                case DRIVER -> assignRole(personResponse.id(), DRIVER);
+                case PASSENGER -> assignRole(personResponse.id(), PASSENGER.toString().toLowerCase());
+                case DRIVER -> assignRole(personResponse.id(), DRIVER.toString().toLowerCase());
             }
         } catch (ForbiddenException e) {
             throw new ForbiddenAccessException(FORBIDDEN_ATTEMPT_TO_ASSIGN_ROLE, e.getMessage());
@@ -136,8 +140,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PersonResponse updateUser(String userId, PersonRequest updateRequest) {
-        UserResource userResource = getUserResource(userId);
+    public PersonResponse updateUser(UUID userId, PersonRequest updateRequest) {
+        UserResource userResource = getUserResource(userId.toString());
         UserRepresentation user = userResource.toRepresentation();
 
         user.setUsername(updateRequest.username());
@@ -157,7 +161,7 @@ public class UserServiceImpl implements UserService {
         UserRepresentation updatedUser = userResource.toRepresentation();
         return PersonResponse
                 .builder()
-                .id(updatedUser.getId())
+                .id(UUID.fromString(updatedUser.getId()))
                 .username(updatedUser.getUsername())
                 .name(updatedUser.getFirstName())
                 .email(updatedUser.getEmail())
@@ -167,24 +171,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deactivateUser(String userId) {
-        UserResource userResource = getUserResource(userId);
+    public void deactivateUser(UUID userId) {
+        UserResource userResource = getUserResource(userId.toString());
         UserRepresentation user = userResource.toRepresentation();
         user.setEnabled(false);
         userResource.update(user);
 
         List<RoleRepresentation> roleRepresentationList = userResource.roles().getAll().getRealmMappings();
-        if (roleRepresentationList.contains(getRoleRepresentation(PASSENGER))) {
-//            passengerClient.createPassenger();
+        if (roleRepresentationList.contains(getRoleRepresentation(PASSENGER.toString().toLowerCase()))) {
+            passengerClient.deletePassenger(userId);
         }
-        if (roleRepresentationList.contains(getRoleRepresentation(DRIVER))) {
-//            driverClient.createDriver();
+        if (roleRepresentationList.contains(getRoleRepresentation(DRIVER.toString().toLowerCase()))) {
+            driverClient.deleteDriver(userId);
         }
     }
 
     @Override
-    public void assignRole(String userId, String roleName) {
-        UserResource userResource = getUserResource(userId);
+    public void assignRole(UUID userId, String roleName) {
+        UserResource userResource = getUserResource(userId.toString());
         RoleRepresentation representation = getRoleRepresentation(roleName);
         userResource.roles().realmLevel().add(Collections.singletonList(representation));
     }

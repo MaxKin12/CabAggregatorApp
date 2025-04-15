@@ -77,7 +77,7 @@ public final class CarTestData {
             .brand(CAR_BRAND_CREATED)
             .number(CAR_NUMBER_CREATED)
             .color(CAR_COLOR_CREATED)
-            .driverId(2L)
+            .driverId(DRIVER_ID_2)
             .build();
 
     public final static CarResponse CAR_RESPONSE_UPDATED = CarResponse.builder()
@@ -99,7 +99,7 @@ public final class CarTestData {
             .brand(CAR_BRAND_CREATED)
             .number(CAR_NUMBER_CREATED)
             .color(CAR_COLOR_CREATED)
-            .driverId(2L)
+            .driverId(DRIVER_ID_2)
             .build();
 
     public final static CarRequest CAR_REQUEST_UPDATED = CarRequest.builder()

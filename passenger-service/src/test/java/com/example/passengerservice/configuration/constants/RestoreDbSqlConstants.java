@@ -19,15 +19,15 @@ public final class RestoreDbSqlConstants {
 
     public final static String SQL_DELETE_ALL_TEST_DATA = "delete from test.passengers;";
     public final static String SQL_INSERT_TEST_ENTITY_DATA =
-            "insert into passengers (id, name, email, phone, rate) values (" +
-                    PASSENGER_ID + ", '" +
+            "insert into passengers (id, name, email, phone, rate) values (UNHEX(REPLACE('" +
+                    PASSENGER_ID + "', '-', '')), '" +
                     PASSENGER_NAME + "', '" +
                     PASSENGER_EMAIL + "', '" +
                     PASSENGER_PHONE + "', " +
                     PASSENGER_RATE + ");";
     public final static String SQL_INSERT_TEST_ENTITY_DATA_2 =
-            "insert into passengers (id, name, email, phone, rate) values (" +
-                    PASSENGER_ID_2 + ", '" +
+            "insert into passengers (id, name, email, phone, rate) values (UNHEX(REPLACE('" +
+                    PASSENGER_ID_2 + "', '-', '')), '" +
                     PASSENGER_NAME_2 + "', '" +
                     PASSENGER_EMAIL_2 + "', '" +
                     PASSENGER_PHONE_2 + "', " +

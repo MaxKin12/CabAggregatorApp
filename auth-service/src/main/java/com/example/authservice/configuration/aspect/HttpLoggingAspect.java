@@ -43,6 +43,7 @@ public class HttpLoggingAspect {
         ResponseEntity<?> response = (ResponseEntity<?>) joinPoint.proceed();
         long duration = System.currentTimeMillis() - startTime;
 
+
         String responseBody = serializeToJson(response);
         log.info(RESPONSE_LOG_TEMPLATE,
                 request.getMethod(),

@@ -1,8 +1,7 @@
-package com.example.ridesservice.enums;
+package com.example.authservice.enums;
 
 public enum PersonType {
 
-    ADMIN,
     PASSENGER,
     DRIVER
 

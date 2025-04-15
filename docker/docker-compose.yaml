@@ -146,15 +146,15 @@ services:
     networks:
       - app-net
     ports:
-      - 9080:9080
+      - 9090:9090
     depends_on:
       eureka-service:
         condition: service_healthy
     healthcheck:
-      test: curl -f http://gateway-service:8080/actuator/health
+      test: curl -f http://gateway-service:9090/actuator/health
       interval: 5s
       retries: 5
-      start_period: 60s
+      start_period: 120s
       timeout: 10s
 
   eureka-service:
@@ -175,7 +175,7 @@ services:
       test: curl -f http://eureka-service:8761/actuator/health
       interval: 5s
       retries: 5
-      start_period: 60s
+      start_period: 120s
       timeout: 10s
 
   my-sql-passenger-db:
@@ -197,7 +197,7 @@ services:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
       retries: 5
-      start_period: 60s
+      start_period: 120s
       timeout: 10s
 
   my-sql-driver-db:
@@ -219,7 +219,7 @@ services:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
       retries: 5
-      start_period: 60s
+      start_period: 120s
       timeout: 10s
 
   my-sql-rides-db:
@@ -241,7 +241,7 @@ services:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
       retries: 5
-      start_period: 60s
+      start_period: 120s
       timeout: 10s
 
   my-sql-rates-db:
@@ -263,7 +263,7 @@ services:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
       retries: 5
-      start_period: 60s
+      start_period: 120s
       timeout: 10s
 
   zookeeper:
@@ -300,7 +300,7 @@ services:
       test: nc -z localhost 9092 || exit -1
       interval: 5s
       retries: 5
-      start_period: 60s
+      start_period: 120s
       timeout: 10s
 
   grafana:
@@ -408,7 +408,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
       KC_DB_USERNAME: user
       KC_DB_PASSWORD: ${DB_KEYCLOAK_PASSWORD}
-    command: ["start-dev", "--http-port=9080"]
+    command: ["start-dev", "--http-port=8080"]
     volumes:
       - ./keycloak/init-keycloak.sh:/opt/keycloak/init-keycloak.sh
     entrypoint: [ "sh", "-c", "/opt/keycloak/bin/kc.sh start-dev & /opt/keycloak/init-keycloak.sh" ]
@@ -442,7 +442,7 @@ services:
       test: PGPASSWORD=${DB_KEYCLOAK_PASSWORD} psql -U user -d auth_service -h localhost -c "SELECT 1" || exit 1
       interval: 5s
       retries: 5
-      start_period: 60s
+      start_period: 120s
       timeout: 10s
 
 networks:
