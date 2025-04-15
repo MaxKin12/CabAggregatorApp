@@ -6,7 +6,7 @@ import lombok.Builder;
 @Builder
 public record ExternalEntityResponse(
 
-        UUID id,
+        String id,
         String name,
         String email,
         String phone,

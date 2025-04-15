@@ -8,8 +8,12 @@ public final class InternationalizationExceptionVariablesConstants {
 
     public static final String INVALID_SERIALISATION_ATTEMPT = "exception.invalid.serialisation.attempt";
     public static final String INTERNAL_SERVER_ERROR = "exception.internal-server.error";
+    public static final String FORBIDDEN_ATTEMPT_TO_CREATE_USER = "exception.internal-server.error";
+    public static final String FORBIDDEN_ATTEMPT_TO_ASSIGN_ROLE = "exception.internal-server.error";
+    public static final String DUPLICATE_USER_DATA = "exception.internal-server.error";
     public static final String RIDE_NOT_FOUND = "exception.ride.not.found";
-    public static final String INVALID_ATTEMPT_CHANGE_RIDE = "exception.invalid.attempt.change.ride";
+    public static final String INVALID_ATTEMPT_TO_CREATE_USER = "exception.invalid.attempt.change.ride";
+    public static final String INVALID_ATTEMPT_TO_ASSIGN_ROLE = "exception.invalid.attempt.change.ride";
     public static final String INVALID_ENUM_ARGUMENT = "exception.invalid.enum.argument";
     public static final String WRONG_STATUS_TRANSITION = "exception.status.wrong.transition";
     public static final String QUEUE_IS_EMPTY = "exception.queue.is.empty";

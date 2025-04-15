@@ -1,4 +1,4 @@
-package com.example.authservice.dto;
+package com.example.authservice.dto.person;
 
 import static com.example.authservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.EMAIL_BLANK;
 import static com.example.authservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.EMAIL_INVALID_PATTERN;
@@ -21,7 +21,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record UserSignUpRequest(
+public record PersonRequest(
 
         @NotBlank(message = NAME_BLANK)
         @Size(max = 50, message = NAME_TOO_LONG)

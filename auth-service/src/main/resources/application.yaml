@@ -1,6 +1,9 @@
 server:
   port: 8086
 
+auth-service:
+  max-page-limit: ${PAGE_RESPONSE_LIMIT_SIZE:50}
+
 spring:
   application:
     name: auth-service
@@ -18,6 +21,7 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: "http://${keycloak.domain}/realms/${keycloak.realm}"
+          jwk-set-uri: "http://${keycloak.domain}/realms/${keycloak.realm}/protocol/openid-connect/certs"
 
 logging:
   level:
@@ -28,6 +32,9 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+
 
 springdoc:
   api-docs:
@@ -49,6 +56,12 @@ keycloak:
   auth-server-url: http://${keycloak.domain}
 
 management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
   endpoints:
     web:
       exposure:
@@ -61,3 +74,41 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        sliding-window-size: 9
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 15s
+        permitted-number-of-calls-in-half-open-state: 6
+        ignore-exceptions:
+          - com.example.authservice.exception.external.ExternalServiceClientBadRequest
+          - com.example.authservice.exception.external.ExternalServiceEntityNotFoundException
+    instances:
+      passengerFeignClient:
+        base-config: default
+      driverFeignClient:
+        base-config: default
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 500ms
+        ignore-exceptions:
+          - com.example.authservice.exception.external.ExternalServiceClientBadRequest
+          - com.example.authservice.exception.external.ExternalServiceEntityNotFoundException
+    instances:
+      passengerFeignClient:
+        base-config: default
+      driverFeignClient:
+        base-config: default
+  ratelimiter:
+    configs:
+      default:
+        limitRefreshPeriod: 60s
+        limitForPeriod: 5

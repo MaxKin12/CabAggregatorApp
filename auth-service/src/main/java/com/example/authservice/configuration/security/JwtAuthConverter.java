@@ -11,6 +11,9 @@ import java.util.stream.Stream;
 import com.example.authservice.configuration.properties.KeycloakProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.keycloak.TokenVerifier;
+import org.keycloak.common.VerificationException;
+import org.keycloak.representations.AccessToken;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,44 +34,62 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
-        Collection<GrantedAuthority> authorities = Stream.concat(
-                jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
-                extractResourceRoles(jwt).stream()).collect(Collectors.toSet());
+        Collection<GrantedAuthority> authorities;
+        AccessToken token = null;
+        try {
+            token = TokenVerifier.create(jwt.getTokenValue(), AccessToken.class).getToken();
+        } catch (VerificationException e) {
+            log.error("JwtAuthConverter." + e.getMessage());
+            throw new RuntimeException(e);
+//            throw new JwtConverterException(JWT_CONVERT_EXCEPTION_MESSAGE);
+        }
+
+        authorities = token.getRealmAccess().getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .collect(Collectors.toSet());
         return new JwtAuthenticationToken(jwt, authorities, jwt.getClaim(JwtClaimNames.SUB));
     }
 
-    private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
-        Map<String, Object> realmAccess = jwt.getClaim("realm_access");
-        Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
-
-        Collection<String> allRoles = new ArrayList<>();
-        Collection<String> resourceRoles;
-        Collection<String> realmRoles ;
-
-        if (resourceAccess != null && resourceAccess.get("account") != null){
-            log.info("888888");
-            Map<String,Object> account =  (Map<String,Object>) resourceAccess.get("account");
-            if (account.containsKey("roles") ){
-                resourceRoles = (Collection<String>) account.get("roles");
-                allRoles.addAll(resourceRoles);
-            }
-        }
-        log.info("2 -|- {}", realmAccess);
-        if (realmAccess != null && realmAccess.containsKey("roles")){
-            log.info("777777");
-            realmRoles = (Collection<String>) realmAccess.get("roles");
-            allRoles.addAll(realmRoles);
-        }
-        log.info("3 -|- {} == {}", properties.client(), jwt.getClaim("azp"));
-        if (allRoles.isEmpty() || !Objects.equals(properties.client(), jwt.getClaim("azp")) ) {
-            log.info("99999");
-            return Set.of();
-        }
-
-        return allRoles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .collect(Collectors.toSet());
-    }
+//    @Override
+//    public AbstractAuthenticationToken convert(Jwt jwt) {
+//        Collection<GrantedAuthority> authorities = Stream.concat(
+//                jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
+//                extractResourceRoles(jwt).stream()).collect(Collectors.toSet());
+//        return new JwtAuthenticationToken(jwt, authorities, jwt.getClaim(JwtClaimNames.SUB));
+//    }
+//
+//    private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
+//        Map<String, Object> realmAccess = jwt.getClaim("realm_access");
+//        Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
+//
+//        Collection<String> allRoles = new ArrayList<>();
+//        Collection<String> resourceRoles;
+//        Collection<String> realmRoles ;
+//
+//        if (resourceAccess != null && resourceAccess.get("account") != null){
+//            log.info("888888");
+//            Map<String,Object> account =  (Map<String,Object>) resourceAccess.get("account");
+//            if (account.containsKey("roles") ){
+//                resourceRoles = (Collection<String>) account.get("roles");
+//                allRoles.addAll(resourceRoles);
+//            }
+//        }
+//        log.info("2 -|- {}", realmAccess);
+//        if (realmAccess != null && realmAccess.containsKey("roles")){
+//            log.info("777777");
+//            realmRoles = (Collection<String>) realmAccess.get("roles");
+//            allRoles.addAll(realmRoles);
+//        }
+//        log.info("3 -|- {} == {}", properties.client(), jwt.getClaim("azp"));
+//        if (allRoles.isEmpty() || !Objects.equals(properties.client(), jwt.getClaim("azp")) ) {
+//            log.info("99999");
+//            return Set.of();
+//        }
+//
+//        return allRoles.stream()
+//                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+//                .collect(Collectors.toSet());
+//    }
 
 
 }

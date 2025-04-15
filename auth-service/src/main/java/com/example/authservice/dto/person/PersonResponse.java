@@ -1,12 +1,11 @@
-package com.example.authservice.dto;
+package com.example.authservice.dto.person;
 
-import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record UserSignUpResponse(
+public record PersonResponse(
 
-        UUID id,
+        String id,
         String username,
         String name,
         String email,

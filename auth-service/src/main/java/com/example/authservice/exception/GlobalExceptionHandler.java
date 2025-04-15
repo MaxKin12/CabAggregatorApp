@@ -2,12 +2,14 @@ package com.example.authservice.exception;
 
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVER_ERROR;
 
+import com.example.authservice.exception.custom.DuplicateUsersException;
+import com.example.authservice.exception.custom.ForbiddenAccessException;
 import com.example.authservice.exception.external.DriverNotContainsCarException;
 import com.example.authservice.exception.external.ExternalServiceClientBadRequest;
 import com.example.authservice.exception.external.ExternalServiceEntityNotFoundException;
 import com.example.authservice.dto.exception.ExceptionHandlerResponse;
 import com.example.authservice.exception.custom.FeignClientTemporarilyUnavailable;
-import com.example.authservice.exception.custom.IllegalEnumArgumentException;
+import com.sun.jdi.request.DuplicateRequestException;
 import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +34,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-        IllegalEnumArgumentException.class,
         ConstraintViolationException.class,
         ExternalServiceClientBadRequest.class,
-        DriverNotContainsCarException.class
+        DriverNotContainsCarException.class,
+        DuplicateUsersException.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleBadRequestException(Exception e) {
         return getExceptionResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({
+        ForbiddenAccessException.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleForbiddenRequestException(Exception e) {
+        return getExceptionResponse(e, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({

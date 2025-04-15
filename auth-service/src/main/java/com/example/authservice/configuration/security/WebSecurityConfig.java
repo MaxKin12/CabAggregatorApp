@@ -21,6 +21,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/api/v1/users").authenticated()
 //                        .requestMatchers(HttpMethod.POST, "/api/v1/users/**").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/api/v1/users/driver").permitAll()
 //                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -44,28 +45,37 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-
-        return (web) -> {
-            web.ignoring().requestMatchers(
-                    HttpMethod.POST,
-                    "/api/v1/users/**"
-            );
-            web.ignoring().requestMatchers(
-                    HttpMethod.POST,
-                    "/api/v1/users/login"
-            );
-            web.ignoring().requestMatchers(
-                    HttpMethod.GET,
-                    "/actuator/**"
-            );
-            web.ignoring().requestMatchers(
-                            HttpMethod.OPTIONS,
-                            "/**"
-                    )
-                    .requestMatchers("**/swagger-ui/**", "**/swagger-resources/**", "**/swagger-ui.html",
-                            "**/api-docs/**");
-
-        };
+        return (web) -> web.ignoring()
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/v1/users",
+                        "/api/v1/users/all",
+                        "/actuator/**"
+                )
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/v1/users",
+                        "/api/v1/users/**",
+                        "/api/v1/users/login"
+                )
+                .requestMatchers(
+                        HttpMethod.PATCH,
+                        "/api/v1/users/**"
+                )
+                .requestMatchers(
+                        HttpMethod.DELETE,
+                        "/api/v1/users/**"
+                )
+                .requestMatchers(
+                        HttpMethod.OPTIONS,
+                        "/**"
+                )
+                .requestMatchers(
+                        "/api/v1/swagger-ui/**",
+                        "/api/v1/swagger-resources/**",
+                        "/api/v1/swagger-ui.html",
+                        "/api/v1/api-docs/**"
+                );
     }
 
 }
