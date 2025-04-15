@@ -16,6 +16,7 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   security:
     oauth2:
       resourceserver:
@@ -48,11 +49,10 @@ eureka:
       defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8761/eureka/}
 
 keycloak:
-  realm: cab-aggregator
-  domain: keycloak:8080
-  admin-client-id: admin-client
-  admin-client-secret: 8pEFEmfOofwarXWWUYtjglwYUwoonHv3
-  client: authenticationClientId
+  realm: ${KEYCLOAK_REALM:cab-aggregator}
+  domain: ${KEYCLOAK_DOMAIN:localhost:8080}
+  admin-client-id: ${ADMIN_CLIENT_ID:admin-client}
+  admin-client-secret: ${ADMIN_CLIENT_SECRET:8pEFEmfOofwarXWWUYtjglwYUwoonHv3}
   auth-server-url: http://${keycloak.domain}
 
 management:

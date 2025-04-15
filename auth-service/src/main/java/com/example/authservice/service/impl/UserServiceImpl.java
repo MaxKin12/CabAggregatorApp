@@ -127,8 +127,8 @@ public class UserServiceImpl implements UserService {
 
         try {
             switch (role) {
-                case PASSENGER -> assignRole(personResponse.id(), PASSENGER.toString().toLowerCase());
-                case DRIVER -> assignRole(personResponse.id(), DRIVER.toString().toLowerCase());
+                case PASSENGER -> assignRole(personResponse.id(), PASSENGER.getType());
+                case DRIVER -> assignRole(personResponse.id(), DRIVER.getType());
             }
         } catch (ForbiddenException e) {
             throw new ForbiddenAccessException(FORBIDDEN_ATTEMPT_TO_ASSIGN_ROLE, e.getMessage());
@@ -143,10 +143,10 @@ public class UserServiceImpl implements UserService {
         UserResource userResource = getUserResource(userId.toString());
 
         List<RoleRepresentation> roleRepresentationList = userResource.roles().getAll().getRealmMappings();
-        if (roleRepresentationList.contains(getRoleRepresentation(PASSENGER.toString().toLowerCase()))) {
+        if (roleRepresentationList.contains(getRoleRepresentation(PASSENGER.getType()))) {
             passengerClient.updatePassenger(userMapper.toExternalFromRequest(updateRequest, userId), userId);
         }
-        if (roleRepresentationList.contains(getRoleRepresentation(DRIVER.toString().toLowerCase()))) {
+        if (roleRepresentationList.contains(getRoleRepresentation(DRIVER.getType()))) {
             driverClient.updateDriver(userMapper.toExternalFromRequest(updateRequest, userId), userId);
         }
 
@@ -180,10 +180,10 @@ public class UserServiceImpl implements UserService {
         UserResource userResource = getUserResource(userId.toString());
 
         List<RoleRepresentation> roleRepresentationList = userResource.roles().getAll().getRealmMappings();
-        if (roleRepresentationList.contains(getRoleRepresentation(PASSENGER.toString().toLowerCase()))) {
+        if (roleRepresentationList.contains(getRoleRepresentation(PASSENGER.getType()))) {
             passengerClient.deletePassenger(userId);
         }
-        if (roleRepresentationList.contains(getRoleRepresentation(DRIVER.toString().toLowerCase()))) {
+        if (roleRepresentationList.contains(getRoleRepresentation(DRIVER.getType()))) {
             driverClient.deleteDriver(userId);
         }
 

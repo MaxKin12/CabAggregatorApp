@@ -2,7 +2,18 @@ package com.example.authservice.enums;
 
 public enum PersonType {
 
-    PASSENGER,
-    DRIVER
+    ADMIN("admin"),
+    PASSENGER("passenger"),
+    DRIVER("driver");
+
+    private final String displayName;
+
+    PersonType(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getType() {
+        return displayName;
+    }
 
 }
