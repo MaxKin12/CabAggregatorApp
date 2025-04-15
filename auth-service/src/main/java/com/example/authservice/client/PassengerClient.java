@@ -4,7 +4,7 @@ import static com.example.authservice.utility.constants.InternationalizationExce
 
 import com.example.authservice.client.decoder.ExternalServiceClientDecoder;
 import com.example.authservice.dto.external.PassengerResponse;
-import com.example.authservice.dto.external.ExternalEntityResponse;
+import com.example.authservice.dto.external.ExternalEntityRequest;
 import com.example.authservice.exception.custom.FeignClientTemporarilyUnavailable;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -23,7 +23,7 @@ public interface PassengerClient {
     @PostMapping
     @CircuitBreaker(name = "passengerFeignClient", fallbackMethod = "throwExceptionThatTemporarilyUnavailable")
     @Retry(name = "passengerFeignClient", fallbackMethod = "throwExceptionThatTemporarilyUnavailable")
-    PassengerResponse createPassenger(@RequestBody ExternalEntityResponse passengerRequest);
+    PassengerResponse createPassenger(@RequestBody ExternalEntityRequest passengerRequest);
 
     default PassengerResponse throwExceptionThatTemporarilyUnavailable(CallNotPermittedException e) {
         throw new FeignClientTemporarilyUnavailable(PASSENGER_SERVICE_IN_OPENED_STATE);

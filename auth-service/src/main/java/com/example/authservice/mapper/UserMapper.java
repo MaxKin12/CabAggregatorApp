@@ -4,7 +4,7 @@ import com.example.authservice.dto.person.PersonResponse;
 import com.example.authservice.dto.person.PersonRequest;
 import com.example.authservice.dto.user.UserPageResponse;
 import com.example.authservice.dto.user.UserResponse;
-import com.example.authservice.dto.external.ExternalEntityResponse;
+import com.example.authservice.dto.external.ExternalEntityRequest;
 import java.util.List;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.mapstruct.Mapper;
@@ -23,7 +23,7 @@ public interface UserMapper {
 
     PersonResponse toResponseFromRequest(PersonRequest personRequest, String id);
 
-    ExternalEntityResponse toExternalFromRequest(PersonRequest personRequest, String id);
+    ExternalEntityRequest toExternalFromRequest(PersonRequest personRequest, String id);
 
     @Mapping(target = "userList", source = "userList", qualifiedByName = "userRepresentationListToResponseList")
     @Mapping(target = "currentPageNumber", source = "offset")

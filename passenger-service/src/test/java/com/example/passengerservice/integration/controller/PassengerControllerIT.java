@@ -4,7 +4,6 @@ import static com.example.passengerservice.configuration.constants.GeneralUtilit
 import static com.example.passengerservice.configuration.constants.GeneralUtilityConstants.ID_PARAMETER_NAME;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.INVALID_LIMIT;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.INVALID_OFFSET;
-import static com.example.passengerservice.configuration.constants.PassengerTestData.INVALID_PASSENGER_ID;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.INVALID_PASSENGER_REQUEST;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.LIMIT;
 import static com.example.passengerservice.configuration.constants.PassengerTestData.NOT_EXIST_PASSENGER_ID;
@@ -66,14 +65,6 @@ class PassengerControllerIT extends MySqlTestContainer {
         assertThat(passengerResponse)
                 .usingRecursiveComparison()
                 .isEqualTo(PASSENGER_RESPONSE);
-    }
-
-    @Test
-    void getPassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
-        ExceptionHandlerResponse exception = ControllerRestAssuredMethods
-                .getPassengerException(INVALID_PASSENGER_ID, HttpStatus.BAD_REQUEST);
-
-        assertExceptionResponse(exception, HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -146,14 +137,6 @@ class PassengerControllerIT extends MySqlTestContainer {
     }
 
     @Test
-    void updatePassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
-        ExceptionHandlerResponse exception = ControllerRestAssuredMethods
-                .updatePassengerException(PASSENGER_REQUEST_UPDATED, INVALID_PASSENGER_ID, HttpStatus.BAD_REQUEST);
-
-        assertExceptionResponse(exception, HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
     void updatePassenger_PassengerNotFound_ReturnsExceptionResponseWithNotFoundStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .updatePassengerException(PASSENGER_REQUEST_UPDATED, NOT_EXIST_PASSENGER_ID, HttpStatus.NOT_FOUND);
@@ -165,14 +148,6 @@ class PassengerControllerIT extends MySqlTestContainer {
     @Test
     void deletePassenger_ValidId_ReturnsVoid() {
         ControllerRestAssuredMethods.deletePassenger(PASSENGER_ID);
-    }
-
-    @Test
-    void deletePassenger_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
-        ExceptionHandlerResponse exception = ControllerRestAssuredMethods
-                .deletePassengerException(INVALID_PASSENGER_ID, HttpStatus.BAD_REQUEST);
-
-        assertExceptionResponse(exception, HttpStatus.BAD_REQUEST);
     }
 
     @Test

@@ -10,19 +10,20 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
+import java.util.UUID;
+
 public interface PassengerService {
 
-    PassengerResponse findById(@Positive(message = ID_NEGATIVE) Long id);
+    PassengerResponse findById(UUID id);
 
     PassengerPageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit);
 
     PassengerResponse create(@Valid PassengerRequest passengerRequest);
 
-    PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest,
-                                      @Positive(message = ID_NEGATIVE) Long id);
+    PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest, UUID id);
 
     void updateRate(RateChangeEventResponse event);
 
-    void delete(@Positive(message = ID_NEGATIVE) Long id);
+    void delete(@Positive(message = ID_NEGATIVE) UUID id);
 
 }

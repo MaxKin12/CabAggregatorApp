@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RequestMapping("/api/v1/passengers")
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +27,7 @@ public class PassengerController {
     private final PassengerService passengerService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PassengerResponse> getPassenger(@PathVariable("id") Long passengerId) {
+    public ResponseEntity<PassengerResponse> getPassenger(@PathVariable("id") UUID passengerId) {
         PassengerResponse passengerResponse = passengerService.findById(passengerId);
         return ResponseEntity.status(HttpStatus.OK).body(passengerResponse);
     }
@@ -47,13 +49,13 @@ public class PassengerController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<PassengerResponse> updatePassenger(@RequestBody PassengerRequest passengerRequest,
-                                                             @PathVariable("id") Long passengerId) {
+                                                             @PathVariable("id") UUID passengerId) {
         PassengerResponse passengerResponse = passengerService.updatePassenger(passengerRequest, passengerId);
         return ResponseEntity.status(HttpStatus.OK).body(passengerResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePassenger(@PathVariable("id") Long passengerId) {
+    public ResponseEntity<Void> deletePassenger(@PathVariable("id") UUID passengerId) {
         passengerService.delete(passengerId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

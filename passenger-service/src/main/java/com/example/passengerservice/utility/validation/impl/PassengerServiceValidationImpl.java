@@ -14,6 +14,8 @@ import com.example.passengerservice.utility.validation.PassengerServiceValidatio
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class PassengerServiceValidationImpl implements PassengerServiceValidation {
@@ -23,7 +25,7 @@ public class PassengerServiceValidationImpl implements PassengerServiceValidatio
     private final PassengerMapper passengerMapper;
 
     @Override
-    public Passenger findByIdOrThrow(Long id) {
+    public Passenger findByIdOrThrow(UUID id) {
         return passengerRepository.findById(id)
                 .orElseThrow(() -> new PassengerNotFoundException(PASSENGER_NOT_FOUND, id.toString()));
     }

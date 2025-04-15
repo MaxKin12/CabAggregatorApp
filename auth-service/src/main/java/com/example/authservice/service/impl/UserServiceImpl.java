@@ -12,13 +12,13 @@ import com.example.authservice.client.DriverClient;
 import com.example.authservice.client.PassengerClient;
 import com.example.authservice.configuration.properties.AuthServiceProperties;
 import com.example.authservice.configuration.properties.KeycloakProperties;
+import com.example.authservice.dto.external.ExternalEntityRequest;
 import com.example.authservice.dto.person.PersonResponse;
 import com.example.authservice.dto.user.AuthResponse;
 import com.example.authservice.dto.user.UserLoginRequest;
 import com.example.authservice.dto.user.UserPageResponse;
 import com.example.authservice.dto.person.PersonRequest;
 import com.example.authservice.dto.user.UserResponse;
-import com.example.authservice.dto.external.ExternalEntityResponse;
 import com.example.authservice.exception.custom.DuplicateUsersException;
 import com.example.authservice.exception.custom.ForbiddenAccessException;
 import com.example.authservice.exception.custom.InvalidRoleAssignmentException;
@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         user.setUsername(personRequest.username());
         user.setFirstName(personRequest.name());
+        user.setLastName("");
         user.setEmail(personRequest.email());
         user.setEmailVerified(true);
 
@@ -114,7 +115,7 @@ public class UserServiceImpl implements UserService {
     public PersonResponse createPerson(PersonRequest personRequest, String role) {
         PersonResponse personResponse = createUser(personRequest);
         log.info("User {} with role {} created", personRequest.username(), role);
-        ExternalEntityResponse externalResponse = userMapper.toExternalFromRequest(personRequest, personResponse.id());
+        ExternalEntityRequest externalResponse = userMapper.toExternalFromRequest(personRequest, personResponse.id());
 
 //        switch (role) {
 //            case PASSENGER -> passengerClient.createPassenger(externalResponse);

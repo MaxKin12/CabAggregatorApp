@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.UUID;
+
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional(readOnly = true)
-    public PassengerResponse findById(@Positive(message = ID_NEGATIVE) Long id) {
+    public PassengerResponse findById(UUID id) {
         Passenger passenger = validation.findByIdOrThrow(id);
         return passengerMapper.toResponse(passenger);
     }
@@ -57,8 +59,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest,
-                                             @Positive(message = ID_NEGATIVE) Long id) {
+    public PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest, UUID id) {
         Passenger passenger = validation.findByIdOrThrow(id);
         validation.updateOrThrow(passenger, passengerRequest);
         return passengerMapper.toResponse(passenger);
@@ -73,7 +74,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public void delete(@Positive(message = ID_NEGATIVE) Long id) {
+    public void delete(UUID id) {
         validation.findByIdOrThrow(id);
         passengerRepository.deleteById(id);
     }

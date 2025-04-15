@@ -4,9 +4,9 @@ import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record ExternalEntityResponse(
+public record ExternalEntityRequest(
 
-        String id,
+        UUID id,
         String name,
         String email,
         String phone,
