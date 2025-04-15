@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: gateway-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://${keycloak.domain}/realms/${keycloak.realm}"
+          jwk-set-uri: "http://${keycloak.domain}/realms/${keycloak.realm}/protocol/openid-connect/certs"
   cloud:
     gateway:
       routes:
@@ -23,6 +29,14 @@ spring:
           uri: lb://rates-service
           predicates:
             - Path=/api/v1/rates/**
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/v1/users/**
+
+keycloak:
+  realm: ${KEYCLOAK_REALM:cab-aggregator}
+  domain: ${KEYCLOAK_DOMAIN:localhost:8080}
 
 eureka:
   client:

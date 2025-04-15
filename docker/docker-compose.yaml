@@ -143,6 +143,8 @@ services:
       EUREKA_SERVICE_URL: http://eureka-service:8761/eureka/
       LOKI_URL: http://loki:3100
       ZIPKIN_URL: http://tempo:9411/api/v2/spans
+      KEYCLOAK_REALM: cab-aggregator
+      KEYCLOAK_DOMAIN: keycloak:8080
     networks:
       - app-net
     ports:
