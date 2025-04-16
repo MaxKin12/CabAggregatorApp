@@ -8,6 +8,7 @@ import com.example.ridesservice.exception.custom.FeignClientTemporarilyUnavailab
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import java.util.UUID;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -16,7 +17,7 @@ public interface DriverClient {
     @GetMapping("/drivers/{id}")
     @CircuitBreaker(name = "driverFeignClient", fallbackMethod = "throwExceptionThatTemporarilyUnavailableDriver")
     @Retry(name = "driverFeignClient", fallbackMethod = "throwExceptionThatTemporarilyUnavailableDriver")
-    DriverResponse getDriverById(@PathVariable("id") Long driverId);
+    DriverResponse getDriverById(@PathVariable("id") UUID driverId);
 
     @GetMapping("/cars/{id}")
     @CircuitBreaker(name = "driverFeignClient", fallbackMethod = "throwExceptionThatTemporarilyUnavailableCar")

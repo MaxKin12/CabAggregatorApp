@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RequestMapping("/api/v1/rides")
 @RestController
 @RequiredArgsConstructor
@@ -45,7 +47,7 @@ public class RideController {
 
     @GetMapping("/passenger/{id}")
     public ResponseEntity<RidePageResponse> getLastPassengerRides(
-            @PathVariable("id") Long passengerId,
+            @PathVariable("id") UUID passengerId,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
         RidePageResponse ridePageResponse = rideService
@@ -55,7 +57,7 @@ public class RideController {
 
     @GetMapping("/driver/{id}")
     public ResponseEntity<RidePageResponse> getLastDriverRides(
-            @PathVariable("id") Long passengerId,
+            @PathVariable("id") UUID passengerId,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
         RidePageResponse ridePageResponse = rideService

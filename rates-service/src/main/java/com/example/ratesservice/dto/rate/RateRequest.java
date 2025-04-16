@@ -20,12 +20,14 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
 public record RateRequest(
 
         @NotNull(message = PASSENGER_ID_NULL)
         @Positive(message = PASSENGER_ID_NEGATIVE)
-        Long passengerId,
+        UUID passengerId,
 
         @NotNull(message = RIDE_ID_NULL)
         @Positive(message = RIDE_ID_NEGATIVE)
@@ -33,7 +35,7 @@ public record RateRequest(
 
         @NotNull(message = DRIVER_ID_NULL)
         @Positive(message = DRIVER_ID_NEGATIVE)
-        Long driverId,
+        UUID driverId,
 
         @NotBlank(message = RECIPIENT_BLANK)
         @RecipientTypeValidation(enumClass = RecipientType.class)

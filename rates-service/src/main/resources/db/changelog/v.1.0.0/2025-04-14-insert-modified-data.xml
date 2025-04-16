@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="delete-initial-rates-data" author="MaxKin12">
+        <delete tableName="rates"/>
+    </changeSet>
+
+    <changeSet id="insert-new-rides-data" author="MaxKin12">
+        <insert tableName="rates">
+            <column name="id" value="1"/>
+            <column name="ride_id" value="1"/>
+            <column name="passenger_id" valueComputed="UNHEX(REPLACE('04f13490-2048-4b99-8514-17a4e90dc3ba', '-', ''))"/>
+            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
+            <column name="recipient" value="1"/>
+            <column name="value" value="5"/>
+            <column name="comment" value="So cool driver!"/>
+        </insert>
+        <insert tableName="rates">
+            <column name="id" value="2"/>
+            <column name="ride_id" value="1"/>
+            <column name="passenger_id" valueComputed="UNHEX(REPLACE('04f13490-2048-4b99-8514-17a4e90dc3ba', '-', ''))"/>
+            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
+            <column name="recipient" value="1"/>
+            <column name="value" value="0"/>
+            <column name="comment" value="Rude passenger..."/>
+        </insert>
+        <insert tableName="rates">
+            <column name="id" value="3"/>
+            <column name="ride_id" value="3"/>
+            <column name="passenger_id" valueComputed="UNHEX(REPLACE('0220f106-09a1-429c-a309-e7f99cf4499a', '-', ''))"/>
+            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
+            <column name="recipient" value="1"/>
+            <column name="value" value="4"/>
+        </insert>
+        <insert tableName="rates">
+            <column name="id" value="4"/>
+            <column name="ride_id" value="3"/>
+            <column name="passenger_id" valueComputed="UNHEX(REPLACE('0220f106-09a1-429c-a309-e7f99cf4499a', '-', ''))"/>
+            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
+            <column name="recipient" value="0"/>
+            <column name="value" value="5"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

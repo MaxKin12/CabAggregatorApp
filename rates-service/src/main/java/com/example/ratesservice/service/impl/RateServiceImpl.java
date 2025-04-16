@@ -1,7 +1,6 @@
 package com.example.ratesservice.service.impl;
 
 import static com.example.ratesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
-import static com.example.ratesservice.utility.constants.LogMessagesTemplate.EVENT_EXTRACTED_LOG_TEMPLATE;
 import static com.example.ratesservice.utility.constants.LogMessagesTemplate.EVENT_PLACED_LOG_TEMPLATE;
 
 import com.example.ratesservice.client.dto.RidesResponse;
@@ -27,6 +26,8 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -70,7 +71,7 @@ public class RateServiceImpl implements RateService {
     @Override
     @Transactional(readOnly = true)
     public RateAverageResponse findAverageRate(
-            @Positive(message = ID_NEGATIVE) Long personId,
+            UUID personId,
             RecipientType recipientType
     ) {
         List<Rate> ratePage = validation.getLastRatesPage(personId, recipientType);
@@ -115,7 +116,7 @@ public class RateServiceImpl implements RateService {
     @Transactional
     public void updateAverageRate(RateResponse rateResponse) {
         RecipientType recipientType = RecipientType.valueOf(rateResponse.recipient().toUpperCase());
-        Long recipientId = recipientType.equals(RecipientType.PASSENGER)
+        UUID recipientId = recipientType.equals(RecipientType.PASSENGER)
                 ? rateResponse.passengerId() : rateResponse.driverId();
         RateAverageResponse rateAverageResponse;
         try {

@@ -28,6 +28,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class RideServiceValidationImpl implements RideServiceValidation {
@@ -52,7 +54,7 @@ public class RideServiceValidationImpl implements RideServiceValidation {
     }
 
     @Override
-    public Page<Ride> findLastRidesPage(Long personId, PersonType personType, Integer limit) {
+    public Page<Ride> findLastRidesPage(UUID personId, PersonType personType, Integer limit) {
         return personType.equals(PersonType.PASSENGER)
                 ? rideRepository.findByPassengerId(
                         PageRequest.of(0, limit, Sort.by(Sort.Order.desc("id"))),
@@ -102,7 +104,7 @@ public class RideServiceValidationImpl implements RideServiceValidation {
     }
 
     @Override
-    public void checkPassengerExistence(Long id) {
+    public void checkPassengerExistence(UUID id) {
         passengerClient.getPassengerById(id);
     }
 
@@ -112,7 +114,7 @@ public class RideServiceValidationImpl implements RideServiceValidation {
     }
 
     @Override
-    public void checkDriverExistenceAndCarOwning(Long driverId, Long carId) {
+    public void checkDriverExistenceAndCarOwning(UUID driverId, Long carId) {
         DriverResponse driverResponse = driverClient.getDriverById(driverId);
         if (!driverResponse.carIds().contains(carId)) {
             throw new DriverNotContainsCarException(

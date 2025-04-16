@@ -32,7 +32,8 @@ public final class SqlConstants {
         "insert into rides" +
         "(id, passenger_id, driver_id, car_id, pick_up_address, destination_address, status, order_time, price)" +
         "values" +
-        "(:id, :passengerId, :driverId, :carId, :pickUpAddress, :destinationAddress, :status, :orderTime, :price);";
+        "(:id, UNHEX(REPLACE(':passengerId', '-', '')), UNHEX(REPLACE(':driverId', '-', '')), " +
+                ":carId, :pickUpAddress, :destinationAddress, :status, :orderTime, :price);";
 
     public final static SqlParameterSource INSERT_DATA_PARAMS = new MapSqlParameterSource()
             .addValue("id", RIDE_ID)
