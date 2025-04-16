@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,8 +31,8 @@ public final class RateTestData {
     public final static Long RIDE_ID = 1L;
     public final static Long RIDE_ID_2 = 2L;
     public final static Long RIDE_ID_CREATED = 1L;
-    public final static Long PASSENGER_ID = 1L;
-    public final static Long DRIVER_ID = 1L;
+    public final static UUID PASSENGER_ID = UUID.fromString("e5f3a033-51a5-4bc0-9443-2b63d5f59ca3");
+    public final static UUID DRIVER_ID = UUID.fromString("4ba41155-bcff-48d5-8675-bc0aac800e99");
     public final static Long EVENT_ID = 1L;
 
     public final static Integer VALUE = 5;

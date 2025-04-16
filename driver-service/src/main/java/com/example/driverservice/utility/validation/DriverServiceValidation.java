@@ -2,10 +2,11 @@ package com.example.driverservice.utility.validation;
 
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.model.entity.Driver;
+import java.util.UUID;
 
 public interface DriverServiceValidation {
 
-    Driver findByIdOrThrow(Long id);
+    Driver findByIdOrThrow(UUID id);
 
     int cutDownLimit(int limit);
 

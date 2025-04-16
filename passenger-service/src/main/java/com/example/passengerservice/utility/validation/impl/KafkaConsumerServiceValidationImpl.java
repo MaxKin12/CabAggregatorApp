@@ -12,6 +12,8 @@ import com.example.passengerservice.utility.validation.KafkaConsumerServiceValid
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class KafkaConsumerServiceValidationImpl implements KafkaConsumerServiceValidation {
@@ -19,7 +21,7 @@ public class KafkaConsumerServiceValidationImpl implements KafkaConsumerServiceV
     private final PassengerRepository passengerRepository;
 
     @Override
-    public Passenger findByIdOrThrow(Long id) {
+    public Passenger findByIdOrThrow(UUID id) {
         return passengerRepository.findById(id)
                 .orElseThrow(() -> new PassengerNotFoundException(PASSENGER_NOT_FOUND, id.toString()));
     }

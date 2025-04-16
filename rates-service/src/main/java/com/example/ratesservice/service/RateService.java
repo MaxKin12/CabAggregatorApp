@@ -12,13 +12,15 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
+import java.util.UUID;
+
 public interface RateService {
 
     RateResponse findById(@Positive(message = ID_NEGATIVE) Long id);
 
     RatePageResponse findAllByAuthor(@Min(0) Integer offset, @Min(1) Integer limit, RecipientType recipientType);
 
-    RateAverageResponse findAverageRate(@Positive(message = ID_NEGATIVE) Long driverId, RecipientType recipientType);
+    RateAverageResponse findAverageRate(UUID personId, RecipientType recipientType);
 
     RateResponse create(@Valid RateRequest rateRequest);
 

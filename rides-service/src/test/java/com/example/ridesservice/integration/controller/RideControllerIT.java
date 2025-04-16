@@ -16,7 +16,6 @@ import static com.example.ridesservice.configuration.constants.RideTestData.DRIV
 import static com.example.ridesservice.configuration.constants.RideTestData.INVALID_LIMIT;
 import static com.example.ridesservice.configuration.constants.RideTestData.INVALID_OFFSET;
 import static com.example.ridesservice.configuration.constants.RideTestData.INVALID_RIDE_ID;
-import static com.example.ridesservice.configuration.constants.RideTestData.INVALID_RIDE_REQUEST;
 import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT;
 import static com.example.ridesservice.configuration.constants.RideTestData.NOT_EXIST_RIDE_ID;
 import static com.example.ridesservice.configuration.constants.RideTestData.OFFSET;
@@ -154,14 +153,6 @@ class RideControllerIT extends MySqlTestContainer {
     }
 
     @Test
-    void createRide_InvalidRequest_ReturnsExceptionResponseWithBadRequestStatus() {
-        ExceptionHandlerResponse exception = ControllerRestAssuredMethods
-                .createRideException(INVALID_RIDE_REQUEST, HttpStatus.BAD_REQUEST);
-
-        assertExceptionResponse(exception, HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
     void updateRide_ValidRequestAndId_ReturnsValidResponseEntity() {
         setGetResponseStub(GET_PASSENGER_REQUEST_URL, PASSENGER_ID.toString(), PASSENGER_JSON_RESPONSE);
         setGetResponseStub(GET_DRIVER_REQUEST_URL, DRIVER_ID.toString(), DRIVER_JSON_RESPONSE);
@@ -177,14 +168,6 @@ class RideControllerIT extends MySqlTestContainer {
         assertThat(rideResponse)
                 .extracting(RideResponse::price, as(BIG_DECIMAL))
                 .isEqualByComparingTo(rideResponse.price());
-    }
-
-    @Test
-    void updateRide_InvalidRequest_ReturnsExceptionResponseWithBadRequestStatus() {
-        ExceptionHandlerResponse exception = ControllerRestAssuredMethods
-                .updateRideException(INVALID_RIDE_REQUEST, RIDE_ID, HttpStatus.BAD_REQUEST);
-
-        assertExceptionResponse(exception, HttpStatus.BAD_REQUEST);
     }
 
     @Test

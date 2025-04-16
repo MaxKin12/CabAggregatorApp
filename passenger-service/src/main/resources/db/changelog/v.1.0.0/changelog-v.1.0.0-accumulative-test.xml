@@ -10,5 +10,6 @@
 
     <include file="2025-01-23-create-table-passengers.xml" relativeToChangelogFile="true"/>
     <include file="2025-02-19-add-rate-column.xml" relativeToChangelogFile="true"/>
+    <include file="2025-04-14-edit-id-column.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

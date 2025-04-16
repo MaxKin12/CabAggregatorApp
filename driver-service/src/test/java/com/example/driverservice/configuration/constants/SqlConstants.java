@@ -29,16 +29,16 @@ public final class SqlConstants {
     public final static String SQL_DELETE_ALL_TEST_DATA_DRIVERS = "delete from drivers;";
     public final static String SQL_DELETE_ALL_TEST_DATA_CARS = "delete from cars;";
     public final static String SQL_INSERT_TEST_ENTITY_DATA_DRIVERS =
-            "insert into drivers (id, name, email, phone, sex, rate) values (" +
-                    DRIVER_ID + ", '" +
+            "insert into drivers (id, name, email, phone, sex, rate) values (UNHEX(REPLACE('" +
+                    DRIVER_ID + "', '-', '')), '" +
                     DRIVER_NAME + "', '" +
                     DRIVER_EMAIL + "', '" +
                     DRIVER_PHONE + "', " +
                     UserGender.MALE.getCode() + ", " +
                     DRIVER_RATE + ");\n";
     public final static String SQL_INSERT_TEST_ENTITY_DATA_DRIVERS_2 =
-            "insert into drivers (id, name, email, phone, sex, rate) values (" +
-                    DRIVER_ID_2 + ", '" +
+            "insert into drivers (id, name, email, phone, sex, rate) values (UNHEX(REPLACE('" +
+                    DRIVER_ID_2 + "', '-', '')), '" +
                     DRIVER_NAME_2 + "', '" +
                     DRIVER_EMAIL_2 + "', '" +
                     DRIVER_PHONE_2 + "', " +

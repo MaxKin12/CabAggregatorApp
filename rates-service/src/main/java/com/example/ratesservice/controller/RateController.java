@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RequestMapping("/api/v1/rates")
 @RestController
 @RequiredArgsConstructor
@@ -52,14 +54,14 @@ public class RateController {
     }
 
     @GetMapping("/passengers/{id}")
-    public ResponseEntity<RateAverageResponse> getAveragePassengerRate(@PathVariable("id") Long passengerId) {
+    public ResponseEntity<RateAverageResponse> getAveragePassengerRate(@PathVariable("id") UUID passengerId) {
         RateAverageResponse rateAverageResponse = rateService
                 .findAverageRate(passengerId, RecipientType.PASSENGER);
         return ResponseEntity.status(HttpStatus.OK).body(rateAverageResponse);
     }
 
     @GetMapping("/drivers/{id}")
-    public ResponseEntity<RateAverageResponse> getAverageDriverRate(@PathVariable("id") Long driverId) {
+    public ResponseEntity<RateAverageResponse> getAverageDriverRate(@PathVariable("id") UUID driverId) {
         RateAverageResponse rateAverageResponse = rateService
                 .findAverageRate(driverId, RecipientType.DRIVER);
         return ResponseEntity.status(HttpStatus.OK).body(rateAverageResponse);

@@ -29,13 +29,15 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.UUID;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RequiredArgsConstructor
 public class StepDefinitions {
 
     private final JdbcTemplate jdbcTemplate;
     private final ObjectMapper objectMapper;
-    private Long passengerId;
+    private UUID passengerId;
     private Response response;
     private PassengerRequest passengerRequest;
     private PassengerResponse actualResponse;
@@ -56,9 +58,9 @@ public class StepDefinitions {
         jdbcTemplate.execute(SQL_INSERT_TEST_ENTITY_DATA_2);
     }
 
-    @Given("passenger with id {long}")
-    public void givenPassengerWithId(Long id) {
-        passengerId = id;
+    @Given("passenger with id {string}")
+    public void givenPassengerWithId(String id) {
+        passengerId = UUID.fromString(id);
     }
 
     @Given("passenger's data for signing up")
@@ -67,10 +69,10 @@ public class StepDefinitions {
         passengerRequest = objectMapper.readValue(createPassengerJson, PassengerRequest.class);
     }
 
-    @Given("passenger's data for update with id {long}")
+    @Given("passenger's data for update with id {string}")
     @SneakyThrows
-    public void givenUpdatedPassengerData(Long id, String updatePassengerJson) {
-        passengerId = id;
+    public void givenUpdatedPassengerData(String id, String updatePassengerJson) {
+        passengerId = UUID.fromString(id);
         passengerRequest = objectMapper.readValue(updatePassengerJson, PassengerRequest.class);
     }
 

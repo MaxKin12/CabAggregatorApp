@@ -24,7 +24,8 @@ public final class SqlConstants {
 
     public final static String SQL_INSERT_TEST_DATA =
         "insert into rates(id, ride_id, passenger_id, driver_id, recipient, value, comment)" +
-        "values (:id, :rideId, :passengerId, :driverId, :recipient, :value, :comment);";
+        "values (:id, :rideId, UNHEX(REPLACE(':passengerId', '-', '')), UNHEX(REPLACE(':driverId', '-', '')), " +
+                ":recipient, :value, :comment);";
 
     public final static SqlParameterSource INSERT_DATA_PARAMS = new MapSqlParameterSource()
             .addValue("id", RATE_ID)

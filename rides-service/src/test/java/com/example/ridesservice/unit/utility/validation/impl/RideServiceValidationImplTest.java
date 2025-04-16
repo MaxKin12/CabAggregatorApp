@@ -49,6 +49,8 @@ import com.example.ridesservice.repository.RideRepository;
 import com.example.ridesservice.utility.validation.impl.RideServiceValidationImpl;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -134,7 +136,7 @@ class RideServiceValidationImplTest {
 
     @Test
     void findLastRidesPageTest_Passenger_ReturnsPage() {
-        Long passengerId = PASSENGER_ID;
+        UUID passengerId = PASSENGER_ID;
         PersonType personType = PersonType.PASSENGER;
         Page<Ride> ridePage = RIDE_PAGE;
 
@@ -148,7 +150,7 @@ class RideServiceValidationImplTest {
 
     @Test
     void findLastRidesPageTest_Driver_ReturnsPage() {
-        Long driverId = DRIVER_ID;
+        UUID driverId = DRIVER_ID;
         PersonType personType = PersonType.DRIVER;
         Page<Ride> ridePage = RIDE_PAGE;
 
@@ -222,7 +224,7 @@ class RideServiceValidationImplTest {
 
     @Test
     void checkPassengerExistenceTest_ValidPassenger_NoException() {
-        Long passengerId = PASSENGER_ID;
+        UUID passengerId = PASSENGER_ID;
         PassengerResponse passengerResponse = PassengerResponse.builder()
                 .id(passengerId)
                 .build();
@@ -236,7 +238,7 @@ class RideServiceValidationImplTest {
 
     @Test
     void checkDriverExistenceAndCarOwningTest_ValidDriverAndCar_NoException() {
-        Long driverId = DRIVER_ID;
+        UUID driverId = DRIVER_ID;
         Long carId = CAR_ID;
         DriverResponse driverResponse = DriverResponse.builder()
                 .id(driverId)
@@ -252,7 +254,7 @@ class RideServiceValidationImplTest {
 
     @Test
     void checkDriverExistenceAndCarOwningTest_InvalidCar_ThrowsException() {
-        Long driverId = DRIVER_ID;
+        UUID driverId = DRIVER_ID;
         Long carId = INVALID_RIDE_ID;
         DriverResponse driverResponse = DriverResponse.builder()
                 .id(driverId)

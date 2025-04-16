@@ -81,20 +81,6 @@ public final class ControllerRestAssuredMethods {
                 .as(RideResponse.class);
     }
 
-    public static ExceptionHandlerResponse createRideException(RideRequest rideRequest,
-                                                               HttpStatus httpStatus) {
-        return given()
-                .contentType(ContentType.JSON)
-                .body(rideRequest)
-                .when()
-                .post()
-                .then()
-                .statusCode(httpStatus.value())
-                .contentType(ContentType.JSON)
-                .extract()
-                .as(ExceptionHandlerResponse.class);
-    }
-
     public static RideResponse updateRide(RideRequest rideRequest, Long id) {
         return given()
                 .contentType(ContentType.JSON)

@@ -1,7 +1,5 @@
 package com.example.driverservice.service.impl;
 
-import static com.example.driverservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
-
 import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.dto.kafkaevent.RateChangeEventResponse;
@@ -14,7 +12,7 @@ import com.example.driverservice.service.DriverService;
 import com.example.driverservice.utility.validation.DriverServiceValidation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,7 +32,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional(readOnly = true)
-    public DriverResponse findById(@Positive(message = ID_NEGATIVE) Long id) {
+    public DriverResponse findById(UUID id) {
         Driver driver = validation.findByIdOrThrow(id);
         return driverMapper.toResponse(driver);
     }
@@ -51,14 +49,16 @@ public class DriverServiceImpl implements DriverService {
     @Transactional
     public DriverResponse create(@Valid DriverRequest driverRequest) {
         Driver driver = driverMapper.toDriver(driverRequest);
+        if (driver.getId() == null) {
+            driver.setId(UUID.randomUUID());
+        }
         Driver savedDriver = validation.saveOrThrow(driver);
         return driverMapper.toResponse(savedDriver);
     }
 
     @Override
     @Transactional
-    public DriverResponse updateDriver(@Valid DriverRequest driverRequest,
-                                       @Positive(message = ID_NEGATIVE) Long id) {
+    public DriverResponse updateDriver(@Valid DriverRequest driverRequest, UUID id) {
         Driver driver = validation.findByIdOrThrow(id);
         validation.updateOrThrow(driver, driverRequest);
         return driverMapper.toResponse(driver);
@@ -73,7 +73,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public void delete(@Positive(message = ID_NEGATIVE) Long id) {
+    public void delete(UUID id) {
         validation.findByIdOrThrow(id);
         driverRepository.deleteById(id);
     }

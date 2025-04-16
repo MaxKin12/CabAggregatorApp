@@ -1,13 +1,13 @@
 Feature: Driver management in driver-service
 
   Scenario: Find driver by id
-    Given driver with id 1
+    Given driver with id "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
     When searching driver by id
     Then received driver response has status 200
     And driver body equals to
     """
       {
-        "id": 1,
+        "id": "1377f946-6c0a-45eb-88a6-e9131c3c27ff",
         "name": "John Cena",
         "email": "john@gmail.com",
         "phone": "+375291111111",
@@ -18,7 +18,7 @@ Feature: Driver management in driver-service
     """
 
   Scenario: Invalid attempt to find driver by id
-    Given driver with id 20
+    Given driver with id "8ec2cea3-554e-4133-9d18-2aed95fe23c5"
     When searching driver by id
     Then received driver response has status 404
 
@@ -66,7 +66,7 @@ Feature: Driver management in driver-service
     Then received driver response has status 400
 
   Scenario: Update driver
-    Given driver's data for update with id 1
+    Given driver's data for update with id "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
     """
       {
         "name": "Pepe the Frog",
@@ -80,7 +80,7 @@ Feature: Driver management in driver-service
     And driver body equals to
     """
       {
-        "id": 1,
+        "id": "1377f946-6c0a-45eb-88a6-e9131c3c27ff",
         "name": "Pepe the Frog",
         "email": "john@gmail.com",
         "phone": "+375291111111",
@@ -91,7 +91,7 @@ Feature: Driver management in driver-service
     """
 
   Scenario: Invalid attempt to update driver (invalid id)
-    Given driver's data for update with id 20
+    Given driver's data for update with id "8ec2cea3-554e-4133-9d18-2aed95fe23c5"
     """
       {
         "name": "Pepe the Frog",
@@ -104,7 +104,7 @@ Feature: Driver management in driver-service
     Then received driver response has status 404
 
   Scenario: Invalid attempt to update driver (repeated data)
-    Given driver's data for update with id 1
+    Given driver's data for update with id "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
     """
       {
         "name": "Pepe the Frog",
@@ -117,12 +117,12 @@ Feature: Driver management in driver-service
     Then received driver response has status 400
 
   Scenario: Delete driver
-    Given driver with id 1
+    Given driver with id "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
     When deleting driver
     Then received driver response has status 204
     And check if driver is deleted in db
 
   Scenario: Invalid attempt to delete driver
-    Given driver with id 20
+    Given driver with id "8ec2cea3-554e-4133-9d18-2aed95fe23c5"
     When deleting driver
     Then received driver response has status 404

@@ -11,6 +11,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.UUID;
+
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
@@ -26,7 +28,7 @@ public interface CarMapper {
     void updateCarFromDto(CarRequest carRequest, @MappingTarget Car car);
 
     @Named("driverIdToDriver")
-    default Driver driverIdToDriver(Long id) {
+    default Driver driverIdToDriver(UUID id) {
         Driver driver = new Driver();
         driver.setId(id);
         return driver;

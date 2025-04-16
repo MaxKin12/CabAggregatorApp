@@ -44,6 +44,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.UUID;
+
 @ExtendWith(MockitoExtension.class)
 class PassengerServiceImplTest {
 
@@ -64,7 +66,7 @@ class PassengerServiceImplTest {
 
     @Test
     void findByIdTest_ValidId_ReturnsValidResponseEntity() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         Passenger passenger = PASSENGER;
         PassengerResponse passengerResponse = PASSENGER_RESPONSE;
 
@@ -83,7 +85,7 @@ class PassengerServiceImplTest {
 
     @Test
     void findByIdTest_InvalidId_ThrowsException() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id))
@@ -187,7 +189,7 @@ class PassengerServiceImplTest {
 
     @Test
     void updatePassengerTest_ValidIdAndRequestEntity_ReturnsValidResponseEntity() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         PassengerRequest passengerRequest = PASSENGER_REQUEST;
         Passenger passenger = PASSENGER;
         PassengerResponse passengerResponseUpdated = PASSENGER_RESPONSE;
@@ -209,7 +211,7 @@ class PassengerServiceImplTest {
 
     @Test
     void updatePassengerTest_InvalidId_ThrowsEntityNotFoundException() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id))
@@ -226,7 +228,7 @@ class PassengerServiceImplTest {
 
     @Test
     void updatePassengerTest_ValidIdButInvalidAttemptToUpdateEntity_ThrowsDbModificationAttemptException() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         PassengerRequest passengerRequest = PASSENGER_REQUEST;
         Passenger passenger = PASSENGER;
         String[] args = new String[] {ATTEMPT_CHANGE_UPDATE, EXCEPTION_MESSAGE};
@@ -276,7 +278,7 @@ class PassengerServiceImplTest {
 
     @Test
     void deleteTest_ValidId_EntityIsDeleted() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
 
         when(validation.findByIdOrThrow(id)).thenReturn(PASSENGER);
         doNothing().when(passengerRepository).deleteById(id);
@@ -290,7 +292,7 @@ class PassengerServiceImplTest {
 
     @Test
     void deleteTest_InvalidId_ThrowsException() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id)).thenThrow(new PassengerNotFoundException(PASSENGER_NOT_FOUND, args));

@@ -5,6 +5,7 @@ import com.example.ratesservice.dto.rate.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.model.Rate;
 import java.util.List;
+import java.util.UUID;
 
 public interface RateServiceValidation {
 
@@ -18,16 +19,16 @@ public interface RateServiceValidation {
 
     RidesResponse getRideById(Long id);
 
-    void checkPassengerExistence(Long id);
+    void checkPassengerExistence(UUID id);
 
-    void checkDriverExistence(Long id);
+    void checkDriverExistence(UUID id);
 
     void checkRidesRules(RidesResponse ridesResponse, Rate rate);
 
     void checkRateExistence(Rate rate);
 
-    double countAverage(List<Rate> ratePage, Long personId, RecipientType recipientType);
+    double countAverage(List<Rate> ratePage, UUID personId, RecipientType recipientType);
 
-    List<Rate> getLastRatesPage(Long personId, RecipientType recipientType);
+    List<Rate> getLastRatesPage(UUID personId, RecipientType recipientType);
 
 }

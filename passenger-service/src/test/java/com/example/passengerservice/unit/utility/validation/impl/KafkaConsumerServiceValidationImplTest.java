@@ -21,6 +21,8 @@ import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
 import com.example.passengerservice.utility.validation.impl.KafkaConsumerServiceValidationImpl;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +40,7 @@ class KafkaConsumerServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_ValidId_ReturnsPassenger() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
 
         when(passengerRepository.findById(id)).thenReturn(Optional.of(PASSENGER));
 
@@ -53,7 +55,7 @@ class KafkaConsumerServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_InvalidId_ThrowsException() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
         when(passengerRepository.findById(id)).thenReturn(Optional.empty());

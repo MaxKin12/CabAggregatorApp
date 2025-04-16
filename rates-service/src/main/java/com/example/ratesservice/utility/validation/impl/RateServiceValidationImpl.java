@@ -26,6 +26,8 @@ import com.example.ratesservice.repository.RateRepository;
 import com.example.ratesservice.utility.validation.RateServiceValidation;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -78,12 +80,12 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     }
 
     @Override
-    public void checkPassengerExistence(Long id) {
+    public void checkPassengerExistence(UUID id) {
         passengerClient.getPassengerById(id);
     }
 
     @Override
-    public void checkDriverExistence(Long id) {
+    public void checkDriverExistence(UUID id) {
         driverClient.getDriverById(id);
     }
 
@@ -106,7 +108,7 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     }
 
     @Override
-    public double countAverage(List<Rate> ratePage, Long personId, RecipientType recipientType) {
+    public double countAverage(List<Rate> ratePage, UUID personId, RecipientType recipientType) {
         return ratePage
                 .stream()
                 .mapToDouble(Rate::getValue)
@@ -117,7 +119,7 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     }
 
     @Override
-    public List<Rate> getLastRatesPage(Long personId, RecipientType recipientType) {
+    public List<Rate> getLastRatesPage(UUID personId, RecipientType recipientType) {
         return recipientType.equals(RecipientType.PASSENGER)
                 ? rateRepository.findByPassengerIdAndRecipient(
                         PageRequest.of(0, properties.lastRidesCount(),

@@ -11,7 +11,7 @@ Feature: Car management in driver-service
         "brand": "Toyota",
         "number": "1234AB-3",
         "color": "Red",
-        "driverId": 1
+        "driverId": "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
       }
     """
 
@@ -31,7 +31,7 @@ Feature: Car management in driver-service
         "brand": "BMW",
         "number": "1012TP-7",
         "color": "Yellow",
-        "driverId": 2
+        "driverId": "7757fc43-a2c4-4504-b464-bf61b293af72"
       }
     """
     When saving car
@@ -43,7 +43,7 @@ Feature: Car management in driver-service
         "brand": "BMW",
         "number": "1012TP-7",
         "color": "Yellow",
-        "driverId": 2
+        "driverId": "7757fc43-a2c4-4504-b464-bf61b293af72"
       }
     """
     And check if created car in db
@@ -55,7 +55,7 @@ Feature: Car management in driver-service
         "brand": "BMW",
         "number": "1234AB-3",
         "color": "Yellow",
-        "driverId": 2
+        "driverId": "7757fc43-a2c4-4504-b464-bf61b293af72"
       }
     """
     When saving car
@@ -68,7 +68,7 @@ Feature: Car management in driver-service
         "brand": "Toyota",
         "number": "1234AB-3",
         "color": "Pink",
-        "driverId": 1
+        "driverId": "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
       }
     """
     When updating car
@@ -80,7 +80,7 @@ Feature: Car management in driver-service
         "brand": "Toyota",
         "number": "1234AB-3",
         "color": "Pink",
-        "driverId": 1
+        "driverId": "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
       }
     """
 
@@ -91,7 +91,7 @@ Feature: Car management in driver-service
         "brand": "Toyota",
         "number": "1234AB-3",
         "color": "Pink",
-        "driverId": 1
+        "driverId": "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
       }
     """
     When updating car
@@ -104,7 +104,7 @@ Feature: Car management in driver-service
         "brand": "Toyota",
         "number": "1234AB-5",
         "color": "Pink",
-        "driverId": 1
+        "driverId": "1377f946-6c0a-45eb-88a6-e9131c3c27ff"
       }
     """
     When updating car

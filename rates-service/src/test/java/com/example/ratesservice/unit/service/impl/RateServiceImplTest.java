@@ -48,6 +48,8 @@ import com.example.ratesservice.utility.validation.RateServiceValidation;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -138,7 +140,7 @@ class RateServiceImplTest {
 
     @Test
     void findAverageRate_ValidParameters_ReturnsRateAverageResponse() {
-        Long personId = DRIVER_ID;
+        UUID personId = DRIVER_ID;
         RecipientType recipientType = RecipientType.DRIVER;
         List<Rate> rateList = Collections.singletonList(new Rate());
         BigDecimal averageDecimal = AVERAGE_RATE;
@@ -160,7 +162,7 @@ class RateServiceImplTest {
 
     @Test
     void findAverageRate_EmptyRateList_ThrowsRateListIsEmptyException() {
-        Long personId = DRIVER_ID;
+        UUID personId = DRIVER_ID;
         RecipientType recipientType = RecipientType.DRIVER;
         String[] args = new String[]{personId.toString()};
 

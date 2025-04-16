@@ -13,12 +13,12 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
 public record RideBookingRequest(
 
-        @NotNull(message = PASSENGER_ID_NULL)
-        @Positive(message = PASSENGER_ID_NEGATIVE)
-        Long passengerId,
+        UUID passengerId,
 
         @NotBlank(message = PICK_UP_ADDRESS_BLANK)
         @Size(max = 100, message = PICK_UP_ADDRESS_TOO_LONG)

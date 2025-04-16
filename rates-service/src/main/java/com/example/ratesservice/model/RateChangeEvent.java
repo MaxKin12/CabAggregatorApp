@@ -12,6 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +38,7 @@ public class RateChangeEvent {
     private Long eventId;
 
     @Column(name = "recipient_id", nullable = false)
-    private Long recipientId;
+    private UUID recipientId;
 
     @Column(name = "recipient_type", nullable = false)
     @Convert(converter = RecipientTypeConverter.class)

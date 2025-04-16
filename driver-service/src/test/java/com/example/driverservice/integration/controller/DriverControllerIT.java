@@ -4,7 +4,6 @@ import static com.example.driverservice.configuration.constants.GeneralUtilityCo
 import static com.example.driverservice.configuration.constants.GeneralUtilityConstants.ID_PARAMETER_NAME;
 import static com.example.driverservice.configuration.constants.DriverTestData.INVALID_LIMIT;
 import static com.example.driverservice.configuration.constants.DriverTestData.INVALID_OFFSET;
-import static com.example.driverservice.configuration.constants.DriverTestData.INVALID_DRIVER_ID;
 import static com.example.driverservice.configuration.constants.DriverTestData.INVALID_DRIVER_REQUEST;
 import static com.example.driverservice.configuration.constants.DriverTestData.LIMIT;
 import static com.example.driverservice.configuration.constants.DriverTestData.NOT_EXIST_DRIVER_ID;
@@ -67,14 +66,6 @@ public class DriverControllerIT extends MySqlTestContainer {
         assertThat(driverResponse)
                 .usingRecursiveComparison()
                 .isEqualTo(DRIVER_RESPONSE);
-    }
-
-    @Test
-    void getDriver_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
-        ExceptionHandlerResponse exception = ControllerRestAssuredMethods
-                .getEntityException(INVALID_DRIVER_ID, HttpStatus.BAD_REQUEST);
-
-        assertExceptionResponse(exception, HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -145,14 +136,6 @@ public class DriverControllerIT extends MySqlTestContainer {
     }
 
     @Test
-    void updateDriver_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
-        ExceptionHandlerResponse exception = ControllerRestAssuredMethods
-                .updateEntityException(DRIVER_REQUEST_UPDATED, INVALID_DRIVER_ID, HttpStatus.BAD_REQUEST);
-
-        assertExceptionResponse(exception, HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
     void updateDriver_DriverNotFound_ReturnsExceptionResponseWithNotFoundStatus() {
         ExceptionHandlerResponse exception = ControllerRestAssuredMethods
                 .updateEntityException(DRIVER_REQUEST_UPDATED, NOT_EXIST_DRIVER_ID, HttpStatus.NOT_FOUND);
@@ -163,14 +146,6 @@ public class DriverControllerIT extends MySqlTestContainer {
     @Test
     void deleteDriver_ValidId_ReturnsVoid() {
         ControllerRestAssuredMethods.deleteEntity(DRIVER_ID);
-    }
-
-    @Test
-    void deleteDriver_InvalidId_ReturnsExceptionResponseWithBadRequestStatus() {
-        ExceptionHandlerResponse exception = ControllerRestAssuredMethods
-                .deleteEntityException(INVALID_DRIVER_ID, HttpStatus.BAD_REQUEST);
-
-        assertExceptionResponse(exception, HttpStatus.BAD_REQUEST);
     }
 
     @Test

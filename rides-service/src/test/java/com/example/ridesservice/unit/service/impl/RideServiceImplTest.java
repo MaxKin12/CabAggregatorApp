@@ -5,6 +5,7 @@ import static com.example.ridesservice.configuration.constants.RideTestData.INVA
 import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT;
 import static com.example.ridesservice.configuration.constants.RideTestData.LIMIT_CUT;
 import static com.example.ridesservice.configuration.constants.RideTestData.OFFSET;
+import static com.example.ridesservice.configuration.constants.RideTestData.PASSENGER_ID;
 import static com.example.ridesservice.configuration.constants.RideTestData.PRICE;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE;
 import static com.example.ridesservice.configuration.constants.RideTestData.RIDE_BOOKING_REQUEST;
@@ -49,6 +50,8 @@ import com.example.ridesservice.utility.pricecounter.PriceCounter;
 import com.example.ridesservice.utility.validation.RideServiceValidation;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -143,7 +146,7 @@ class RideServiceImplTest {
         int offset = OFFSET;
         int limit = LIMIT;
         int limitCut = LIMIT_CUT;
-        Long personId = RIDE_ID;
+        UUID personId = PASSENGER_ID;
         PersonType personType = PersonType.PASSENGER;
         Page<Ride> ridePage = RIDE_PAGE;
         RidePageResponse ridePageResponse = RIDE_PAGE_RESPONSE;
