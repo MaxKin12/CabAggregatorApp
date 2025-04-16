@@ -23,11 +23,8 @@ import java.util.UUID;
 @Builder
 public record RideRequest(
 
-        @NotNull(message = PASSENGER_ID_NULL)
-        @Positive(message = PASSENGER_ID_NEGATIVE)
         UUID passengerId,
 
-        @Positive(message = DRIVER_ID_NEGATIVE)
         UUID driverId,
 
         @Positive(message = CAR_ID_NEGATIVE)

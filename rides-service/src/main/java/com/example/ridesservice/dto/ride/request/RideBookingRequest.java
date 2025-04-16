@@ -18,8 +18,6 @@ import java.util.UUID;
 @Builder
 public record RideBookingRequest(
 
-        @NotNull(message = PASSENGER_ID_NULL)
-        @Positive(message = PASSENGER_ID_NEGATIVE)
         UUID passengerId,
 
         @NotBlank(message = PICK_UP_ADDRESS_BLANK)

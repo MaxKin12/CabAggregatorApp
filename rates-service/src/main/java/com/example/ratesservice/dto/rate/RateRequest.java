@@ -25,16 +25,12 @@ import java.util.UUID;
 @Builder
 public record RateRequest(
 
-        @NotNull(message = PASSENGER_ID_NULL)
-        @Positive(message = PASSENGER_ID_NEGATIVE)
         UUID passengerId,
 
         @NotNull(message = RIDE_ID_NULL)
         @Positive(message = RIDE_ID_NEGATIVE)
         Long rideId,
 
-        @NotNull(message = DRIVER_ID_NULL)
-        @Positive(message = DRIVER_ID_NEGATIVE)
         UUID driverId,
 
         @NotBlank(message = RECIPIENT_BLANK)

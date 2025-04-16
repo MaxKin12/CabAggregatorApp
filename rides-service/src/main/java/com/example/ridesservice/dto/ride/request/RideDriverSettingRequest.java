@@ -11,7 +11,6 @@ import java.util.UUID;
 @Builder
 public record RideDriverSettingRequest(
 
-        @Positive(message = DRIVER_ID_NEGATIVE)
         UUID driverId,
 
         @Positive(message = CAR_ID_NEGATIVE)
