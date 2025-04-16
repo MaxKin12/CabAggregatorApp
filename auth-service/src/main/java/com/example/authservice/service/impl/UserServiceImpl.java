@@ -7,6 +7,8 @@ import static com.example.authservice.utility.constants.InternationalizationExce
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.FORBIDDEN_ATTEMPT_TO_CREATE_USER;
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_TO_ASSIGN_ROLE;
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.INVALID_ATTEMPT_TO_CREATE_USER;
+import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.LOGIN_EXCEPTION;
+import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.REFRESH_TOKEN_EXCEPTION;
 
 import com.example.authservice.client.DriverClient;
 import com.example.authservice.client.PassengerClient;
@@ -18,12 +20,15 @@ import com.example.authservice.dto.user.AuthResponse;
 import com.example.authservice.dto.user.UserLoginRequest;
 import com.example.authservice.dto.user.UserPageResponse;
 import com.example.authservice.dto.person.PersonRequest;
+import com.example.authservice.dto.user.UserRefreshRequest;
 import com.example.authservice.dto.user.UserResponse;
 import com.example.authservice.enums.PersonType;
 import com.example.authservice.exception.custom.DuplicateUsersException;
 import com.example.authservice.exception.custom.ForbiddenAccessException;
 import com.example.authservice.exception.custom.InvalidRoleAssignmentException;
 import com.example.authservice.exception.custom.InvalidUserCreationException;
+import com.example.authservice.exception.custom.LoginAttemptException;
+import com.example.authservice.exception.custom.RefreshTokenException;
 import com.example.authservice.mapper.UserMapper;
 import com.example.authservice.service.UserService;
 import jakarta.validation.constraints.Min;
@@ -31,6 +36,7 @@ import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,13 +51,23 @@ import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final RestTemplate restTemplate;
     private final Keycloak keycloak;
     private final UserMapper userMapper;
     private final DriverClient driverClient;
@@ -232,8 +248,39 @@ public class UserServiceImpl implements UserService {
                     .expirationTime(tokens.getExpiresIn())
                     .build();
         } catch (Exception e) {
-            log.error("ex: {}", e.getMessage());
-            throw e;
+            throw new LoginAttemptException(LOGIN_EXCEPTION, e.getMessage());
+        }
+    }
+
+    @Override
+    public AuthResponse refreshTokens(UserRefreshRequest refreshRequest) {
+        String tokenEndpoint = String.format("%s/realms/%s/protocol/openid-connect/token",
+                keycloakProperties.authServerUrl(),
+                keycloakProperties.realm());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("client_id", keycloakProperties.adminClientId());
+        body.add("client_secret", keycloakProperties.adminClientSecret());
+        body.add("grant_type", OAuth2Constants.REFRESH_TOKEN);
+        body.add("refresh_token", refreshRequest.refreshToken());
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+
+        try {
+            ResponseEntity<Map<String, Object>> response = restTemplate
+                    .exchange(tokenEndpoint, HttpMethod.POST, request, new ParameterizedTypeReference<>() {});
+            Map<String, Object> responseBody = response.getBody();
+
+            return AuthResponse.builder()
+                    .accessToken((String) responseBody.get("access_token"))
+                    .refreshToken((String) responseBody.get("refresh_token"))
+                    .expirationTime(((Integer) responseBody.get("expires_in")).longValue())
+                    .build();
+        } catch (Exception e) {
+            throw new RefreshTokenException(REFRESH_TOKEN_EXCEPTION, e.getMessage());
         }
     }
 

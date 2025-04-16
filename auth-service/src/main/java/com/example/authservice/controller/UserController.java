@@ -8,6 +8,7 @@ import com.example.authservice.dto.user.AuthResponse;
 import com.example.authservice.dto.user.UserLoginRequest;
 import com.example.authservice.dto.user.UserPageResponse;
 import com.example.authservice.dto.person.PersonRequest;
+import com.example.authservice.dto.user.UserRefreshRequest;
 import com.example.authservice.dto.user.UserResponse;
 import com.example.authservice.service.UserService;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -39,6 +40,12 @@ public class UserController {
     @RateLimiter(name = "loginRestRequest")
     public ResponseEntity<AuthResponse> login(@RequestBody UserLoginRequest loginRequest) {
         AuthResponse authResponse = userService.login(loginRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(authResponse);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody UserRefreshRequest refreshRequest) {
+        AuthResponse authResponse = userService.refreshTokens(refreshRequest);
         return ResponseEntity.status(HttpStatus.OK).body(authResponse);
     }
 

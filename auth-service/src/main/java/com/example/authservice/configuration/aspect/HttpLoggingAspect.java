@@ -40,17 +40,17 @@ public class HttpLoggingAspect {
                 requestBody);
 
         long startTime = System.currentTimeMillis();
-        ResponseEntity<?> response = (ResponseEntity<?>) joinPoint.proceed();
-        long duration = System.currentTimeMillis() - startTime;
-
-
-        String responseBody = serializeToJson(response);
-        log.info(RESPONSE_LOG_TEMPLATE,
-                request.getMethod(),
-                response.getStatusCode(),
-                request.getRequestURI(),
-                responseBody,
-                duration);
+        Object response = joinPoint.proceed();
+        if (response instanceof ResponseEntity<?> responseEntity) {
+            String responseBody = serializeToJson(responseEntity);
+            long duration = System.currentTimeMillis() - startTime;
+            log.info(RESPONSE_LOG_TEMPLATE,
+                    request.getMethod(),
+                    responseEntity.getStatusCode(),
+                    request.getRequestURI(),
+                    responseBody,
+                    duration);
+        }
         return response;
     }
 

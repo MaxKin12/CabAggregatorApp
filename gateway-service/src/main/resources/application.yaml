@@ -38,6 +38,12 @@ keycloak:
   realm: ${KEYCLOAK_REALM:cab-aggregator}
   domain: ${KEYCLOAK_DOMAIN:localhost:8080}
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
 eureka:
   client:
     service-url:

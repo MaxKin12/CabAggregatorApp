@@ -1,4 +1,4 @@
-package com.example.authservice.configuration.security;
+package com.example.gatewayservice.configuration;
 
 import java.util.Collection;
 import java.util.Collections;
