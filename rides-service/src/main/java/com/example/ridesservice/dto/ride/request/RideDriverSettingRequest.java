@@ -6,11 +6,12 @@ import static com.example.ridesservice.utility.constants.InternationalizationVal
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
 public record RideDriverSettingRequest(
 
-        @Positive(message = DRIVER_ID_NEGATIVE)
-        Long driverId,
+        UUID driverId,
 
         @Positive(message = CAR_ID_NEGATIVE)
         Long carId

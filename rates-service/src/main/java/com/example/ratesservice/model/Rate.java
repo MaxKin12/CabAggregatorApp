@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,10 +40,10 @@ public class Rate {
     private Long rideId;
 
     @Column(name = "passenger_id", nullable = false)
-    private Long passengerId;
+    private UUID passengerId;
 
     @Column(name = "driver_id", nullable = false)
-    private Long driverId;
+    private UUID driverId;
 
     @Column(name = "recipient")
     @Convert(converter = RecipientTypeConverter.class)

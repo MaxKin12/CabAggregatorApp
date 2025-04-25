@@ -13,13 +13,15 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
+import java.util.UUID;
+
 public interface RideService {
 
     RideResponse findById(@Positive(message = ID_NEGATIVE) Long id);
 
     RidePageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit);
 
-    RidePageResponse findLastPersonRides(@Positive(message = ID_NEGATIVE) Long passengerId, @Min(1) Integer limit,
+    RidePageResponse findLastPersonRides(UUID passengerId, @Min(1) Integer limit,
                                          PersonType personType);
 
     RideResponse create(@Valid RideRequest rideRequest);

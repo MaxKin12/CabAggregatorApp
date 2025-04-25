@@ -1,7 +1,5 @@
 package com.example.passengerservice.service.impl;
 
-import static com.example.passengerservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
-
 import com.example.passengerservice.dto.kafkaevent.RateChangeEventResponse;
 import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;
@@ -14,7 +12,7 @@ import com.example.passengerservice.service.PassengerService;
 import com.example.passengerservice.utility.validation.PassengerServiceValidation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,7 +32,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional(readOnly = true)
-    public PassengerResponse findById(@Positive(message = ID_NEGATIVE) Long id) {
+    public PassengerResponse findById(UUID id) {
         Passenger passenger = validation.findByIdOrThrow(id);
         return passengerMapper.toResponse(passenger);
     }
@@ -51,15 +49,17 @@ public class PassengerServiceImpl implements PassengerService {
     @Transactional
     public PassengerResponse create(@Valid PassengerRequest passengerRequest) {
         Passenger passenger = passengerMapper.toPassenger(passengerRequest);
+        if (passenger.getId() == null) {
+            passenger.setId(UUID.randomUUID());
+        }
         Passenger savedPassenger = validation.saveOrThrow(passenger);
         return passengerMapper.toResponse(savedPassenger);
     }
 
     @Override
     @Transactional
-    public PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest,
-                                             @Positive(message = ID_NEGATIVE) Long id) {
-        Passenger passenger = validation.findByIdOrThrow(id);
+    public PassengerResponse updatePassenger(@Valid PassengerRequest passengerRequest, UUID passengerId) {
+        Passenger passenger = validation.findByIdOrThrow(passengerId);
         validation.updateOrThrow(passenger, passengerRequest);
         return passengerMapper.toResponse(passenger);
     }
@@ -73,9 +73,9 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public void delete(@Positive(message = ID_NEGATIVE) Long id) {
-        validation.findByIdOrThrow(id);
-        passengerRepository.deleteById(id);
+    public void delete(UUID passengerId) {
+        validation.findByIdOrThrow(passengerId);
+        passengerRepository.deleteById(passengerId);
     }
 
 }

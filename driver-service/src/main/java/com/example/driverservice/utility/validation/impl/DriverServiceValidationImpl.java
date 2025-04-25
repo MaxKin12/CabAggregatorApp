@@ -11,6 +11,7 @@ import com.example.driverservice.mapper.driver.DriverMapper;
 import com.example.driverservice.model.entity.Driver;
 import com.example.driverservice.repository.DriverRepository;
 import com.example.driverservice.utility.validation.DriverServiceValidation;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class DriverServiceValidationImpl implements DriverServiceValidation {
     private final DriverMapper driverMapper;
 
     @Override
-    public Driver findByIdOrThrow(Long id) {
+    public Driver findByIdOrThrow(UUID id) {
         return driverRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(DRIVER_NOT_FOUND, id.toString()));
     }

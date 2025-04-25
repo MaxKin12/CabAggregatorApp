@@ -41,6 +41,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.UUID;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RequiredArgsConstructor
 public class StepDefinitions {
@@ -64,18 +66,18 @@ public class StepDefinitions {
         jdbcTemplate.execute(SQL_DELETE_ALL_TEST_DATA);
     }
 
-    @Given("{string} with id {long} wants to rate {int} the ride {long} with driver {long} and left the comment {string}")
+    @Given("{string} with id {string} wants to rate {int} the ride {long} with driver {string} and left the comment {string}")
     public void withIdWantsToRateTheRideWithDriverAndLeftTheComment(
             String givenRecipientType,
-            Long givenPassengerId,
+            String givenPassengerId,
             Integer givenRateValue,
             Long givenRideId,
-            Long givenDriverId,
+            String givenDriverId,
             String givenComment) {
         rateRequest = RateRequest.builder()
-                .passengerId(givenPassengerId)
+                .passengerId(UUID.fromString(givenPassengerId))
                 .rideId(givenRideId)
-                .driverId(givenDriverId)
+                .driverId(UUID.fromString(givenDriverId))
                 .recipient(givenRecipientType)
                 .value(givenRateValue)
                 .comment(givenComment)

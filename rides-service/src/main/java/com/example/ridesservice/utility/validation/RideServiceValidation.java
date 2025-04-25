@@ -7,13 +7,15 @@ import com.example.ridesservice.enums.PersonType;
 import com.example.ridesservice.model.Ride;
 import org.springframework.data.domain.Page;
 
+import java.util.UUID;
+
 public interface RideServiceValidation {
 
     int cutDownLimit(int limit);
 
     Ride findByIdOrThrow(Long id);
 
-    Page<Ride> findLastRidesPage(Long personId, PersonType personType, Integer limit);
+    Page<Ride> findLastRidesPage(UUID personId, PersonType personType, Integer limit);
 
     Ride saveOrThrow(Ride ride);
 
@@ -23,11 +25,11 @@ public interface RideServiceValidation {
 
     void updateStatusOrThrow(Ride ride, RideStatusRequest rideRequest);
 
-    void checkPassengerExistence(Long id);
+    void checkPassengerExistence(UUID id);
 
     void checkCarExistence(Long id);
 
-    void checkDriverExistenceAndCarOwning(Long driverId, Long carId);
+    void checkDriverExistenceAndCarOwning(UUID driverId, Long carId);
 
     void checkStatusTransitionAllowed(Ride ride, RideStatusRequest rideRequest);
 

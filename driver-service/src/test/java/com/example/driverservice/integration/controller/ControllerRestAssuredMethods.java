@@ -10,12 +10,25 @@ import com.example.driverservice.dto.EntityRequest;
 import com.example.driverservice.dto.EntityResponse;
 import com.example.driverservice.dto.exception.ExceptionHandlerResponse;
 import io.restassured.http.ContentType;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ControllerRestAssuredMethods {
+
+    public static <T extends EntityResponse> T getEntity(UUID id, Class<T> clazz) {
+        return given()
+                .pathParam(ID_PARAMETER_NAME, id)
+                .when()
+                .get(ENDPOINT_WITH_ID)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .extract()
+                .as(clazz);
+    }
 
     public static <T extends EntityResponse> T getEntity(Long id, Class<T> clazz) {
         return given()
@@ -27,6 +40,18 @@ public final class ControllerRestAssuredMethods {
                 .contentType(ContentType.JSON)
                 .extract()
                 .as(clazz);
+    }
+
+    public static ExceptionHandlerResponse getEntityException(UUID id, HttpStatus httpStatus) {
+        return given()
+                .pathParam(ID_PARAMETER_NAME, id)
+                .when()
+                .get(ENDPOINT_WITH_ID)
+                .then()
+                .statusCode(httpStatus.value())
+                .contentType(ContentType.JSON)
+                .extract()
+                .as(ExceptionHandlerResponse.class);
     }
 
     public static ExceptionHandlerResponse getEntityException(Long id, HttpStatus httpStatus) {
@@ -98,6 +123,24 @@ public final class ControllerRestAssuredMethods {
 
     public static <T extends EntityResponse, G extends EntityRequest> T updateEntity(
             G passengerRequest,
+            UUID id,
+            Class<T> clazz
+    ) {
+        return given()
+                .contentType(ContentType.JSON)
+                .body(passengerRequest)
+                .pathParam(ID_PARAMETER_NAME, id)
+                .when()
+                .patch(ENDPOINT_WITH_ID)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .extract()
+                .as(clazz);
+    }
+
+    public static <T extends EntityResponse, G extends EntityRequest> T updateEntity(
+            G passengerRequest,
             Long id,
             Class<T> clazz
     ) {
@@ -112,6 +155,24 @@ public final class ControllerRestAssuredMethods {
                 .contentType(ContentType.JSON)
                 .extract()
                 .as(clazz);
+    }
+
+    public static <G extends EntityRequest> ExceptionHandlerResponse updateEntityException(
+            G passengerRequest,
+            UUID id,
+            HttpStatus httpStatus
+    ) {
+        return given()
+                .contentType(ContentType.JSON)
+                .body(passengerRequest)
+                .pathParam(ID_PARAMETER_NAME, id)
+                .when()
+                .patch(ENDPOINT_WITH_ID)
+                .then()
+                .statusCode(httpStatus.value())
+                .contentType(ContentType.JSON)
+                .extract()
+                .as(ExceptionHandlerResponse.class);
     }
 
     public static <G extends EntityRequest> ExceptionHandlerResponse updateEntityException(
@@ -132,6 +193,15 @@ public final class ControllerRestAssuredMethods {
                 .as(ExceptionHandlerResponse.class);
     }
 
+    public static void deleteEntity(UUID id) {
+        given()
+                .pathParam(ID_PARAMETER_NAME, id)
+                .when()
+                .delete(ENDPOINT_WITH_ID)
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
     public static void deleteEntity(Long id) {
         given()
                 .pathParam(ID_PARAMETER_NAME, id)
@@ -139,6 +209,18 @@ public final class ControllerRestAssuredMethods {
                 .delete(ENDPOINT_WITH_ID)
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    public static ExceptionHandlerResponse deleteEntityException(UUID id, HttpStatus httpStatus) {
+        return given()
+                .pathParam(ID_PARAMETER_NAME, id)
+                .when()
+                .delete(ENDPOINT_WITH_ID)
+                .then()
+                .statusCode(httpStatus.value())
+                .contentType(ContentType.JSON)
+                .extract()
+                .as(ExceptionHandlerResponse.class);
     }
 
     public static ExceptionHandlerResponse deleteEntityException(Long id, HttpStatus httpStatus) {

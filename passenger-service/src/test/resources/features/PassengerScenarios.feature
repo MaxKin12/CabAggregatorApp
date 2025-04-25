@@ -1,13 +1,13 @@
 Feature: Passenger management in passenger-service
 
   Scenario: Find passenger by id
-    Given passenger with id 1
+    Given passenger with id "04f13490-2048-4b99-8514-17a4e90dc3ba"
     When searching passenger by id
     Then received response has status 200
     And body equals to
     """
       {
-        "id": 1,
+        "id": "04f13490-2048-4b99-8514-17a4e90dc3ba",
         "name": "John Cena",
         "email": "john@gmail.com",
         "phone": "+375291111111",
@@ -16,7 +16,7 @@ Feature: Passenger management in passenger-service
     """
 
   Scenario: Invalid attempt to find passenger by id
-    Given passenger with id 20
+    Given passenger with id "0220f106-09a1-429c-a309-e7f99cf4499a"
     When searching passenger by id
     Then received response has status 404
 
@@ -60,7 +60,7 @@ Feature: Passenger management in passenger-service
     Then received response has status 400
 
   Scenario: Update passenger
-    Given passenger's data for update with id 1
+    Given passenger's data for update with id "04f13490-2048-4b99-8514-17a4e90dc3ba"
     """
       {
         "name": "Kermit the Frog",
@@ -73,7 +73,7 @@ Feature: Passenger management in passenger-service
     And body equals to
     """
       {
-        "id": 1,
+        "id": "04f13490-2048-4b99-8514-17a4e90dc3ba",
         "name": "Kermit the Frog",
         "email": "some@email1.com",
         "phone": "+375291110001",
@@ -82,7 +82,7 @@ Feature: Passenger management in passenger-service
     """
 
   Scenario: Invalid attempt to update passenger (invalid id)
-    Given passenger's data for update with id 20
+    Given passenger's data for update with id "0220f106-09a1-429c-a309-e7f99cf4499a"
     """
       {
         "name": "Kermit the Frog",
@@ -94,7 +94,7 @@ Feature: Passenger management in passenger-service
     Then received response has status 404
 
   Scenario: Invalid attempt to update passenger (repeated data)
-    Given passenger's data for update with id 1
+    Given passenger's data for update with id "04f13490-2048-4b99-8514-17a4e90dc3ba"
     """
       {
         "name": "Kermit the Frog",
@@ -106,12 +106,12 @@ Feature: Passenger management in passenger-service
     Then received response has status 400
 
   Scenario: Delete passenger
-    Given passenger with id 1
+    Given passenger with id "04f13490-2048-4b99-8514-17a4e90dc3ba"
     When deleting passenger
     Then received response has status 204
     And check if deleted in db
 
   Scenario: Invalid attempt to delete passenger
-    Given passenger with id 20
+    Given passenger with id "0220f106-09a1-429c-a309-e7f99cf4499a"
     When deleting passenger
     Then received response has status 404

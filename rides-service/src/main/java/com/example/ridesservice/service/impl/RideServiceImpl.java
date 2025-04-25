@@ -23,6 +23,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,7 +63,7 @@ public class RideServiceImpl implements RideService {
     @Override
     @Transactional(readOnly = true)
     public RidePageResponse findLastPersonRides(
-            @Positive(message = ID_NEGATIVE) Long personId,
+            UUID personId,
             @Min(1) Integer limit,
             PersonType personType
     ) {
