@@ -8,7 +8,7 @@ scrape_configs:
 
   - job_name: gateway-service-metrics
     static_configs:
-      - targets: [ "host.docker.internal:8080", "gateway-service:8080" ]
+      - targets: [ "host.docker.internal:9090", "gateway-service:9090" ]
     metrics_path: "/actuator/prometheus"
     scrape_interval: 60s
 
@@ -33,5 +33,11 @@ scrape_configs:
   - job_name: "rates-service-metrics"
     static_configs:
       - targets: [ "rates-service:8084" ]
+    metrics_path: "/actuator/prometheus"
+    scrape_interval: 60s
+
+  - job_name: "auth-service-metrics"
+    static_configs:
+      - targets: [ "auth-service:8086" ]
     metrics_path: "/actuator/prometheus"
     scrape_interval: 60s

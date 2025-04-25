@@ -1,0 +1,112 @@
+server:
+  port: 8086
+
+auth-service:
+  max-page-limit: ${PAGE_RESPONSE_LIMIT_SIZE:50}
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: ${DB_AUTH_URL:jdbc:postgresql://localhost:5432/auth_service}
+    username: ${DB_AUTH_USERNAME:user}
+    password: ${DB_AUTH_PASSWORD:123456789abc}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://${keycloak.domain}/realms/${keycloak.realm}"
+          jwk-set-uri: "http://${keycloak.domain}/realms/${keycloak.realm}/protocol/openid-connect/certs"
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type.descriptor.sql.BasicBinder: TRACE
+
+
+springdoc:
+  api-docs:
+    path: /api/v1/users/api-docs
+  swagger-ui:
+    path: /api/v1/users/swagger-ui.html
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8761/eureka/}
+
+keycloak:
+  realm: ${KEYCLOAK_REALM:cab-aggregator}
+  domain: ${KEYCLOAK_DOMAIN:localhost:8080}
+  admin-client-id: ${ADMIN_CLIENT_ID:admin-client}
+  admin-client-secret: ${ADMIN_CLIENT_SECRET:8pEFEmfOofwarXWWUYtjglwYUwoonHv3}
+  auth-server-url: http://${keycloak.domain}
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://localhost:9411/api/v2/spans}
+  tracing:
+    sampling:
+      probability: 1.0
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        sliding-window-size: 9
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 15s
+        permitted-number-of-calls-in-half-open-state: 6
+        ignore-exceptions:
+          - com.example.authservice.exception.external.ExternalServiceClientBadRequest
+          - com.example.authservice.exception.external.ExternalServiceEntityNotFoundException
+    instances:
+      passengerFeignClient:
+        base-config: default
+      driverFeignClient:
+        base-config: default
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 500ms
+        ignore-exceptions:
+          - com.example.authservice.exception.external.ExternalServiceClientBadRequest
+          - com.example.authservice.exception.external.ExternalServiceEntityNotFoundException
+    instances:
+      passengerFeignClient:
+        base-config: default
+      driverFeignClient:
+        base-config: default
+  ratelimiter:
+    configs:
+      default:
+        limitRefreshPeriod: 60s
+        limitForPeriod: 5
+    instances:
+      loginRestRequest:
+        base-config: default
