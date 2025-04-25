@@ -23,12 +23,10 @@ public class HttpLoggingAspect {
             pointcut = "@within(org.springframework.web.bind.annotation.RestControllerAdvice))",
             returning = "result"
     )
-    public Object logRequestAndResponseForExceptionHandler(
-            Object result
-    ) {
+    public Object logRequestAndResponseForExceptionHandler(Object result) {
         ResponseEntity<?> response = (ResponseEntity<?>) result;
-        String responseBody = serializeToJson(response);
-        log.info(EXCEPTION_RESPONSE_LOG_TEMPLATE,
+        String responseBody = serializeToJson(response.getBody());
+        log.warn(EXCEPTION_RESPONSE_LOG_TEMPLATE,
                 response.getStatusCode(),
                 responseBody);
         return response;
@@ -41,7 +39,7 @@ public class HttpLoggingAspect {
         try {
             return jsonMapper.writeValueAsString(object);
         } catch (Exception e) {
-            log.error(INVALID_SERIALISATION_ATTEMPT, e);
+            log.warn(INVALID_SERIALISATION_ATTEMPT, e);
             return INVALID_SERIALISATION_ATTEMPT;
         }
     }

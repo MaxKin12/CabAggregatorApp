@@ -5,6 +5,7 @@ import static com.example.passengerservice.utility.constants.Internationalizatio
 import com.example.passengerservice.dto.exception.ExceptionHandlerResponse;
 import com.example.passengerservice.exception.custom.DbModificationAttemptException;
 import com.example.passengerservice.exception.custom.PassengerNotFoundException;
+import com.example.passengerservice.exception.custom.ResourceSecurityViolationException;
 import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
+        ResourceSecurityViolationException.class
+    })
+    public ResponseEntity<ExceptionHandlerResponse> handleForbiddenException(Exception e) {
+        return getExceptionResponse(e, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler({
         Exception.class
     })
     public ResponseEntity<ExceptionHandlerResponse> handleOtherExceptions(Exception e) {
@@ -47,7 +55,8 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ExceptionHandlerResponse> getExceptionResponse(Exception e, HttpStatus httpStatus) {
-        return new ResponseEntity<>(new ExceptionHandlerResponse(
+        return new ResponseEntity<>(
+                new ExceptionHandlerResponse(
                     httpStatus.value(),
                     getExceptionMessage(e),
                     LocalDateTime.now()),

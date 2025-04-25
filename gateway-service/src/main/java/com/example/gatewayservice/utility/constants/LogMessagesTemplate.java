@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 public final class LogMessagesTemplate {
 
     public static final String EXCEPTION_RESPONSE_LOG_TEMPLATE =
-            "Gateway exception response | Status code: {} | Response args: {}";
+            "Gateway exception response | Status code: {} | Response body: {}";
+    public static final String USER_ID_HEADER_ADDED =
+            "Add user id header GlobalFilter: header added with value ({})";
+    public static final String USER_ID_HEADER_SKIPPED =
+            "Add user id header GlobalFilter: header not added";
 
 }

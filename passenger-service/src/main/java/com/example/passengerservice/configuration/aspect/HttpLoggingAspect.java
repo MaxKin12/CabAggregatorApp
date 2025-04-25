@@ -4,7 +4,7 @@ import static com.example.passengerservice.utility.constants.Internationalizatio
 import static com.example.passengerservice.utility.constants.LogMessagesTemplate.EXCEPTION_RESPONSE_LOG_TEMPLATE;
 import static com.example.passengerservice.utility.constants.LogMessagesTemplate.REQUEST_LOG_TEMPLATE;
 import static com.example.passengerservice.utility.constants.LogMessagesTemplate.RESPONSE_LOG_TEMPLATE;
-import static com.example.passengerservice.utility.constants.LogMessagesTemplate.SERIALISATION_DELIMITER;
+import static com.example.passengerservice.utility.constants.UtilConstants.SERIALISATION_DELIMITER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,7 +43,7 @@ public class HttpLoggingAspect {
         ResponseEntity<?> response = (ResponseEntity<?>) joinPoint.proceed();
         long duration = System.currentTimeMillis() - startTime;
 
-        String responseBody = serializeToJson(response);
+        String responseBody = serializeToJson(response.getBody());
         log.info(RESPONSE_LOG_TEMPLATE,
                 request.getMethod(),
                 response.getStatusCode(),
@@ -57,13 +57,11 @@ public class HttpLoggingAspect {
             pointcut = "@within(org.springframework.web.bind.annotation.RestControllerAdvice))",
             returning = "result"
     )
-    public Object logRequestAndResponseForExceptionHandler(
-            Object result
-    ) {
+    public Object logRequestAndResponseForExceptionHandler(Object result) {
         HttpServletRequest httpRequest = getCurrentHttpRequest();
         ResponseEntity<?> response = (ResponseEntity<?>) result;
-        String responseBody = serializeToJson(response);
-        log.info(EXCEPTION_RESPONSE_LOG_TEMPLATE,
+        String responseBody = serializeToJson(response.getBody());
+        log.warn(EXCEPTION_RESPONSE_LOG_TEMPLATE,
                 httpRequest.getMethod(),
                 response.getStatusCode(),
                 httpRequest.getRequestURI(),
