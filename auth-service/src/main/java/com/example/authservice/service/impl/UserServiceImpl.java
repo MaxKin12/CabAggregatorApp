@@ -12,8 +12,6 @@ import static com.example.authservice.utility.constants.InternationalizationExce
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.LOGOUT_EXCEPTION;
 import static com.example.authservice.utility.constants.InternationalizationExceptionVariablesConstants.REFRESH_TOKEN_EXCEPTION;
 
-import com.example.authservice.client.DriverClient;
-import com.example.authservice.client.PassengerClient;
 import com.example.authservice.configuration.properties.AuthServiceProperties;
 import com.example.authservice.configuration.properties.KeycloakProperties;
 import com.example.authservice.dto.external.ExternalEntityRequest;
@@ -34,6 +32,8 @@ import com.example.authservice.exception.custom.LoginAttemptException;
 import com.example.authservice.exception.custom.LogoutException;
 import com.example.authservice.exception.custom.RefreshTokenException;
 import com.example.authservice.mapper.UserMapper;
+import com.example.authservice.service.ResilientDriverClientService;
+import com.example.authservice.service.ResilientPassengerClientService;
 import com.example.authservice.service.UserService;
 import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.ForbiddenException;
@@ -74,8 +74,8 @@ public class UserServiceImpl implements UserService {
     private final RestTemplate restTemplate;
     private final Keycloak keycloak;
     private final UserMapper userMapper;
-    private final DriverClient driverClient;
-    private final PassengerClient passengerClient;
+    private final ResilientPassengerClientService passengerClient;
+    private final ResilientDriverClientService driverClient;
     private final KeycloakProperties keycloakProperties;
     private final AuthServiceProperties authServiceProperties;
 
