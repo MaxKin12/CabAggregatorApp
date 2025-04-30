@@ -1,14 +1,13 @@
-package com.example.ratesservice.dto.rate;
-
-import lombok.Builder;
+package com.example.ratesservice.dto.rate.response;
 
 import java.util.UUID;
+import lombok.Builder;
 
 @Builder
 public record RateResponse(
 
-        Long id,
-        Long rideId,
+        UUID id,
+        UUID rideId,
         UUID passengerId,
         UUID driverId,
         String recipient,

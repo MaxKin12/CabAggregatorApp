@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.example.ridesservice.client.exception.ExternalServiceEntityNotFoundException;
+import com.example.ridesservice.exception.external.ExternalServiceEntityNotFoundException;
 import com.example.ridesservice.dto.ride.request.RideBookingRequest;
 import com.example.ridesservice.dto.ride.request.RideDriverSettingRequest;
 import com.example.ridesservice.dto.ride.request.RideRequest;

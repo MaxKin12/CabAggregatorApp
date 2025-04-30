@@ -1,14 +1,13 @@
 package com.example.ratesservice.service.impl;
 
-import static com.example.ratesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
 import static com.example.ratesservice.utility.constants.LogMessagesTemplate.EVENT_PLACED_LOG_TEMPLATE;
 
-import com.example.ratesservice.client.dto.RidesResponse;
-import com.example.ratesservice.dto.rate.RateAverageResponse;
-import com.example.ratesservice.dto.rate.RatePageResponse;
-import com.example.ratesservice.dto.rate.RateRequest;
-import com.example.ratesservice.dto.rate.RateResponse;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.external.RidesResponse;
+import com.example.ratesservice.dto.rate.response.RateAverageResponse;
+import com.example.ratesservice.dto.rate.response.RatePageResponse;
+import com.example.ratesservice.dto.rate.request.RateRequest;
+import com.example.ratesservice.dto.rate.response.RateResponse;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.exception.custom.RateListIsEmptyException;
 import com.example.ratesservice.mapper.rate.RateAverageMapper;
@@ -22,12 +21,10 @@ import com.example.ratesservice.service.RateService;
 import com.example.ratesservice.utility.validation.RateServiceValidation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -51,7 +48,7 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional(readOnly = true)
-    public RateResponse findById(@Positive(message = ID_NEGATIVE) Long id) {
+    public RateResponse findById(UUID id) {
         Rate rate = validation.findByIdOrThrow(id);
         return rateMapper.toResponse(rate);
     }
@@ -70,10 +67,7 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional(readOnly = true)
-    public RateAverageResponse findAverageRate(
-            UUID personId,
-            RecipientType recipientType
-    ) {
+    public RateAverageResponse findAverageRate(UUID personId, RecipientType recipientType) {
         List<Rate> ratePage = validation.getLastRatesPage(personId, recipientType);
         double average = validation.countAverage(ratePage, personId, recipientType);
         BigDecimal averageDecimal = BigDecimal.valueOf(average).setScale(2, RoundingMode.CEILING);
@@ -97,8 +91,7 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional
-    public RateResponse update(@Valid RateUpdateRequest rateUpdateRequest,
-                               @Positive(message = ID_NEGATIVE) Long id) {
+    public RateResponse update(@Valid RateUpdateRequest rateUpdateRequest, UUID id) {
         Rate rate = validation.findByIdOrThrow(id);
         validation.updateOrThrow(rate, rateUpdateRequest);
         return rateMapper.toResponse(rate);
@@ -106,7 +99,7 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional
-    public RateResponse delete(@Positive(message = ID_NEGATIVE) Long id) {
+    public RateResponse delete(UUID id) {
         Rate rate = validation.findByIdOrThrow(id);
         rateRepository.deleteById(id);
         return rateMapper.toResponse(rate);

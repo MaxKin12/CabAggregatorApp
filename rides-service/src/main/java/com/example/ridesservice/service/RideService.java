@@ -1,7 +1,5 @@
 package com.example.ridesservice.service;
 
-import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
-
 import com.example.ridesservice.dto.ride.request.RideBookingRequest;
 import com.example.ridesservice.dto.ride.request.RideDriverSettingRequest;
 import com.example.ridesservice.dto.ride.request.RideRequest;
@@ -11,29 +9,26 @@ import com.example.ridesservice.dto.ride.response.RideResponse;
 import com.example.ridesservice.enums.PersonType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
-
 import java.util.UUID;
 
 public interface RideService {
 
-    RideResponse findById(@Positive(message = ID_NEGATIVE) Long id);
+    RideResponse findById(UUID id);
 
     RidePageResponse findAll(@Min(0) Integer offset, @Min(1) Integer limit);
 
-    RidePageResponse findLastPersonRides(UUID passengerId, @Min(1) Integer limit,
-                                         PersonType personType);
+    RidePageResponse findLastPersonRides(UUID passengerId, @Min(1) Integer limit, PersonType personType);
 
     RideResponse create(@Valid RideRequest rideRequest);
 
     RideResponse bookRide(@Valid RideBookingRequest rideRequest);
 
-    RideResponse update(@Valid RideRequest rideRequest, @Positive(message = ID_NEGATIVE) Long id);
+    RideResponse update(@Valid RideRequest rideRequest, UUID id);
 
     RideResponse setDriverToRide(@Valid RideDriverSettingRequest rideRequest);
 
-    RideResponse updateStatus(@Valid RideStatusRequest rideRequest, @Positive(message = ID_NEGATIVE) Long id);
+    RideResponse updateStatus(@Valid RideStatusRequest rideRequest, UUID id);
 
-    void delete(@Positive(message = ID_NEGATIVE) Long id);
+    void delete(UUID id);
 
 }

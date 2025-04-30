@@ -1,7 +1,7 @@
 package com.example.ratesservice.utility.validation;
 
-import com.example.ratesservice.client.dto.RidesResponse;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.external.RidesResponse;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.model.Rate;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface RateServiceValidation {
 
-    Rate findByIdOrThrow(Long id);
+    Rate findByIdOrThrow(UUID id);
 
     int cutDownLimit(int limit);
 
@@ -17,7 +17,7 @@ public interface RateServiceValidation {
 
     void updateOrThrow(Rate rate, RateUpdateRequest rateUpdateRequest);
 
-    RidesResponse getRideById(Long id);
+    RidesResponse getRideById(UUID id);
 
     void checkPassengerExistence(UUID id);
 

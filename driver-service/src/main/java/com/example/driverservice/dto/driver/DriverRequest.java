@@ -20,6 +20,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.UUID;
 import lombok.Builder;
+
 @Builder
 public record DriverRequest(
 

@@ -1,4 +1,4 @@
-package com.example.ratesservice.client.dto;
+package com.example.ratesservice.dto.external;
 
 import java.math.BigDecimal;
 import java.util.UUID;

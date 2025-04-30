@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RideRepository extends JpaRepository<Ride, Long> {
+public interface RideRepository extends JpaRepository<Ride, UUID> {
 
     Page<Ride> findByPassengerId(PageRequest pageRequest, UUID passengerId);
 

@@ -1,4 +1,4 @@
-package com.example.ridesservice.client.dto;
+package com.example.ratesservice.dto.external;
 
 import java.time.LocalDateTime;
 

@@ -32,9 +32,9 @@ import static org.mockito.Mockito.when;
 
 import com.example.ridesservice.client.driver.DriverClient;
 import com.example.ridesservice.client.passenger.PassengerClient;
-import com.example.ridesservice.client.dto.DriverResponse;
-import com.example.ridesservice.client.dto.PassengerResponse;
-import com.example.ridesservice.client.exception.DriverNotContainsCarException;
+import com.example.ridesservice.dto.external.DriverResponse;
+import com.example.ridesservice.dto.external.PassengerResponse;
+import com.example.ridesservice.exception.external.DriverNotContainsCarException;
 import com.example.ridesservice.configuration.properties.RideServiceProperties;
 import com.example.ridesservice.dto.ride.request.RideRequest;
 import com.example.ridesservice.dto.ride.request.RideStatusRequest;

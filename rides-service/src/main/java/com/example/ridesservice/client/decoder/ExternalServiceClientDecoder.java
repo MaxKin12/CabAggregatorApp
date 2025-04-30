@@ -3,10 +3,10 @@ package com.example.ridesservice.client.decoder;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.EXTERNAL_SERVICE_ERROR;
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.SERVICE_UNAVAILABLE;
 
-import com.example.ridesservice.client.dto.ExternalServiceExceptionHandlerResponse;
-import com.example.ridesservice.client.exception.ExternalServiceClientBadRequest;
-import com.example.ridesservice.client.exception.ExternalServiceEntityNotFoundException;
-import com.example.ridesservice.client.exception.ExternalServiceUnknownInternalServerError;
+import com.example.ridesservice.dto.external.ExternalServiceExceptionHandlerResponse;
+import com.example.ridesservice.exception.external.ExternalServiceClientBadRequest;
+import com.example.ridesservice.exception.external.ExternalServiceEntityNotFoundException;
+import com.example.ridesservice.exception.external.ExternalServiceUnknownInternalServerError;
 import com.example.ridesservice.exception.custom.FeignClientTemporarilyUnavailable;
 import com.example.ridesservice.utility.validation.FeignClientDecoderValidation;
 import feign.Response;

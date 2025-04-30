@@ -9,12 +9,12 @@ import static com.example.ratesservice.utility.constants.InternationalizationExc
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.RATE_NOT_FOUND;
 
 import com.example.ratesservice.client.driver.DriverClient;
-import com.example.ratesservice.client.dto.RidesResponse;
-import com.example.ratesservice.client.exception.InvalidRideContentException;
+import com.example.ratesservice.dto.external.RidesResponse;
+import com.example.ratesservice.exception.external.InvalidRideContentException;
 import com.example.ratesservice.client.passenger.PassengerClient;
 import com.example.ratesservice.client.rides.RidesClient;
 import com.example.ratesservice.configuration.properties.RateServiceProperties;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
@@ -45,7 +45,7 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     private final RidesClient ridesClient;
 
     @Override
-    public Rate findByIdOrThrow(Long id) {
+    public Rate findByIdOrThrow(UUID id) {
         return rateRepository.findById(id)
                 .orElseThrow(() -> new RateNotFoundException(RATE_NOT_FOUND, id.toString()));
     }
@@ -75,7 +75,7 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     }
 
     @Override
-    public RidesResponse getRideById(Long id) {
+    public RidesResponse getRideById(UUID id) {
         return ridesClient.getRideById(id);
     }
 

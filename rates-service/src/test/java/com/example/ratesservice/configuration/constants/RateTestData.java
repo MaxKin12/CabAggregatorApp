@@ -1,11 +1,11 @@
 package com.example.ratesservice.configuration.constants;
 
 import com.example.ratesservice.dto.kafkaevent.RateChangeEventResponse;
-import com.example.ratesservice.dto.rate.RateAverageResponse;
-import com.example.ratesservice.dto.rate.RatePageResponse;
-import com.example.ratesservice.dto.rate.RateRequest;
-import com.example.ratesservice.dto.rate.RateResponse;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.rate.response.RateAverageResponse;
+import com.example.ratesservice.dto.rate.response.RatePageResponse;
+import com.example.ratesservice.dto.rate.request.RateRequest;
+import com.example.ratesservice.dto.rate.response.RateResponse;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.model.Rate;
 import com.example.ratesservice.model.RateChangeEvent;

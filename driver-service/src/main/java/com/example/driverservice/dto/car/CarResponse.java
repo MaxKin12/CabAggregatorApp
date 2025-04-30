@@ -7,7 +7,7 @@ import lombok.Builder;
 @Builder
 public record CarResponse(
 
-        Long id,
+        UUID id,
         String brand,
         String number,
         String color,

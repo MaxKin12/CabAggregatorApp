@@ -2,7 +2,7 @@ package com.example.ridesservice.client.passenger;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.PASSENGER_SERVICE_IN_OPENED_STATE;
 
-import com.example.ridesservice.client.dto.PassengerResponse;
+import com.example.ridesservice.dto.external.PassengerResponse;
 import com.example.ridesservice.exception.custom.FeignClientTemporarilyUnavailable;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;

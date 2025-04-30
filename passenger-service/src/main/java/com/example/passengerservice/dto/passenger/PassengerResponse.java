@@ -2,7 +2,6 @@ package com.example.passengerservice.dto.passenger;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-
 import lombok.Builder;
 
 @Builder

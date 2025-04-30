@@ -1,4 +1,4 @@
-package com.example.ratesservice.dto.rate;
+package com.example.ratesservice.dto.rate.request;
 
 import static com.example.ratesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.COMMENT_TOO_LONG;
 import static com.example.ratesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.VALUE_NULL;

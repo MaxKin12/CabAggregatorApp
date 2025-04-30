@@ -1,6 +1,6 @@
 package com.example.ratesservice.mapper.rate;
 
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.model.Rate;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

@@ -1,12 +1,13 @@
 package com.example.ratesservice.controller;
 
-import com.example.ratesservice.dto.rate.RateAverageResponse;
-import com.example.ratesservice.dto.rate.RatePageResponse;
-import com.example.ratesservice.dto.rate.RateRequest;
-import com.example.ratesservice.dto.rate.RateResponse;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.rate.response.RateAverageResponse;
+import com.example.ratesservice.dto.rate.response.RatePageResponse;
+import com.example.ratesservice.dto.rate.request.RateRequest;
+import com.example.ratesservice.dto.rate.response.RateResponse;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.service.RateService;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @RequestMapping("/api/v1/rates")
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class RateController {
     private final RateService rateService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RateResponse> getRate(@PathVariable("id") Long rateId) {
+    public ResponseEntity<RateResponse> getRate(@PathVariable("id") UUID rateId) {
         RateResponse rateResponse = rateService.findById(rateId);
         return ResponseEntity.status(HttpStatus.OK).body(rateResponse);
     }
@@ -76,14 +75,14 @@ public class RateController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<RateResponse> updateRate(@RequestBody RateUpdateRequest rateUpdateRequest,
-                                                   @PathVariable("id") Long rateId) {
+                                                   @PathVariable("id") UUID rateId) {
         RateResponse rateResponse = rateService.update(rateUpdateRequest, rateId);
         rateService.updateAverageRate(rateResponse);
         return ResponseEntity.status(HttpStatus.OK).body(rateResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRate(@PathVariable("id") Long rateId) {
+    public ResponseEntity<Void> deleteRate(@PathVariable("id") UUID rateId) {
         RateResponse rateResponse = rateService.delete(rateId);
         rateService.updateAverageRate(rateResponse);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

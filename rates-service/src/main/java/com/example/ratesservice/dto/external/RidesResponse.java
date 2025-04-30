@@ -1,18 +1,17 @@
-package com.example.ratesservice.client.dto;
+package com.example.ratesservice.dto.external;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
 import lombok.Builder;
 
 @Builder
 public record RidesResponse(
 
-        Long id,
+        UUID id,
         UUID passengerId,
         UUID driverId,
-        Long carId,
+        UUID carId,
         String pickUpAddress,
         String destinationAddress,
         String status,

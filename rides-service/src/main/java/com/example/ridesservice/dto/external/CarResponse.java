@@ -1,10 +1,10 @@
-package com.example.ridesservice.client.dto;
+package com.example.ridesservice.dto.external;
 
 import java.util.UUID;
 
 public record CarResponse(
 
-        Long id,
+        UUID id,
         String brand,
         String number,
         String color,

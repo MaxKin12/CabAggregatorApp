@@ -11,6 +11,7 @@ import com.example.driverservice.mapper.car.CarMapper;
 import com.example.driverservice.model.entity.Car;
 import com.example.driverservice.repository.CarRepository;
 import com.example.driverservice.utility.validation.CarServiceValidation;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class CarServiceValidationImpl implements CarServiceValidation {
     private final CarMapper carMapper;
 
     @Override
-    public Car findByIdOrThrow(Long id) {
+    public Car findByIdOrThrow(UUID id) {
         return carRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(CAR_NOT_FOUND, id.toString()));
     }

@@ -5,15 +5,14 @@ import com.example.ridesservice.dto.ride.request.RideRequest;
 import com.example.ridesservice.dto.ride.request.RideStatusRequest;
 import com.example.ridesservice.enums.PersonType;
 import com.example.ridesservice.model.Ride;
-import org.springframework.data.domain.Page;
-
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 
 public interface RideServiceValidation {
 
     int cutDownLimit(int limit);
 
-    Ride findByIdOrThrow(Long id);
+    Ride findByIdOrThrow(UUID id);
 
     Page<Ride> findLastRidesPage(UUID personId, PersonType personType, Integer limit);
 
@@ -27,9 +26,9 @@ public interface RideServiceValidation {
 
     void checkPassengerExistence(UUID id);
 
-    void checkCarExistence(Long id);
+    void checkCarExistence(UUID id);
 
-    void checkDriverExistenceAndCarOwning(UUID driverId, Long carId);
+    void checkDriverExistenceAndCarOwning(UUID driverId, UUID carId);
 
     void checkStatusTransitionAllowed(Ride ride, RideStatusRequest rideRequest);
 

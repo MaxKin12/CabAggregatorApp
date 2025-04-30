@@ -9,10 +9,10 @@ import static com.example.ratesservice.configuration.constants.GeneralUtilityCon
 import static io.restassured.RestAssured.given;
 
 import com.example.ratesservice.dto.exception.ExceptionHandlerResponse;
-import com.example.ratesservice.dto.rate.RatePageResponse;
-import com.example.ratesservice.dto.rate.RateRequest;
-import com.example.ratesservice.dto.rate.RateResponse;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.rate.response.RatePageResponse;
+import com.example.ratesservice.dto.rate.request.RateRequest;
+import com.example.ratesservice.dto.rate.response.RateResponse;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import io.restassured.http.ContentType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

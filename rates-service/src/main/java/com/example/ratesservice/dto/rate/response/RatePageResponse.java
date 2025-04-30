@@ -1,4 +1,4 @@
-package com.example.ratesservice.dto.rate;
+package com.example.ratesservice.dto.rate.response;
 
 import java.util.List;
 import lombok.Builder;

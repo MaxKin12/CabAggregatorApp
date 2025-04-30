@@ -23,10 +23,10 @@ import static io.restassured.RestAssured.port;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import com.example.ratesservice.dto.rate.RatePageResponse;
-import com.example.ratesservice.dto.rate.RateRequest;
-import com.example.ratesservice.dto.rate.RateResponse;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.rate.response.RatePageResponse;
+import com.example.ratesservice.dto.rate.request.RateRequest;
+import com.example.ratesservice.dto.rate.response.RateResponse;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

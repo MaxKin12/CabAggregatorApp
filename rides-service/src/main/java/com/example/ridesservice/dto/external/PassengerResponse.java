@@ -1,4 +1,4 @@
-package com.example.ridesservice.client.dto;
+package com.example.ridesservice.dto.external;
 
 import java.math.BigDecimal;
 import java.util.UUID;

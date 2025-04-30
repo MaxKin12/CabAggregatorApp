@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,12 +28,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class QueueRide {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     @Column(name = "ride_id", nullable = false)
-    private Long rideId;
+    private UUID rideId;
 
     @Column(name = "changed_at")
     @UpdateTimestamp

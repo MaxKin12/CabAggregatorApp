@@ -2,9 +2,9 @@ package com.example.ridesservice.exception;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.INTERNAL_SERVER_ERROR;
 
-import com.example.ridesservice.client.exception.DriverNotContainsCarException;
-import com.example.ridesservice.client.exception.ExternalServiceClientBadRequest;
-import com.example.ridesservice.client.exception.ExternalServiceEntityNotFoundException;
+import com.example.ridesservice.exception.external.DriverNotContainsCarException;
+import com.example.ridesservice.exception.external.ExternalServiceClientBadRequest;
+import com.example.ridesservice.exception.external.ExternalServiceEntityNotFoundException;
 import com.example.ridesservice.dto.exception.ExceptionHandlerResponse;
 import com.example.ridesservice.exception.custom.DbModificationAttemptException;
 import com.example.ridesservice.exception.custom.FeignClientTemporarilyUnavailable;

@@ -4,14 +4,13 @@ import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.model.entity.Car;
 import com.example.driverservice.model.entity.Driver;
+import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
-
-import java.util.UUID;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,

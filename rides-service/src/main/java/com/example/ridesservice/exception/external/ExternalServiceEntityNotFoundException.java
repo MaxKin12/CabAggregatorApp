@@ -1,4 +1,4 @@
-package com.example.ridesservice.client.exception;
+package com.example.ridesservice.exception.external;
 
 import com.example.ridesservice.exception.MessageSourceException;
 

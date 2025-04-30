@@ -1,11 +1,7 @@
 package com.example.ridesservice.dto.ride.request;
 
-import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.CAR_ID_NEGATIVE;
 import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.DESTINATION_ADDRESS_BLANK;
 import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.DESTINATION_ADDRESS_TOO_LONG;
-import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.DRIVER_ID_NEGATIVE;
-import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.PASSENGER_ID_NEGATIVE;
-import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.PASSENGER_ID_NULL;
 import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.PICK_UP_ADDRESS_BLANK;
 import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.PICK_UP_ADDRESS_TOO_LONG;
 import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.STATUS_BLANK;
@@ -13,8 +9,6 @@ import static com.example.ridesservice.utility.constants.InternationalizationVal
 import com.example.ridesservice.enums.RideStatus;
 import com.example.ridesservice.enums.annotation.StatusValidation;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
@@ -27,8 +21,7 @@ public record RideRequest(
 
         UUID driverId,
 
-        @Positive(message = CAR_ID_NEGATIVE)
-        Long carId,
+        UUID carId,
 
         @NotBlank(message = PICK_UP_ADDRESS_BLANK)
         @Size(max = 100, message = PICK_UP_ADDRESS_TOO_LONG)

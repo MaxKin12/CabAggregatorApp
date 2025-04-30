@@ -1,4 +1,4 @@
-package com.example.ratesservice.client.exception;
+package com.example.ratesservice.exception.external;
 
 import com.example.ratesservice.exception.MessageSourceException;
 

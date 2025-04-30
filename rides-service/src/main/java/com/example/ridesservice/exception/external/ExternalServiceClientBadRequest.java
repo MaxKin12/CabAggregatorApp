@@ -1,6 +1,6 @@
-package com.example.ratesservice.client.exception;
+package com.example.ridesservice.exception.external;
 
-import com.example.ratesservice.exception.MessageSourceException;
+import com.example.ridesservice.exception.MessageSourceException;
 
 public class ExternalServiceClientBadRequest extends MessageSourceException {
 

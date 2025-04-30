@@ -9,10 +9,9 @@ import com.example.passengerservice.exception.custom.PassengerNotFoundException;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
 import com.example.passengerservice.utility.validation.KafkaConsumerServiceValidation;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

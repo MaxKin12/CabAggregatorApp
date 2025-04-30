@@ -1,22 +1,18 @@
 package com.example.ratesservice.service;
 
-import static com.example.ratesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
-
-import com.example.ratesservice.dto.rate.RateAverageResponse;
-import com.example.ratesservice.dto.rate.RatePageResponse;
-import com.example.ratesservice.dto.rate.RateRequest;
-import com.example.ratesservice.dto.rate.RateResponse;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.rate.response.RateAverageResponse;
+import com.example.ratesservice.dto.rate.response.RatePageResponse;
+import com.example.ratesservice.dto.rate.request.RateRequest;
+import com.example.ratesservice.dto.rate.response.RateResponse;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
-
 import java.util.UUID;
 
 public interface RateService {
 
-    RateResponse findById(@Positive(message = ID_NEGATIVE) Long id);
+    RateResponse findById(UUID id);
 
     RatePageResponse findAllByAuthor(@Min(0) Integer offset, @Min(1) Integer limit, RecipientType recipientType);
 
@@ -24,9 +20,9 @@ public interface RateService {
 
     RateResponse create(@Valid RateRequest rateRequest);
 
-    RateResponse update(@Valid RateUpdateRequest rateUpdateRequest, @Positive(message = ID_NEGATIVE) Long id);
+    RateResponse update(@Valid RateUpdateRequest rateUpdateRequest, UUID id);
 
-    RateResponse delete(@Positive(message = ID_NEGATIVE) Long id);
+    RateResponse delete(UUID id);
 
     void updateAverageRate(RateResponse rateResponse);
 

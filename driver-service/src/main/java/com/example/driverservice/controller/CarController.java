@@ -4,6 +4,7 @@ import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.service.CarService;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class CarController {
     private final CarService carService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CarResponse> getCar(@PathVariable("id") Long carId) {
+    public ResponseEntity<CarResponse> getCar(@PathVariable("id") UUID carId) {
         CarResponse carResponse = carService.findById(carId);
         return ResponseEntity.status(HttpStatus.OK).body(carResponse);
     }
@@ -47,13 +48,13 @@ public class CarController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<CarResponse> updateCar(@RequestBody CarRequest carRequest,
-                                                 @PathVariable("id") Long carId) {
+                                                 @PathVariable("id") UUID carId) {
         CarResponse carResponse = carService.update(carRequest, carId);
         return ResponseEntity.status(HttpStatus.OK).body(carResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCar(@PathVariable("id") Long carId) {
+    public ResponseEntity<Void> deleteCar(@PathVariable("id") UUID carId) {
         carService.delete(carId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

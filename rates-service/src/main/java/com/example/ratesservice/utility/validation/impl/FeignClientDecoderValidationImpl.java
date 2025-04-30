@@ -2,8 +2,8 @@ package com.example.ratesservice.utility.validation.impl;
 
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.EXTERNAL_SERVICE_ERROR;
 
-import com.example.ratesservice.client.dto.ExternalServiceExceptionHandlerResponse;
-import com.example.ratesservice.client.exception.ExternalServiceUnknownInternalServerError;
+import com.example.ratesservice.dto.external.ExternalServiceExceptionHandlerResponse;
+import com.example.ratesservice.exception.external.ExternalServiceUnknownInternalServerError;
 import com.example.ratesservice.utility.validation.FeignClientDecoderValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
