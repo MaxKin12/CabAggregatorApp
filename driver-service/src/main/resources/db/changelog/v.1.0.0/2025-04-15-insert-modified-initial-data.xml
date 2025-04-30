@@ -6,112 +6,57 @@
 
     <changeSet id="insert-initial-drivers-data" author="MaxKin12">
         <insert tableName="drivers">
-            <column name="id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
+            <column name="id" value="2200d01f-c38b-4cad-9945-94f9fa75c6f4"/>
             <column name="name" value="ivan"/>
-            <column name="email" value="driver@email1.com"/>
+            <column name="email" value="ivan@gmail.com"/>
             <column name="phone" value="+375292110001"/>
             <column name="sex" value="1"/>
         </insert>
         <insert tableName="drivers">
-            <column name="id" valueComputed="UNHEX(REPLACE('a8d96b21-8a96-4f38-958d-06c18652a250', '-', ''))"/>
+            <column name="id" value="c150db0a-5bcf-4a39-81c1-b63450e42e6f"/>
             <column name="name" value="dmitry"/>
-            <column name="email" value="driver@email2.com"/>
+            <column name="email" value="dmitry@gmail.com"/>
             <column name="phone" value="+375292110002"/>
             <column name="sex" value="1"/>
+            <column name="rate" value="5"/>
         </insert>
         <insert tableName="drivers">
-            <column name="id" valueComputed="UNHEX(REPLACE('a55c07dc-81b2-4d04-a925-8eb951909a9b', '-', ''))"/>
+            <column name="id" value="7bb753e9-80f3-46f9-8918-27d2fee8fe12"/>
             <column name="name" value="anna"/>
-            <column name="email" value="driver@email3.com"/>
+            <column name="email" value="anna@gmail.com"/>
             <column name="phone" value="+375292110003"/>
             <column name="sex" value="2"/>
-        </insert>
-        <insert tableName="drivers">
-            <column name="id" valueComputed="UNHEX(REPLACE('f8d621f5-d972-4999-9a9a-f9216df4faa6', '-', ''))"/>
-            <column name="name" value="svetlana"/>
-            <column name="email" value="driver@email4.com"/>
-            <column name="phone" value="+375292110004"/>
-            <column name="sex" value="2"/>
-        </insert>
-        <insert tableName="drivers">
-            <column name="id" valueComputed="UNHEX(REPLACE('248b90a8-a237-4c62-b29d-625e65b514ee', '-', ''))"/>
-            <column name="name" value="ahmed"/>
-            <column name="email" value="driver@email5.com"/>
-            <column name="phone" value="+375292110005"/>
-            <column name="sex" value="1"/>
         </insert>
     </changeSet>
 
     <changeSet id="insert-initial-cars-data" author="MaxKin12">
         <insert tableName="cars">
-            <column name="id" value="1"/>
+            <column name="id" value="ae8fefbd-4b23-493b-a206-ee13466bb4bd"/>
             <column name="brand" value="volkswagen"/>
             <column name="number" value="1001TP-7"/>
             <column name="color" value="grey"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
+            <column name="driver_id" value="2200d01f-c38b-4cad-9945-94f9fa75c6f4"/>
         </insert>
         <insert tableName="cars">
-            <column name="id" value="2"/>
+            <column name="id" value="c05b46d9-c133-48e0-a171-a82665f00900"/>
             <column name="brand" value="toyota"/>
             <column name="number" value="1002TA-7"/>
             <column name="color" value="grey"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('f8d621f5-d972-4999-9a9a-f9216df4faa6', '-', ''))"/>
+            <column name="driver_id" value="c150db0a-5bcf-4a39-81c1-b63450e42e6f"/>
         </insert>
         <insert tableName="cars">
-            <column name="id" value="3"/>
+            <column name="id" value="67691b70-8f3f-4ff3-a399-2cfd4c5f0fca"/>
             <column name="brand" value="volkswagen"/>
             <column name="number" value="1003KP-5"/>
             <column name="color" value="white"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('a8d96b21-8a96-4f38-958d-06c18652a250', '-', ''))"/>
+            <column name="driver_id" value="7bb753e9-80f3-46f9-8918-27d2fee8fe12"/>
         </insert>
         <insert tableName="cars">
-            <column name="id" value="4"/>
+            <column name="id" value="37a83073-c35a-4086-9cf7-6429cdc5bbdc"/>
             <column name="brand" value="audi"/>
             <column name="number" value="1004EX-4"/>
             <column name="color" value="black"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('a55c07dc-81b2-4d04-a925-8eb951909a9b', '-', ''))"/>
-        </insert>
-        <insert tableName="cars">
-            <column name="id" value="5"/>
-            <column name="brand" value="lada"/>
-            <column name="number" value="1004AB-7"/>
-            <column name="color" value="pink"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('248b90a8-a237-4c62-b29d-625e65b514ee', '-', ''))"/>
-        </insert>
-        <insert tableName="cars">
-            <column name="id" value="6"/>
-            <column name="brand" value="volvo"/>
-            <column name="number" value="1005AB-7"/>
-            <column name="color" value="red"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
-        </insert>
-        <insert tableName="cars">
-            <column name="id" value="7"/>
-            <column name="brand" value="bmw"/>
-            <column name="number" value="1006AB-7"/>
-            <column name="color" value="yellow"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
-        </insert>
-        <insert tableName="cars">
-            <column name="id" value="8"/>
-            <column name="brand" value="mazda"/>
-            <column name="number" value="1007AB-7"/>
-            <column name="color" value="black"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
-        </insert>
-        <insert tableName="cars">
-            <column name="id" value="9"/>
-            <column name="brand" value="mercedes"/>
-            <column name="number" value="1008AB-7"/>
-            <column name="color" value="blue"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('a8d96b21-8a96-4f38-958d-06c18652a250', '-', ''))"/>
-        </insert>
-        <insert tableName="cars">
-            <column name="id" value="10"/>
-            <column name="brand" value="subaru"/>
-            <column name="number" value="1009AB-7"/>
-            <column name="color" value="grey"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('f8d621f5-d972-4999-9a9a-f9216df4faa6', '-', ''))"/>
+            <column name="driver_id" value="2200d01f-c38b-4cad-9945-94f9fa75c6f4"/>
         </insert>
     </changeSet>
 

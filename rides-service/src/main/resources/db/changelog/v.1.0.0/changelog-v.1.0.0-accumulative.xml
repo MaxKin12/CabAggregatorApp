@@ -12,7 +12,7 @@
     <include file="2025-02-02-insert-initial-rides-data.xml" relativeToChangelogFile="true"/>
     <include file="2025-02-20-create-table-queue-rides.xml" relativeToChangelogFile="true"/>
     <include file="2025-02-27-insert-changed-data.xml" relativeToChangelogFile="true"/>
-    <include file="2025-04-14-edit-column.xml" relativeToChangelogFile="true"/>
-    <include file="2025-04-14-insert-modified-initial-rides-data-test.xml" relativeToChangelogFile="true"/>
+    <include file="2025-04-14-edit-id.xml" relativeToChangelogFile="true"/>
+    <include file="2025-04-14-insert-modified-initial-data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

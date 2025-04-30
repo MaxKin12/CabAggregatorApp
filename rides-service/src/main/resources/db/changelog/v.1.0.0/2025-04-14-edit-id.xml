@@ -5,25 +5,36 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
     <changeSet id="delete-initial-rides-data" author="MaxKin12">
-        <delete tableName="rates"/>
+        <delete tableName="rides"/>
     </changeSet>
 
-    <changeSet id="change-column-type-bigint-to-char" author="MaxKin12">
+    <changeSet id="change-rides-column-type-bigint-to-varchar" author="MaxKin12">
         <modifyDataType
-                tableName="rates"
+                tableName="rides"
                 columnName="id"
                 newDataType="varchar(100)"/>
         <modifyDataType
-                tableName="rates"
-                columnName="ride_id"
-                newDataType="varchar(100)"/>
-        <modifyDataType
-                tableName="rates"
+                tableName="rides"
                 columnName="passenger_id"
                 newDataType="varchar(100)"/>
         <modifyDataType
-                tableName="rates"
+                tableName="rides"
                 columnName="driver_id"
+                newDataType="varchar(100)"/>
+        <modifyDataType
+                tableName="rides"
+                columnName="car_id"
+                newDataType="varchar(100)"/>
+    </changeSet>
+
+    <changeSet id="change-queue-column-type-bigint-to-varchar" author="MaxKin12">
+        <modifyDataType
+                tableName="queue_rides"
+                columnName="id"
+                newDataType="varchar(100)"/>
+        <modifyDataType
+                tableName="queue_rides"
+                columnName="ride_id"
                 newDataType="varchar(100)"/>
     </changeSet>
 

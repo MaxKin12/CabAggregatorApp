@@ -6,28 +6,23 @@
 
     <changeSet id="insert-initial-passengers-data" author="MaxKin12">
         <insert tableName="passengers">
-            <column name="id" valueComputed="UNHEX(REPLACE('04f13490-2048-4b99-8514-17a4e90dc3ba', '-', ''))"/>
+            <column name="id" value="00255060-7436-4532-8b2b-5b4cb9e5eb69"/>
             <column name="name" value="alice"/>
-            <column name="email" value="some@email1.com"/>
+            <column name="email" value="alice@gmail.com"/>
             <column name="phone" value="+375291110001"/>
+            <column name="rate" value="4"/>
         </insert>
         <insert tableName="passengers">
-            <column name="id" valueComputed="UNHEX(REPLACE('0220f106-09a1-429c-a309-e7f99cf4499a', '-', ''))"/>
+            <column name="id" value="012dc731-cb5f-4e8b-b421-70a2ad1fb8d7"/>
             <column name="name" value="bob"/>
-            <column name="email" value="some@email2.com"/>
+            <column name="email" value="bob@gmail.com"/>
             <column name="phone" value="+375291110002"/>
         </insert>
         <insert tableName="passengers">
-            <column name="id" valueComputed="UNHEX(REPLACE('b8090af1-42a4-4154-a23f-7e4ffa7c400f', '-', ''))"/>
+            <column name="id" value="7dedd690-7029-45f5-8ef9-024d81ee5ea6"/>
             <column name="name" value="charlie"/>
-            <column name="email" value="some@email3.com"/>
+            <column name="email" value="charlie@gmail.com"/>
             <column name="phone" value="+375441110003"/>
-        </insert>
-        <insert tableName="passengers">
-            <column name="id" valueComputed="UNHEX(REPLACE('c128d813-a0f7-4099-97da-0c71d93d9b83', '-', ''))"/>
-            <column name="name" value="joey"/>
-            <column name="email" value="some@email4.com"/>
-            <column name="phone" value="+375331110004"/>
         </insert>
     </changeSet>
 

@@ -7,6 +7,8 @@ import com.example.driverservice.model.entity.Car;
 import com.example.driverservice.model.entity.Driver;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -31,7 +33,7 @@ public interface DriverMapper {
     void updateDriverFromDto(DriverRequest driverRequest, @MappingTarget Driver driver);
 
     @Named("carsToCarIds")
-    default List<Long> carsToCarIds(List<Car> carList) {
+    default List<UUID> carsToCarIds(List<Car> carList) {
         if (carList == null) {
             return new ArrayList<>();
         }

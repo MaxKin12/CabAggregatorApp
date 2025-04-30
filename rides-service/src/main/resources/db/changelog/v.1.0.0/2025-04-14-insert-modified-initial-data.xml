@@ -6,10 +6,10 @@
 
     <changeSet id="insert-initial-rides-data" author="MaxKin12">
         <insert tableName="rides">
-            <column name="id" value="1"/>
-            <column name="passenger_id" valueComputed="UNHEX(REPLACE('04f13490-2048-4b99-8514-17a4e90dc3ba', '-', ''))"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
-            <column name="car_id" value="1"/>
+            <column name="id" value="28bc2711-3230-4fde-a072-60dc3d45140c"/>
+            <column name="passenger_id" value="00255060-7436-4532-8b2b-5b4cb9e5eb69"/>
+            <column name="driver_id" value="2200d01f-c38b-4cad-9945-94f9fa75c6f4"/>
+            <column name="car_id" value="ae8fefbd-4b23-493b-a206-ee13466bb4bd"/>
             <column name="pick_up_address" value="Независимости 4, Минск"/>
             <column name="destination_address" value="Гикало 9, Минск"/>
             <column name="status" value="500"/>
@@ -17,20 +17,20 @@
             <column name="price" value="17.5"/>
         </insert>
         <insert tableName="rides">
-            <column name="id" value="2"/>
-            <column name="passenger_id" valueComputed="UNHEX(REPLACE('0220f106-09a1-429c-a309-e7f99cf4499a', '-', ''))"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
-            <column name="car_id" value="3"/>
+            <column name="id" value="6ea73a25-7c5a-49b4-880c-76368da180ff"/>
+            <column name="passenger_id" value="00255060-7436-4532-8b2b-5b4cb9e5eb69"/>
+            <column name="driver_id" value="c150db0a-5bcf-4a39-81c1-b63450e42e6f"/>
+            <column name="car_id" value="c05b46d9-c133-48e0-a171-a82665f00900"/>
             <column name="pick_up_address" value="Притыцкого 132, Барановичи"/>
             <column name="destination_address" value="Новаторов 120, Барановичи"/>
-            <column name="status" value="600"/>
+            <column name="status" value="500"/>
             <column name="order_time" value="2025-02-02 16:00:00"/>
             <column name="price" value="28"/>
         </insert>
         <insert tableName="rides">
-            <column name="id" value="3"/>
-            <column name="passenger_id" valueComputed="UNHEX(REPLACE('b8090af1-42a4-4154-a23f-7e4ffa7c400f', '-', ''))"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('a8d96b21-8a96-4f38-958d-06c18652a250', '-', ''))"/>
+            <column name="id" value="1404eb23-00af-48bf-bae7-3794b90071f0"/>
+            <column name="passenger_id" value="012dc731-cb5f-4e8b-b421-70a2ad1fb8d7"/>
+            <column name="driver_id" value="2200d01f-c38b-4cad-9945-94f9fa75c6f4"/>
             <column name="car_id" value="null"/>
             <column name="pick_up_address" value="Гоголя 9, Брест"/>
             <column name="destination_address" value="Машерова 15, Брест"/>

@@ -18,7 +18,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -34,9 +36,11 @@ public class RateChangeEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
+    @JdbcType(VarcharJdbcType.class)
     private UUID eventId;
 
     @Column(name = "recipient_id", nullable = false)
+    @JdbcType(VarcharJdbcType.class)
     private UUID recipientId;
 
     @Column(name = "recipient_type", nullable = false)

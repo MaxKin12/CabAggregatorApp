@@ -12,8 +12,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
 
 @Entity
 @Table(name = "passengers")
@@ -28,6 +30,7 @@ public class Passenger {
 
     @Id
     @Column(name = "id")
+    @JdbcType(VarcharJdbcType.class)
     private UUID id;
 
     @Column(name = "name", nullable = false, length = 50)

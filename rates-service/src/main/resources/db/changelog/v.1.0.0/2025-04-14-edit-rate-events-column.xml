@@ -11,8 +11,12 @@
     <changeSet id="change-column-type-bigint-to-char" author="MaxKin12">
         <modifyDataType
                 tableName="rate_events"
+                columnName="id"
+                newDataType="varchar(100)"/>
+        <modifyDataType
+                tableName="rate_events"
                 columnName="recipient_id"
-                newDataType="binary(16)"/>
+                newDataType="varchar(100)"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -14,7 +14,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -30,9 +32,11 @@ public class QueueRide {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
+    @JdbcType(VarcharJdbcType.class)
     private UUID id;
 
     @Column(name = "ride_id", nullable = false)
+    @JdbcType(VarcharJdbcType.class)
     private UUID rideId;
 
     @Column(name = "changed_at")

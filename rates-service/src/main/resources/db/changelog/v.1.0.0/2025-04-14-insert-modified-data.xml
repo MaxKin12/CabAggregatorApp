@@ -10,38 +10,22 @@
 
     <changeSet id="insert-new-rides-data" author="MaxKin12">
         <insert tableName="rates">
-            <column name="id" value="1"/>
-            <column name="ride_id" value="1"/>
-            <column name="passenger_id" valueComputed="UNHEX(REPLACE('04f13490-2048-4b99-8514-17a4e90dc3ba', '-', ''))"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
+            <column name="id" value="bb5068a5-2199-4d40-a465-41a71f253de9"/>
+            <column name="ride_id" value="6ea73a25-7c5a-49b4-880c-76368da180ff"/>
+            <column name="passenger_id" value="00255060-7436-4532-8b2b-5b4cb9e5eb69"/>
+            <column name="driver_id" value="c150db0a-5bcf-4a39-81c1-b63450e42e6f"/>
             <column name="recipient" value="1"/>
             <column name="value" value="5"/>
             <column name="comment" value="So cool driver!"/>
         </insert>
         <insert tableName="rates">
-            <column name="id" value="2"/>
-            <column name="ride_id" value="1"/>
-            <column name="passenger_id" valueComputed="UNHEX(REPLACE('04f13490-2048-4b99-8514-17a4e90dc3ba', '-', ''))"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
-            <column name="recipient" value="1"/>
-            <column name="value" value="0"/>
-            <column name="comment" value="Rude passenger..."/>
-        </insert>
-        <insert tableName="rates">
-            <column name="id" value="3"/>
-            <column name="ride_id" value="3"/>
-            <column name="passenger_id" valueComputed="UNHEX(REPLACE('0220f106-09a1-429c-a309-e7f99cf4499a', '-', ''))"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
-            <column name="recipient" value="1"/>
-            <column name="value" value="4"/>
-        </insert>
-        <insert tableName="rates">
-            <column name="id" value="4"/>
-            <column name="ride_id" value="3"/>
-            <column name="passenger_id" valueComputed="UNHEX(REPLACE('0220f106-09a1-429c-a309-e7f99cf4499a', '-', ''))"/>
-            <column name="driver_id" valueComputed="UNHEX(REPLACE('ceecf7ac-bf04-4c23-8c97-1614a88fa4af', '-', ''))"/>
+            <column name="id" value="1fa5ba64-273b-4190-a6bd-6a4be0a85886"/>
+            <column name="ride_id" value="6ea73a25-7c5a-49b4-880c-76368da180ff"/>
+            <column name="passenger_id" value="00255060-7436-4532-8b2b-5b4cb9e5eb69"/>
+            <column name="driver_id" value="c150db0a-5bcf-4a39-81c1-b63450e42e6f"/>
             <column name="recipient" value="0"/>
-            <column name="value" value="5"/>
+            <column name="value" value="4"/>
+            <column name="comment" value="Calm passenger"/>
         </insert>
     </changeSet>
 
