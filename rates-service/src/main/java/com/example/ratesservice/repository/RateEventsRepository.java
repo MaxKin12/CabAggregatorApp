@@ -5,11 +5,11 @@ import com.example.ratesservice.model.RateChangeEvent;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RateEventsRepository extends JpaRepository<RateChangeEvent, UUID> {
+public interface RateEventsRepository extends MongoRepository<RateChangeEvent, UUID> {
 
     List<RateChangeEvent> findTopByRecipientTypeOrderByChangedAt(RecipientType recipientType, Pageable pageable);
 
