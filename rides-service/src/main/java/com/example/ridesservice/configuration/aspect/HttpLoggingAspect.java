@@ -44,7 +44,7 @@ public class HttpLoggingAspect {
         ResponseEntity<?> response = (ResponseEntity<?>) joinPoint.proceed();
         long duration = System.currentTimeMillis() - startTime;
 
-        String responseBody = serializeToJson(response);
+        String responseBody = serializeToJson(response.getBody());
         log.info(RESPONSE_LOG_TEMPLATE,
                 request.getMethod(),
                 response.getStatusCode(),
@@ -58,12 +58,10 @@ public class HttpLoggingAspect {
             pointcut = "@within(org.springframework.web.bind.annotation.RestControllerAdvice))",
             returning = "result"
     )
-    public Object logRequestAndResponseForExceptionHandler(
-            Object result
-    ) {
+    public Object logRequestAndResponseForExceptionHandler(Object result) {
         HttpServletRequest httpRequest = getCurrentHttpRequest();
         ResponseEntity<?> response = (ResponseEntity<?>) result;
-        String responseBody = serializeToJson(response);
+        String responseBody = serializeToJson(response.getBody());
         log.warn(EXCEPTION_RESPONSE_LOG_TEMPLATE,
                 httpRequest.getMethod(),
                 response.getStatusCode(),
@@ -77,9 +75,7 @@ public class HttpLoggingAspect {
                     "|| within(com.example.ridesservice.client.passenger.PassengerClient+))",
             returning = "result"
     )
-    public Object logFeignClientRequest(
-            Object result
-    ) {
+    public Object logFeignClientRequest(Object result) {
         String responseBody = serializeToJson(result);
         log.info(FEIGN_CLIENT_RESPONSE_LOG_TEMPLATE, responseBody);
         return result;

@@ -13,5 +13,7 @@ public class InternationalizationExceptionPropertyVariablesConstants {
     public static final String INVALID_ATTEMPT_CHANGE_DRIVER = "exception.invalid.attempt.change.driver";
     public static final String INVALID_ATTEMPT_CHANGE_CAR = "exception.invalid.attempt.change.car";
     public static final String INTERNAL_SERVICE_ERROR = "exception.internal.server.error";
+    public static final String CROSS_USER_ACCESS_HEADER_SKIPPED_EXCEPTION = "exception.cross.user.access.header.skipped";
+    public static final String CROSS_USER_ACCESS_FORBIDDEN_EXCEPTION = "exception.cross.user.access.forbidden";
 
 }
