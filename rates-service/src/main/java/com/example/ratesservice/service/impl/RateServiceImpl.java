@@ -78,6 +78,7 @@ public class RateServiceImpl implements RateService {
     @Transactional
     public RateResponse create(@Valid RateRequest rateRequest) {
         Rate rate = rateMapper.toRate(rateRequest);
+        rate.setId(UUID.randomUUID());
 
         RidesResponse ridesResponse = validation.getRideById(rate.getRideId());
         validation.checkRateExistence(rate);

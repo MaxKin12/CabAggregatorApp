@@ -84,7 +84,7 @@ class RateServiceImplTest {
 
     @Test
     void findById_ValidId_ReturnsRateResponse() {
-        Long id = RATE_ID;
+        UUID id = RATE_ID;
         Rate rate = RATE;
         RateResponse rateResponse = RATE_RESPONSE;
 
@@ -102,7 +102,7 @@ class RateServiceImplTest {
 
     @Test
     void findById_InvalidId_ThrowsException() {
-        Long id = INVALID_RATE_ID;
+        UUID id = INVALID_RATE_ID;
         String[] args = new String[]{id.toString()};
 
         when(validation.findByIdOrThrow(id)).thenThrow(new RateNotFoundException(RATE_NOT_FOUND, args));
@@ -205,7 +205,7 @@ class RateServiceImplTest {
 
     @Test
     void update_ValidRateUpdateRequest_ReturnsRateResponse() {
-        Long id = RATE_ID;
+        UUID id = RATE_ID;
         RateUpdateRequest rateUpdateRequest = RATE_REQUEST_UPDATED;
         Rate rate = RATE;
         RateResponse rateResponse = RATE_RESPONSE;
@@ -225,7 +225,7 @@ class RateServiceImplTest {
 
     @Test
     void delete_ValidId_ReturnsRateResponse() {
-        Long id = RATE_ID;
+        UUID id = RATE_ID;
         Rate rate = RATE;
         RateResponse rateResponse = RATE_RESPONSE;
 
@@ -272,7 +272,7 @@ class RateServiceImplTest {
 
     @Test
     void deleteTest_ValidId_DeletesRide() {
-        Long id = RATE_ID;
+        UUID id = RATE_ID;
 
         when(validation.findByIdOrThrow(id)).thenReturn(RATE);
         doNothing().when(rateRepository).deleteById(id);
@@ -285,7 +285,7 @@ class RateServiceImplTest {
 
     @Test
     void deleteTest_InvalidId_ThrowsException() {
-        Long id = INVALID_RATE_ID;
+        UUID id = INVALID_RATE_ID;
         String[] args = new String[]{id.toString()};
 
         when(validation.findByIdOrThrow(id))

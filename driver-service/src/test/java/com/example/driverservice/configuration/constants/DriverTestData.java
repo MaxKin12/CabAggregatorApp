@@ -25,7 +25,7 @@ public final class DriverTestData {
     public final static UUID DRIVER_ID = UUID.fromString("1377f946-6c0a-45eb-88a6-e9131c3c27ff");
     public final static UUID DRIVER_ID_2 = UUID.fromString("7757fc43-a2c4-4504-b464-bf61b293af72");
     public final static UUID NOT_EXIST_DRIVER_ID = UUID.fromString("8ec2cea3-554e-4133-9d18-2aed95fe23c5");
-    public final static Long EVENT_ID = 1L;
+    public final static UUID EVENT_ID = UUID.randomUUID();
 
     public final static BigDecimal DRIVER_RATE = BigDecimal.valueOf(4.52);
     public final static BigDecimal DRIVER_RATE_2 = BigDecimal.valueOf(4.73);

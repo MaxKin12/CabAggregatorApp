@@ -27,7 +27,6 @@ import com.example.ratesservice.utility.validation.RateServiceValidation;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -68,7 +67,6 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     public void updateOrThrow(Rate rate, RateUpdateRequest rateUpdateRequest) {
         try {
             rateUpdateMapper.updateRateFromDto(rateUpdateRequest, rate);
-            rateRepository.flush();
         } catch (Exception e) {
             throw new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_RATE, "update", e.getMessage());
         }

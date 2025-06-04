@@ -10,7 +10,6 @@
             <column name="name" value="alice"/>
             <column name="email" value="alice@gmail.com"/>
             <column name="phone" value="+375291110001"/>
-            <column name="rate" value="4"/>
         </insert>
         <insert tableName="passengers">
             <column name="id" value="012dc731-cb5f-4e8b-b421-70a2ad1fb8d7"/>

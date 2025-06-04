@@ -49,7 +49,7 @@ public class StepDefinitions {
 
     private final JdbcTemplate jdbcTemplate;
     private Response response;
-    private Long rateId;
+    private UUID rateId;
     private RateRequest rateRequest;
 
     @LocalServerPort
@@ -71,7 +71,7 @@ public class StepDefinitions {
             String givenRecipientType,
             String givenPassengerId,
             Integer givenRateValue,
-            Long givenRideId,
+            UUID givenRideId,
             String givenDriverId,
             String givenComment) {
         rateRequest = RateRequest.builder()

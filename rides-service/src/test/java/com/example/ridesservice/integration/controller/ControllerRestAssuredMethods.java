@@ -15,10 +15,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.UUID;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ControllerRestAssuredMethods {
 
-    public static RideResponse getRide(Long id) {
+    public static RideResponse getRide(UUID id) {
         return given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -30,7 +32,7 @@ public final class ControllerRestAssuredMethods {
                 .as(RideResponse.class);
     }
 
-    public static ExceptionHandlerResponse getRideException(Long id, HttpStatus httpStatus) {
+    public static ExceptionHandlerResponse getRideException(UUID id, HttpStatus httpStatus) {
         return given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -81,7 +83,7 @@ public final class ControllerRestAssuredMethods {
                 .as(RideResponse.class);
     }
 
-    public static RideResponse updateRide(RideRequest rideRequest, Long id) {
+    public static RideResponse updateRide(RideRequest rideRequest, UUID id) {
         return given()
                 .contentType(ContentType.JSON)
                 .body(rideRequest)
@@ -96,7 +98,7 @@ public final class ControllerRestAssuredMethods {
     }
 
     public static ExceptionHandlerResponse updateRideException(RideRequest rideRequest,
-                                                               Long id, HttpStatus httpStatus) {
+                                                               UUID id, HttpStatus httpStatus) {
         return given()
                 .contentType(ContentType.JSON)
                 .body(rideRequest)
@@ -110,7 +112,7 @@ public final class ControllerRestAssuredMethods {
                 .as(ExceptionHandlerResponse.class);
     }
 
-    public static void deleteRide(Long id) {
+    public static void deleteRide(UUID id) {
         given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -119,7 +121,7 @@ public final class ControllerRestAssuredMethods {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    public static ExceptionHandlerResponse deleteRideException(Long id, HttpStatus httpStatus) {
+    public static ExceptionHandlerResponse deleteRideException(UUID id, HttpStatus httpStatus) {
         return given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()

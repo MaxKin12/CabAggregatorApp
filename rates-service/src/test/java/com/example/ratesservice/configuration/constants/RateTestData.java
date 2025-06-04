@@ -24,16 +24,16 @@ import org.springframework.data.domain.PageRequest;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RateTestData {
 
-    public final static Long RATE_ID = 1L;
-    public final static Long RATE_ID_2 = 2L;
-    public final static Long INVALID_RATE_ID = -1L;
-    public final static Long NOT_EXIST_RATE_ID = Long.MAX_VALUE;
-    public final static Long RIDE_ID = 1L;
-    public final static Long RIDE_ID_2 = 2L;
-    public final static Long RIDE_ID_CREATED = 1L;
+    public final static UUID RATE_ID = UUID.randomUUID();
+    public final static UUID RATE_ID_2 = UUID.randomUUID();
+    public final static UUID INVALID_RATE_ID = UUID.randomUUID();
+    public final static UUID NOT_EXIST_RATE_ID = UUID.randomUUID();
+    public final static UUID RIDE_ID = UUID.randomUUID();
+    public final static UUID RIDE_ID_2 = UUID.randomUUID();
+    public final static UUID RIDE_ID_CREATED = UUID.randomUUID();
     public final static UUID PASSENGER_ID = UUID.fromString("e5f3a033-51a5-4bc0-9443-2b63d5f59ca3");
     public final static UUID DRIVER_ID = UUID.fromString("4ba41155-bcff-48d5-8675-bc0aac800e99");
-    public final static Long EVENT_ID = 1L;
+    public final static UUID EVENT_ID = UUID.randomUUID();
 
     public final static Integer VALUE = 5;
     public final static Integer VALUE_2 = 0;

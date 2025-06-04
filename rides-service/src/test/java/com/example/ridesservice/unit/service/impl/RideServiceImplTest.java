@@ -89,7 +89,7 @@ class RideServiceImplTest {
 
     @Test
     void findByIdTest_ValidId_ReturnsValidResponseEntity() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
         Ride ride = RIDE;
         RideResponse rideResponse = RIDE_RESPONSE;
 
@@ -106,7 +106,7 @@ class RideServiceImplTest {
 
     @Test
     void findByIdTest_InvalidId_ThrowsException() {
-        Long id = INVALID_RIDE_ID;
+        UUID id = INVALID_RIDE_ID;
         String[] args = new String[]{id.toString()};
 
         when(validation.findByIdOrThrow(id))
@@ -271,7 +271,7 @@ class RideServiceImplTest {
 
     @Test
     void updateTest_ValidIdAndRequestEntity_ReturnsValidResponseEntity() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
         RideRequest rideRequest = RIDE_REQUEST;
         Ride ride = RIDE;
         RideResponse rideResponse = RIDE_RESPONSE;
@@ -297,7 +297,7 @@ class RideServiceImplTest {
 
     @Test
     void updateTest_InvalidRideId_ThrowsException() {
-        Long id = INVALID_RIDE_ID;
+        UUID id = INVALID_RIDE_ID;
         String[] args = new String[]{id.toString()};
 
         when(validation.findByIdOrThrow(id))
@@ -314,7 +314,7 @@ class RideServiceImplTest {
 
     @Test
     void updateTest_InvalidPassengerId_ThrowsException() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
         RideRequest rideRequest = RIDE_REQUEST;
         String[] args = new String[]{EXCEPTION_MESSAGE};
 
@@ -334,7 +334,7 @@ class RideServiceImplTest {
 
     @Test
     void updateTest_InvalidDriverId_ThrowsException() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
         RideRequest rideRequest = RIDE_REQUEST;
         String[] args = new String[]{EXCEPTION_MESSAGE};
 
@@ -356,7 +356,7 @@ class RideServiceImplTest {
 
     @Test
     void updateTest_InvalidCarId_ThrowsException() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
         RideRequest rideRequest = RIDE_REQUEST;
         String[] args = new String[]{EXCEPTION_MESSAGE};
 
@@ -405,7 +405,7 @@ class RideServiceImplTest {
 
     @Test
     void updateStatusTest_ValidIdAndRequestEntity_ReturnsValidResponseEntity() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
         RideStatusRequest rideRequest = RIDE_STATUS_REQUEST;
         Ride ride = RIDE;
         RideResponse rideResponse = RIDE_RESPONSE;
@@ -427,7 +427,7 @@ class RideServiceImplTest {
 
     @Test
     void updateStatusTest_InvalidStatusTransition_ThrowsException() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
         RideStatusRequest rideRequest = RIDE_STATUS_REQUEST;
         String[] args = new String[]{rideRequest.status()};
 
@@ -447,7 +447,7 @@ class RideServiceImplTest {
 
     @Test
     void deleteTest_ValidId_DeletesRide() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
 
         when(validation.findByIdOrThrow(id)).thenReturn(RIDE);
         doNothing().when(rideRepository).deleteById(id);
@@ -460,7 +460,7 @@ class RideServiceImplTest {
 
     @Test
     void deleteTest_InvalidId_ThrowsException() {
-        Long id = INVALID_RIDE_ID;
+        UUID id = INVALID_RIDE_ID;
         String[] args = new String[]{id.toString()};
 
         when(validation.findByIdOrThrow(id))

@@ -55,7 +55,7 @@ public class StepDefinitions {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private Response response;
-    private Long rideId;
+    private UUID rideId;
     private UUID passengerId;
 
     @LocalServerPort

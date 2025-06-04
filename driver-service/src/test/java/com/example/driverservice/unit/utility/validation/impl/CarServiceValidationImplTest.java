@@ -29,6 +29,8 @@ import com.example.driverservice.model.entity.Car;
 import com.example.driverservice.repository.CarRepository;
 import com.example.driverservice.utility.validation.impl.CarServiceValidationImpl;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -52,7 +54,7 @@ class CarServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_ValidId_ReturnsCar() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
         Car car = CAR;
 
         when(carRepository.findById(id)).thenReturn(Optional.of(car));
@@ -65,7 +67,7 @@ class CarServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_InvalidId_ThrowsException() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
         String[] args = new String[] {id.toString()};
 
         when(carRepository.findById(id)).thenReturn(Optional.empty());

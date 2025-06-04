@@ -44,6 +44,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.UUID;
+
 @ExtendWith(MockitoExtension.class)
 class CarServiceImplTest {
 
@@ -64,7 +66,7 @@ class CarServiceImplTest {
 
     @Test
     void findByIdTest_ValidId_ReturnsValidResponseEntity() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
         Car car = CAR;
         CarResponse carResponse = CAR_RESPONSE;
 
@@ -81,7 +83,7 @@ class CarServiceImplTest {
 
     @Test
     void findByIdTest_InvalidId_ThrowsException() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id))
@@ -179,7 +181,7 @@ class CarServiceImplTest {
 
     @Test
     void updateTest_ValidIdAndRequestEntity_ReturnsValidResponseEntity() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
         CarRequest carRequest = CAR_REQUEST_UPDATED;
         Car car = CAR;
         CarResponse carResponseUpdated = CAR_RESPONSE_UPDATED;
@@ -199,7 +201,7 @@ class CarServiceImplTest {
 
     @Test
     void updateTest_InvalidId_ThrowsEntityNotFoundException() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id))
@@ -216,7 +218,7 @@ class CarServiceImplTest {
 
     @Test
     void updateTest_ValidIdButInvalidAttemptToUpdateEntity_ThrowsDbModificationAttemptException() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
         CarRequest carRequest = CAR_REQUEST_UPDATED;
         Car car = CAR;
         String[] args = new String[] {ATTEMPT_CHANGE_UPDATE, EXCEPTION_MESSAGE};
@@ -238,7 +240,7 @@ class CarServiceImplTest {
 
     @Test
     void deleteTest_ValidId_DeletesCar() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
 
         when(validation.findByIdOrThrow(id)).thenReturn(CAR);
         doNothing().when(carRepository).deleteById(id);
@@ -251,7 +253,7 @@ class CarServiceImplTest {
 
     @Test
     void deleteTest_InvalidId_ThrowsException() {
-        Long id = CAR_ID;
+        UUID id = CAR_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id)).thenThrow(new EntityNotFoundException(CAR_NOT_FOUND, args));

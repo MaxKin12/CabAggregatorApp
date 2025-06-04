@@ -108,7 +108,7 @@ class RideServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_ValidId_ReturnsRide() {
-        Long id = RIDE_ID;
+        UUID id = RIDE_ID;
         Ride ride = RIDE;
 
         when(rideRepository.findById(id)).thenReturn(Optional.of(ride));
@@ -121,7 +121,7 @@ class RideServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_InvalidId_ThrowsException() {
-        Long id = INVALID_RIDE_ID;
+        UUID id = INVALID_RIDE_ID;
         String[] args = new String[]{id.toString()};
 
         when(rideRepository.findById(id)).thenReturn(Optional.empty());
@@ -239,7 +239,7 @@ class RideServiceValidationImplTest {
     @Test
     void checkDriverExistenceAndCarOwningTest_ValidDriverAndCar_NoException() {
         UUID driverId = DRIVER_ID;
-        Long carId = CAR_ID;
+        UUID carId = CAR_ID;
         DriverResponse driverResponse = DriverResponse.builder()
                 .id(driverId)
                 .carIds(List.of(carId))
@@ -255,7 +255,7 @@ class RideServiceValidationImplTest {
     @Test
     void checkDriverExistenceAndCarOwningTest_InvalidCar_ThrowsException() {
         UUID driverId = DRIVER_ID;
-        Long carId = INVALID_RIDE_ID;
+        UUID carId = INVALID_RIDE_ID;
         DriverResponse driverResponse = DriverResponse.builder()
                 .id(driverId)
                 .carIds(List.of(CAR_ID_2))

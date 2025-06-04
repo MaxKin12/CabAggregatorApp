@@ -22,16 +22,16 @@ import org.springframework.data.domain.PageRequest;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RideTestData {
 
-    public final static Long RIDE_ID = 1L;
-    public final static Long RIDE_ID_2 = 2L;
-    public final static Long INVALID_RIDE_ID = -1L;
-    public final static Long NOT_EXIST_RIDE_ID = Long.MAX_VALUE;
+    public final static UUID RIDE_ID = UUID.randomUUID();
+    public final static UUID RIDE_ID_2 = UUID.randomUUID();
+    public final static UUID INVALID_RIDE_ID = UUID.randomUUID();
+    public final static UUID NOT_EXIST_RIDE_ID = UUID.randomUUID();
     public final static UUID PASSENGER_ID = UUID.fromString("e5f3a033-51a5-4bc0-9443-2b63d5f59ca3");
     public final static UUID PASSENGER_ID_2 = UUID.fromString("2519b3b3-daa2-49e7-850a-908fee962387");
     public final static UUID DRIVER_ID = UUID.fromString("4ba41155-bcff-48d5-8675-bc0aac800e99");
     public final static UUID DRIVER_ID_2 = UUID.fromString("05a91c2b-e1d6-41a5-83ed-ee4711925924");
-    public final static Long CAR_ID = 1L;
-    public final static Long CAR_ID_2 = 2L;
+    public final static UUID CAR_ID = UUID.randomUUID();
+    public final static UUID CAR_ID_2 = UUID.randomUUID();
 
     public final static int OFFSET = 0;
     public final static int INVALID_OFFSET = -1;

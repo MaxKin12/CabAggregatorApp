@@ -107,9 +107,9 @@ services:
       - app-net
     environment:
       DB_RATE_URL: jdbc:mysql://rates-outbox-db:3306/rates_service
-      MONGODB_RATE_URL: mongodb://rates-db:27017/rates_service
       DB_RATE_USERNAME: user
       DB_RATE_PASSWORD: ${DB_RATES_PASSWORD}
+      MONGODB_RATE_URL: mongodb://root:123456789abc@rates-db:27017/rates_service?authSource=admin
       ACTIVE_PROFILES: dev
       BASE_URI_PASSENGER: http://passenger-service
       BASE_URI_DRIVER: http://driver-service
@@ -338,6 +338,22 @@ services:
       retries: 5
       start_period: 120s
       timeout: 10s
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    restart: always
+    ports:
+      - 8088:8080
+    networks:
+      - app-net
+    environment:
+      KAFKA_CLUSTERS_0_NAME: cab-aggregator-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    depends_on:
+      zookeeper:
+        condition: service_started
 
   grafana:
     container_name: grafana

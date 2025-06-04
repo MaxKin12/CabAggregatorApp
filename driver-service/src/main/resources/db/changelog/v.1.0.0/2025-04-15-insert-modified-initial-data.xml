@@ -18,7 +18,6 @@
             <column name="email" value="dmitry@gmail.com"/>
             <column name="phone" value="+375292110002"/>
             <column name="sex" value="1"/>
-            <column name="rate" value="5"/>
         </insert>
         <insert tableName="drivers">
             <column name="id" value="7bb753e9-80f3-46f9-8918-27d2fee8fe12"/>

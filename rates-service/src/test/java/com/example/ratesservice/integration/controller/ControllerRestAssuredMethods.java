@@ -18,10 +18,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.UUID;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ControllerRestAssuredMethods {
 
-    public static RateResponse getRate(Long id) {
+    public static RateResponse getRate(UUID id) {
         return given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -33,7 +35,7 @@ public final class ControllerRestAssuredMethods {
                 .as(RateResponse.class);
     }
 
-    public static ExceptionHandlerResponse getRateException(Long id, HttpStatus httpStatus) {
+    public static ExceptionHandlerResponse getRateException(UUID id, HttpStatus httpStatus) {
         return given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -125,7 +127,7 @@ public final class ControllerRestAssuredMethods {
                 .as(ExceptionHandlerResponse.class);
     }
 
-    public static RateResponse updateRate(RateUpdateRequest rateRequest, Long id) {
+    public static RateResponse updateRate(RateUpdateRequest rateRequest, UUID id) {
         return given()
                 .contentType(ContentType.JSON)
                 .body(rateRequest)
@@ -140,7 +142,7 @@ public final class ControllerRestAssuredMethods {
     }
 
     public static ExceptionHandlerResponse updateRateException(RateUpdateRequest rateRequest,
-                                                               Long id, HttpStatus httpStatus) {
+                                                               UUID id, HttpStatus httpStatus) {
         return given()
                 .contentType(ContentType.JSON)
                 .body(rateRequest)
@@ -154,7 +156,7 @@ public final class ControllerRestAssuredMethods {
                 .as(ExceptionHandlerResponse.class);
     }
 
-    public static void deleteRate(Long id) {
+    public static void deleteRate(UUID id) {
         given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -163,7 +165,7 @@ public final class ControllerRestAssuredMethods {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    public static ExceptionHandlerResponse deleteRateException(Long id, HttpStatus httpStatus) {
+    public static ExceptionHandlerResponse deleteRateException(UUID id, HttpStatus httpStatus) {
         return given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()

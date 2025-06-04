@@ -6,10 +6,10 @@
 
     <changeSet id="create-table-rate-events" author="MaxKin12">
         <createTable tableName="rate_events">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="id" type="varchar(100)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="recipient_id" type="bigint">
+            <column name="recipient_id" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
             <column name="recipient_type" type="int">
