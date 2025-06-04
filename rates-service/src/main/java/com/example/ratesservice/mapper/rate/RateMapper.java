@@ -1,7 +1,7 @@
 package com.example.ratesservice.mapper.rate;
 
-import com.example.ratesservice.dto.rate.RateRequest;
-import com.example.ratesservice.dto.rate.RateResponse;
+import com.example.ratesservice.dto.rate.request.RateRequest;
+import com.example.ratesservice.dto.rate.response.RateResponse;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.model.Rate;
 import org.mapstruct.Mapper;

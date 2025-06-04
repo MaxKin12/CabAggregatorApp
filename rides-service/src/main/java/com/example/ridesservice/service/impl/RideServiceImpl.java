@@ -1,7 +1,5 @@
 package com.example.ridesservice.service.impl;
 
-import static com.example.ridesservice.utility.constants.InternationalizationValidationPropertyVariablesConstants.ID_NEGATIVE;
-
 import com.example.ridesservice.dto.ride.request.RideBookingRequest;
 import com.example.ridesservice.dto.ride.request.RideDriverSettingRequest;
 import com.example.ridesservice.dto.ride.request.RideRequest;
@@ -21,8 +19,8 @@ import com.example.ridesservice.utility.pricecounter.PriceCounter;
 import com.example.ridesservice.utility.validation.RideServiceValidation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,7 +43,7 @@ public class RideServiceImpl implements RideService {
 
     @Override
     @Transactional(readOnly = true)
-    public RideResponse findById(@Positive(message = ID_NEGATIVE) Long id) {
+    public RideResponse findById(UUID id) {
         Ride ride = validation.findByIdOrThrow(id);
         return rideMapper.toResponse(ride);
     }
@@ -61,7 +59,7 @@ public class RideServiceImpl implements RideService {
     @Override
     @Transactional(readOnly = true)
     public RidePageResponse findLastPersonRides(
-            @Positive(message = ID_NEGATIVE) Long personId,
+            UUID personId,
             @Min(1) Integer limit,
             PersonType personType
     ) {
@@ -96,8 +94,7 @@ public class RideServiceImpl implements RideService {
 
     @Override
     @Transactional
-    public RideResponse update(@Valid RideRequest rideRequest,
-                               @Positive(message = ID_NEGATIVE) Long id) {
+    public RideResponse update(@Valid RideRequest rideRequest, UUID id) {
         Ride ride = validation.findByIdOrThrow(id);
         validation.checkPassengerExistence(rideRequest.passengerId());
         validation.checkCarExistence(rideRequest.carId());
@@ -120,8 +117,7 @@ public class RideServiceImpl implements RideService {
 
     @Override
     @Transactional
-    public RideResponse updateStatus(@Valid RideStatusRequest rideRequest,
-                                     @Positive(message = ID_NEGATIVE) Long id) {
+    public RideResponse updateStatus(@Valid RideStatusRequest rideRequest, UUID id) {
         Ride ride = validation.findByIdOrThrow(id);
         validation.checkStatusTransitionAllowed(ride, rideRequest);
 
@@ -131,7 +127,7 @@ public class RideServiceImpl implements RideService {
 
     @Override
     @Transactional
-    public void delete(@Positive(message = ID_NEGATIVE) Long id) {
+    public void delete(UUID id) {
         validation.findByIdOrThrow(id);
         rideRepository.deleteById(id);
     }

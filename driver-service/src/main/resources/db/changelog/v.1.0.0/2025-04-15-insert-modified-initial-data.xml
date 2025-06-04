@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-initial-drivers-data" author="MaxKin12">
+        <insert tableName="drivers">
+            <column name="id" value="2200d01f-c38b-4cad-9945-94f9fa75c6f4"/>
+            <column name="name" value="ivan"/>
+            <column name="email" value="ivan@gmail.com"/>
+            <column name="phone" value="+375292110001"/>
+            <column name="sex" value="1"/>
+        </insert>
+        <insert tableName="drivers">
+            <column name="id" value="c150db0a-5bcf-4a39-81c1-b63450e42e6f"/>
+            <column name="name" value="dmitry"/>
+            <column name="email" value="dmitry@gmail.com"/>
+            <column name="phone" value="+375292110002"/>
+            <column name="sex" value="1"/>
+        </insert>
+        <insert tableName="drivers">
+            <column name="id" value="7bb753e9-80f3-46f9-8918-27d2fee8fe12"/>
+            <column name="name" value="anna"/>
+            <column name="email" value="anna@gmail.com"/>
+            <column name="phone" value="+375292110003"/>
+            <column name="sex" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert-initial-cars-data" author="MaxKin12">
+        <insert tableName="cars">
+            <column name="id" value="ae8fefbd-4b23-493b-a206-ee13466bb4bd"/>
+            <column name="brand" value="volkswagen"/>
+            <column name="number" value="1001TP-7"/>
+            <column name="color" value="grey"/>
+            <column name="driver_id" value="2200d01f-c38b-4cad-9945-94f9fa75c6f4"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="c05b46d9-c133-48e0-a171-a82665f00900"/>
+            <column name="brand" value="toyota"/>
+            <column name="number" value="1002TA-7"/>
+            <column name="color" value="grey"/>
+            <column name="driver_id" value="c150db0a-5bcf-4a39-81c1-b63450e42e6f"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="67691b70-8f3f-4ff3-a399-2cfd4c5f0fca"/>
+            <column name="brand" value="volkswagen"/>
+            <column name="number" value="1003KP-5"/>
+            <column name="color" value="white"/>
+            <column name="driver_id" value="7bb753e9-80f3-46f9-8918-27d2fee8fe12"/>
+        </insert>
+        <insert tableName="cars">
+            <column name="id" value="37a83073-c35a-4086-9cf7-6429cdc5bbdc"/>
+            <column name="brand" value="audi"/>
+            <column name="number" value="1004EX-4"/>
+            <column name="color" value="black"/>
+            <column name="driver_id" value="2200d01f-c38b-4cad-9945-94f9fa75c6f4"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

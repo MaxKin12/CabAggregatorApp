@@ -1,6 +1,6 @@
 package com.example.ratesservice.utility.validation;
 
-import com.example.ratesservice.client.dto.ExternalServiceExceptionHandlerResponse;
+import com.example.ratesservice.dto.external.ExternalServiceExceptionHandlerResponse;
 import feign.Response;
 import org.springframework.http.HttpStatus;
 

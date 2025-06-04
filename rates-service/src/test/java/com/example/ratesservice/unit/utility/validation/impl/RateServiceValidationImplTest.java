@@ -27,8 +27,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.example.ratesservice.client.dto.RidesResponse;
-import com.example.ratesservice.dto.rate.*;
+import com.example.ratesservice.dto.external.RidesResponse;
+import com.example.ratesservice.dto.rate.response.RateAverageResponse;
+import com.example.ratesservice.dto.rate.response.RatePageResponse;
+import com.example.ratesservice.dto.rate.response.RateResponse;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.exception.custom.RateListIsEmptyException;
 import com.example.ratesservice.exception.custom.RateNotFoundException;

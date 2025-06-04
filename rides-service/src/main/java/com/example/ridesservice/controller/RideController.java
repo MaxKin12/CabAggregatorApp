@@ -8,6 +8,7 @@ import com.example.ridesservice.dto.ride.response.RidePageResponse;
 import com.example.ridesservice.dto.ride.response.RideResponse;
 import com.example.ridesservice.enums.PersonType;
 import com.example.ridesservice.service.RideService;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class RideController {
     private final RideService rideService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RideResponse> getRide(@PathVariable("id") Long rideId) {
+    public ResponseEntity<RideResponse> getRide(@PathVariable("id") UUID rideId) {
         RideResponse rideResponse = rideService.findById(rideId);
         return ResponseEntity.status(HttpStatus.OK).body(rideResponse);
     }
@@ -45,7 +46,7 @@ public class RideController {
 
     @GetMapping("/passenger/{id}")
     public ResponseEntity<RidePageResponse> getLastPassengerRides(
-            @PathVariable("id") Long passengerId,
+            @PathVariable("id") UUID passengerId,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
         RidePageResponse ridePageResponse = rideService
@@ -55,7 +56,7 @@ public class RideController {
 
     @GetMapping("/driver/{id}")
     public ResponseEntity<RidePageResponse> getLastDriverRides(
-            @PathVariable("id") Long passengerId,
+            @PathVariable("id") UUID passengerId,
             @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
         RidePageResponse ridePageResponse = rideService
@@ -77,7 +78,7 @@ public class RideController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<RideResponse> updateRide(@RequestBody RideRequest rideRequest,
-                                                   @PathVariable("id") Long rideId) {
+                                                   @PathVariable("id") UUID rideId) {
         RideResponse rideResponse = rideService.update(rideRequest, rideId);
         return ResponseEntity.status(HttpStatus.OK).body(rideResponse);
     }
@@ -90,13 +91,13 @@ public class RideController {
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<RideResponse> updateStatus(@RequestBody RideStatusRequest rideRequest,
-                                                     @PathVariable("id") Long rideId) {
+                                                     @PathVariable("id") UUID rideId) {
         RideResponse rideResponse = rideService.updateStatus(rideRequest, rideId);
         return ResponseEntity.status(HttpStatus.OK).body(rideResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRide(@PathVariable("id") Long rideId) {
+    public ResponseEntity<Void> deleteRide(@PathVariable("id") UUID rideId) {
         rideService.delete(rideId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

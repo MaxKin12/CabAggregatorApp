@@ -9,6 +9,7 @@ import com.example.passengerservice.exception.custom.PassengerNotFoundException;
 import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
 import com.example.passengerservice.utility.validation.KafkaConsumerServiceValidation;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class KafkaConsumerServiceValidationImpl implements KafkaConsumerServiceV
     private final PassengerRepository passengerRepository;
 
     @Override
-    public Passenger findByIdOrThrow(Long id) {
+    public Passenger findByIdOrThrow(UUID id) {
         return passengerRepository.findById(id)
                 .orElseThrow(() -> new PassengerNotFoundException(PASSENGER_NOT_FOUND, id.toString()));
     }

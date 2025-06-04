@@ -11,13 +11,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
 
 @Entity
 @Table(name = "rides")
@@ -31,18 +34,22 @@ import org.hibernate.annotations.SQLRestriction;
 public class Ride {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    @JdbcType(VarcharJdbcType.class)
+    private UUID id;
 
     @Column(name = "passenger_id", nullable = false)
-    private Long passengerId;
+    @JdbcType(VarcharJdbcType.class)
+    private UUID passengerId;
 
     @Column(name = "driver_id")
-    private Long driverId;
+    @JdbcType(VarcharJdbcType.class)
+    private UUID driverId;
 
     @Column(name = "car_id")
-    private Long carId;
+    @JdbcType(VarcharJdbcType.class)
+    private UUID carId;
 
     @Column(name = "pick_up_address", nullable = false, length = 100)
     private String pickUpAddress;

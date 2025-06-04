@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-table-rate-events" author="MaxKin12">
+        <createTable tableName="rate_events">
+            <column name="id" type="varchar(100)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="recipient_id" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="recipient_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="decimal(3, 2)">
+                <constraints checkConstraint="check value between 1 and 5"/>
+            </column>
+            <column name="changed_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

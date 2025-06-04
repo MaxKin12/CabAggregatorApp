@@ -106,9 +106,10 @@ services:
     networks:
       - app-net
     environment:
-      DB_RATE_URL: jdbc:mysql://rates-db:3306/rates_service
+      DB_RATE_URL: jdbc:mysql://rates-outbox-db:3306/rates_service
       DB_RATE_USERNAME: user
       DB_RATE_PASSWORD: ${DB_RATES_PASSWORD}
+      MONGODB_RATE_URL: mongodb://root:123456789abc@rates-db:27017/rates_service?authSource=admin
       ACTIVE_PROFILES: dev
       BASE_URI_PASSENGER: http://passenger-service
       BASE_URI_DRIVER: http://driver-service
@@ -122,6 +123,9 @@ services:
     expose:
       - 8084
     depends_on:
+      mongo-rates-db:
+        condition: service_started
+        restart: true
       my-sql-rates-db:
         condition: service_healthy
         restart: true
@@ -193,8 +197,10 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSENGER_ROOT_PASSWORD}
     volumes:
       - passenger-db-data:/data
-    expose:
-      - 3306
+#    expose:
+#      - 3306
+    ports:
+      - 3307:3306
     healthcheck:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
@@ -215,8 +221,10 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_DRIVER_ROOT_PASSWORD}
     volumes:
       - driver-db-data:/data
-    expose:
-      - 3306
+#    expose:
+#      - 3306
+    ports:
+      - 3308:3306
     healthcheck:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
@@ -237,8 +245,10 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_RIDE_ROOT_PASSWORD}
     volumes:
       - rides-db-data:/data
-    expose:
-      - 3306
+#    expose:
+#      - 3306
+    ports:
+      - 3309:3306
     healthcheck:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
@@ -246,8 +256,30 @@ services:
       start_period: 120s
       timeout: 10s
 
-  my-sql-rates-db:
+  mongo-rates-db:
     container_name: rates-db
+    image: mongo:7.0
+    restart: always
+    networks:
+      - app-net
+    environment:
+      MONGO_INITDB_DATABASE: rates_service
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_RATES_ROOT_PASSWORD}
+    volumes:
+      - rates-db-data:/data/db
+#    expose:
+#      - 27017
+    ports:
+      - 27018:27017
+    healthcheck:
+      interval: 5s
+      retries: 5
+      start_period: 120s
+      timeout: 10s
+
+  my-sql-rates-db:
+    container_name: rates-outbox-db
     image: mysql:9.2
     restart: always
     networks:
@@ -258,9 +290,11 @@ services:
       MYSQL_PASSWORD: ${DB_RATES_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_RATES_ROOT_PASSWORD}
     volumes:
-      - rates-db-data:/data
-    expose:
-      - 3306
+      - rates-db-outbox-data:/data
+#    expose:
+#      - 3306
+    ports:
+      - 3310:3306
     healthcheck:
       test: [ "CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/3306" ]
       interval: 5s
@@ -304,6 +338,22 @@ services:
       retries: 5
       start_period: 120s
       timeout: 10s
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    restart: always
+    ports:
+      - 8088:8080
+    networks:
+      - app-net
+    environment:
+      KAFKA_CLUSTERS_0_NAME: cab-aggregator-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    depends_on:
+      zookeeper:
+        condition: service_started
 
   grafana:
     container_name: grafana
@@ -443,8 +493,10 @@ services:
       PGDATA: /data/postgres
     volumes:
       - keycloak-db-data:/data/postgres
-    expose:
-      - 5432
+#    expose:
+#      - 5432
+    ports:
+      - 5432:5432
     healthcheck:
       test: PGPASSWORD=${DB_KEYCLOAK_PASSWORD} psql -U user -d auth_service -h localhost -c "SELECT 1" || exit 1
       interval: 5s
@@ -460,6 +512,7 @@ volumes:
   driver-db-data:
   rides-db-data:
   rates-db-data:
+  rates-db-outbox-data:
   kafka-data:
   zookeeper-data:
   keycloak-db-data:

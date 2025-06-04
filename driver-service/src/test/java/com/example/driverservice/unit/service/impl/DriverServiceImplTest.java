@@ -35,6 +35,7 @@ import com.example.driverservice.model.entity.Driver;
 import com.example.driverservice.repository.DriverRepository;
 import com.example.driverservice.service.impl.DriverServiceImpl;
 import com.example.driverservice.utility.validation.DriverServiceValidation;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -63,7 +64,7 @@ class DriverServiceImplTest {
 
     @Test
     void findByIdTest_ValidId_ReturnsDriverResponse() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
         Driver driver = DRIVER;
         driver.setId(id);
         DriverResponse driverResponse = DRIVER_RESPONSE;
@@ -81,7 +82,7 @@ class DriverServiceImplTest {
 
     @Test
     void findByIdTest_InvalidId_ThrowsException() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id))
@@ -179,7 +180,7 @@ class DriverServiceImplTest {
 
     @Test
     void updateDriverTest_ValidIdAndRequestEntity_ReturnsValidResponse() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
         DriverRequest driverRequest = DRIVER_REQUEST;
         Driver driver = DRIVER;
         DriverResponse updatedDriverResponse = DRIVER_RESPONSE;
@@ -199,7 +200,7 @@ class DriverServiceImplTest {
 
     @Test
     void updateDriverTest_InvalidId_ThrowsEntityNotFoundException() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id))
@@ -216,7 +217,7 @@ class DriverServiceImplTest {
 
     @Test
     void updatePassengerTest_ValidIdButInvalidAttemptToUpdateEntity_ThrowsDbModificationAttemptException() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
         DriverRequest driverRequest = DRIVER_REQUEST;
         Driver driver = DRIVER;
         String[] args = new String[] {ATTEMPT_CHANGE_UPDATE, EXCEPTION_MESSAGE};
@@ -266,7 +267,7 @@ class DriverServiceImplTest {
 
     @Test
     void deleteTest_ValidId_DeletesDriver() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
 
         when(validation.findByIdOrThrow(id)).thenReturn(DRIVER);
         doNothing().when(driverRepository).deleteById(id);
@@ -279,7 +280,7 @@ class DriverServiceImplTest {
 
     @Test
     void deleteTest_InvalidId_ThrowsException() {
-        Long id = DRIVER_ID;
+        UUID id = DRIVER_ID;
         String[] args = new String[] {id.toString()};
 
         when(validation.findByIdOrThrow(id)).thenThrow(new EntityNotFoundException(DRIVER_NOT_FOUND, args));

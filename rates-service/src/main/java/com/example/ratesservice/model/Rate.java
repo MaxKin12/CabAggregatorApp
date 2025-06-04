@@ -1,59 +1,43 @@
 package com.example.ratesservice.model;
 
 import com.example.ratesservice.enums.RecipientType;
-import com.example.ratesservice.enums.converter.RecipientTypeConverter;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Entity
-@Table(name = "rates")
+@Document(collection = "rates")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@SQLDelete(sql = "update rates set deleted_at=current_timestamp() where id=?")
-@SQLRestriction("deleted_at is null")
 public class Rate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private UUID id;
 
-    @Column(name = "ride_id", nullable = false)
-    private Long rideId;
+    @Field("ride_id")
+    private UUID rideId;
 
-    @Column(name = "passenger_id", nullable = false)
-    private Long passengerId;
+    @Field("passenger_id")
+    private UUID passengerId;
 
-    @Column(name = "driver_id", nullable = false)
-    private Long driverId;
+    @Field("driver_id")
+    private UUID driverId;
 
-    @Column(name = "recipient")
-    @Convert(converter = RecipientTypeConverter.class)
+    @Field("recipient")
     private RecipientType recipient;
 
-    @Column(name = "value", nullable = false)
+    @Field("value")
     private Integer value;
 
-    @Column(name = "comment")
+    @Field("comment")
     private String comment;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deleteAt;
 
 }

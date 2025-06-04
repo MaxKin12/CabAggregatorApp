@@ -4,6 +4,7 @@ import com.example.passengerservice.dto.passenger.PassengerRequest;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
 import com.example.passengerservice.model.Passenger;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
@@ -18,6 +19,7 @@ public interface PassengerMapper {
 
     Passenger toPassenger(PassengerRequest passengerRequest);
 
+    @Mapping(target = "id", ignore = true)
     void updatePassengerFromDto(PassengerRequest passengerRequest, @MappingTarget Passenger passenger);
 
 }

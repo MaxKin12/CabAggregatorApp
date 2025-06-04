@@ -7,6 +7,8 @@ import com.example.passengerservice.dto.passenger.PassengerResponse;
 import com.example.passengerservice.model.Passenger;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,11 +18,10 @@ import org.springframework.data.domain.PageRequest;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PassengerTestData {
 
-    public final static Long PASSENGER_ID = 1L;
-    public final static Long PASSENGER_ID_2 = 2L;
-    public final static Long INVALID_PASSENGER_ID = -1L;
-    public final static Long NOT_EXIST_PASSENGER_ID = Long.MAX_VALUE;
-    public final static Long EVENT_ID = 1L;
+    public final static UUID PASSENGER_ID = UUID.fromString("04f13490-2048-4b99-8514-17a4e90dc3ba");
+    public final static UUID PASSENGER_ID_2 = UUID.fromString("b8090af1-42a4-4154-a23f-7e4ffa7c400f");
+    public final static UUID NOT_EXIST_PASSENGER_ID = UUID.fromString("0220f106-09a1-429c-a309-e7f99cf4499a");
+    public final static UUID EVENT_ID = UUID.randomUUID();
 
     public final static BigDecimal PASSENGER_RATE = BigDecimal.valueOf(4.52);
     public final static BigDecimal PASSENGER_RATE_2 = BigDecimal.valueOf(4.73);

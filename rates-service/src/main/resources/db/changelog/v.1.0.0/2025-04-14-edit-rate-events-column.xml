@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="delete-initial-rides-data" author="MaxKin12">
+        <delete tableName="rate_events"/>
+    </changeSet>
+
+    <changeSet id="change-column-type-bigint-to-char" author="MaxKin12">
+        <modifyDataType
+                tableName="rate_events"
+                columnName="id"
+                newDataType="varchar(100)"/>
+        <modifyDataType
+                tableName="rate_events"
+                columnName="recipient_id"
+                newDataType="varchar(100)"/>
+    </changeSet>
+
+</databaseChangeLog>

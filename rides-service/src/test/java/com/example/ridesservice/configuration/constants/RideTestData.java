@@ -11,6 +11,8 @@ import com.example.ridesservice.model.Ride;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,17 +22,16 @@ import org.springframework.data.domain.PageRequest;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RideTestData {
 
-    public final static Long RIDE_ID = 1L;
-    public final static Long RIDE_ID_2 = 2L;
-    public final static Long INVALID_RIDE_ID = -1L;
-    public final static Long NOT_EXIST_RIDE_ID = Long.MAX_VALUE;
-    public final static Long PASSENGER_ID = 1L;
-    public final static Long PASSENGER_ID_2 = 2L;
-    public final static Long INVALID_PASSENGER_ID = -1L;
-    public final static Long DRIVER_ID = 1L;
-    public final static Long DRIVER_ID_2 = 2L;
-    public final static Long CAR_ID = 1L;
-    public final static Long CAR_ID_2 = 2L;
+    public final static UUID RIDE_ID = UUID.randomUUID();
+    public final static UUID RIDE_ID_2 = UUID.randomUUID();
+    public final static UUID INVALID_RIDE_ID = UUID.randomUUID();
+    public final static UUID NOT_EXIST_RIDE_ID = UUID.randomUUID();
+    public final static UUID PASSENGER_ID = UUID.fromString("e5f3a033-51a5-4bc0-9443-2b63d5f59ca3");
+    public final static UUID PASSENGER_ID_2 = UUID.fromString("2519b3b3-daa2-49e7-850a-908fee962387");
+    public final static UUID DRIVER_ID = UUID.fromString("4ba41155-bcff-48d5-8675-bc0aac800e99");
+    public final static UUID DRIVER_ID_2 = UUID.fromString("05a91c2b-e1d6-41a5-83ed-ee4711925924");
+    public final static UUID CAR_ID = UUID.randomUUID();
+    public final static UUID CAR_ID_2 = UUID.randomUUID();
 
     public final static int OFFSET = 0;
     public final static int INVALID_OFFSET = -1;
@@ -145,15 +146,6 @@ public final class RideTestData {
 
     public final static RideRequest RIDE_REQUEST_UPDATED = RideRequest.builder()
             .passengerId(PASSENGER_ID)
-            .driverId(DRIVER_ID)
-            .carId(CAR_ID)
-            .pickUpAddress(PICK_UP_ADDRESS)
-            .destinationAddress(DESTINATION_ADDRESS)
-            .status(RIDE_STATUS_ACCEPTED)
-            .build();
-
-    public final static RideRequest INVALID_RIDE_REQUEST = RideRequest.builder()
-            .passengerId(INVALID_PASSENGER_ID)
             .driverId(DRIVER_ID)
             .carId(CAR_ID)
             .pickUpAddress(PICK_UP_ADDRESS)

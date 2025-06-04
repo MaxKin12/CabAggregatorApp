@@ -10,6 +10,8 @@ import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.model.entity.Car;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,10 +21,10 @@ import org.springframework.data.domain.PageRequest;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CarTestData {
 
-    public final static Long CAR_ID = 1L;
-    public final static Long CAR_ID_2 = 2L;
-    public final static Long INVALID_CAR_ID = -1L;
-    public final static Long NOT_EXIST_CAR_ID = Long.MAX_VALUE;
+    public final static UUID CAR_ID = UUID.randomUUID();
+    public final static UUID CAR_ID_2 = UUID.randomUUID();
+    public final static UUID INVALID_CAR_ID = UUID.randomUUID();
+    public final static UUID NOT_EXIST_CAR_ID = UUID.randomUUID();
 
     public final static String CAR_BRAND = "Toyota";
     public final static String CAR_BRAND_2 = "Ford";
@@ -77,7 +79,7 @@ public final class CarTestData {
             .brand(CAR_BRAND_CREATED)
             .number(CAR_NUMBER_CREATED)
             .color(CAR_COLOR_CREATED)
-            .driverId(2L)
+            .driverId(DRIVER_ID_2)
             .build();
 
     public final static CarResponse CAR_RESPONSE_UPDATED = CarResponse.builder()
@@ -99,7 +101,7 @@ public final class CarTestData {
             .brand(CAR_BRAND_CREATED)
             .number(CAR_NUMBER_CREATED)
             .color(CAR_COLOR_CREATED)
-            .driverId(2L)
+            .driverId(DRIVER_ID_2)
             .build();
 
     public final static CarRequest CAR_REQUEST_UPDATED = CarRequest.builder()

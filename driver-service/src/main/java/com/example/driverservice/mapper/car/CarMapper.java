@@ -4,6 +4,7 @@ import com.example.driverservice.dto.car.CarRequest;
 import com.example.driverservice.dto.car.CarResponse;
 import com.example.driverservice.model.entity.Car;
 import com.example.driverservice.model.entity.Driver;
+import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -21,12 +22,12 @@ public interface CarMapper {
     CarResponse toResponse(Car car);
 
     @Mapping(target = "driver", source = "driverId", qualifiedByName = "driverIdToDriver")
-    Car toCar(CarRequest passengerRequest);
+    Car toCar(CarRequest carRequest);
 
     void updateCarFromDto(CarRequest carRequest, @MappingTarget Car car);
 
     @Named("driverIdToDriver")
-    default Driver driverIdToDriver(Long id) {
+    default Driver driverIdToDriver(UUID id) {
         Driver driver = new Driver();
         driver.setId(id);
         return driver;

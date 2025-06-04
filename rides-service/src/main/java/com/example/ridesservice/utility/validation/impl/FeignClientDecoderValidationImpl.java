@@ -2,8 +2,8 @@ package com.example.ridesservice.utility.validation.impl;
 
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.EXTERNAL_SERVICE_ERROR;
 
-import com.example.ridesservice.client.dto.ExternalServiceExceptionHandlerResponse;
-import com.example.ridesservice.client.exception.ExternalServiceUnknownInternalServerError;
+import com.example.ridesservice.dto.external.ExternalServiceExceptionHandlerResponse;
+import com.example.ridesservice.exception.external.ExternalServiceUnknownInternalServerError;
 import com.example.ridesservice.utility.validation.FeignClientDecoderValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;

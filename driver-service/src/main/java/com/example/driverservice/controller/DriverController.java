@@ -4,6 +4,7 @@ import com.example.driverservice.dto.driver.DriverRequest;
 import com.example.driverservice.dto.driver.DriverResponse;
 import com.example.driverservice.dto.page.PageResponse;
 import com.example.driverservice.service.DriverService;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class DriverController {
     private final DriverService driverService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<DriverResponse> getDriver(@PathVariable("id") Long driverId) {
+    public ResponseEntity<DriverResponse> getDriver(@PathVariable("id") UUID driverId) {
         DriverResponse driverResponse = driverService.findById(driverId);
         return ResponseEntity.status(HttpStatus.OK).body(driverResponse);
     }
@@ -47,13 +48,13 @@ public class DriverController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<DriverResponse> updateDriver(@RequestBody DriverRequest driverRequest,
-                                                       @PathVariable("id") Long driverId) {
+                                                       @PathVariable("id") UUID driverId) {
         DriverResponse driverResponse = driverService.updateDriver(driverRequest, driverId);
         return ResponseEntity.status(HttpStatus.OK).body(driverResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDriver(@PathVariable("id") Long driverId) {
+    public ResponseEntity<Void> deleteDriver(@PathVariable("id") UUID driverId) {
         driverService.delete(driverId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

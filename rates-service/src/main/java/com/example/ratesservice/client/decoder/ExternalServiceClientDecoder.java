@@ -3,10 +3,10 @@ package com.example.ratesservice.client.decoder;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.EXTERNAL_SERVICE_ERROR;
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.SERVICE_UNAVAILABLE;
 
-import com.example.ratesservice.client.dto.ExternalServiceExceptionHandlerResponse;
-import com.example.ratesservice.client.exception.ExternalServiceClientBadRequest;
-import com.example.ratesservice.client.exception.ExternalServiceEntityNotFoundException;
-import com.example.ratesservice.client.exception.ExternalServiceUnknownInternalServerError;
+import com.example.ratesservice.dto.external.ExternalServiceExceptionHandlerResponse;
+import com.example.ratesservice.exception.external.ExternalServiceClientBadRequest;
+import com.example.ratesservice.exception.external.ExternalServiceEntityNotFoundException;
+import com.example.ratesservice.exception.external.ExternalServiceUnknownInternalServerError;
 import com.example.ratesservice.exception.custom.FeignClientTemporarilyUnavailable;
 import com.example.ratesservice.utility.validation.FeignClientDecoderValidation;
 import feign.Response;

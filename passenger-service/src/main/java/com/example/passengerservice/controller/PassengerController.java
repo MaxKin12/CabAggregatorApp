@@ -4,6 +4,7 @@ import com.example.passengerservice.dto.passenger.PassengerPageResponse;
 import com.example.passengerservice.dto.passenger.PassengerRequest;
 import com.example.passengerservice.dto.passenger.PassengerResponse;
 import com.example.passengerservice.service.PassengerService;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class PassengerController {
     private final PassengerService passengerService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PassengerResponse> getPassenger(@PathVariable("id") Long passengerId) {
+    public ResponseEntity<PassengerResponse> getPassenger(@PathVariable("id") UUID passengerId) {
         PassengerResponse passengerResponse = passengerService.findById(passengerId);
         return ResponseEntity.status(HttpStatus.OK).body(passengerResponse);
     }
@@ -47,13 +48,13 @@ public class PassengerController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<PassengerResponse> updatePassenger(@RequestBody PassengerRequest passengerRequest,
-                                                             @PathVariable("id") Long passengerId) {
+                                                             @PathVariable("id") UUID passengerId) {
         PassengerResponse passengerResponse = passengerService.updatePassenger(passengerRequest, passengerId);
         return ResponseEntity.status(HttpStatus.OK).body(passengerResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePassenger(@PathVariable("id") Long passengerId) {
+    public ResponseEntity<Void> deletePassenger(@PathVariable("id") UUID passengerId) {
         passengerService.delete(passengerId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

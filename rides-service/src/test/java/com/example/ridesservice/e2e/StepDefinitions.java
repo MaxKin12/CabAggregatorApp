@@ -46,6 +46,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import java.util.UUID;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RequiredArgsConstructor
 public class StepDefinitions {
@@ -53,8 +55,8 @@ public class StepDefinitions {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private Response response;
-    private Long rideId;
-    private Long passengerId;
+    private UUID rideId;
+    private UUID passengerId;
 
     @LocalServerPort
     private int curPort;
@@ -72,12 +74,12 @@ public class StepDefinitions {
         namedParameterJdbcTemplate.update(SQL_INSERT_TEST_DATA, INSERT_DATA_PARAMS_2);
     }
 
-    @Given("passenger with id {long} and driver with id {long} and car with id {long}")
-    public void passengerWithIdAndDriverWithId(Long givenPassengerId, Long givenDriverId, Long givenCarId) {
-        passengerId = givenPassengerId;
+    @Given("passenger with id {string} and driver with id {string} and car with id {long}")
+    public void passengerWithIdAndDriverWithId(String givenPassengerId, String givenDriverId, Long givenCarId) {
+        passengerId = UUID.fromString(givenPassengerId);
 
-        setGetResponseStub(GET_PASSENGER_REQUEST_URL, givenPassengerId.toString(), PASSENGER_JSON_RESPONSE);
-        setGetResponseStub(GET_DRIVER_REQUEST_URL, givenDriverId.toString(), DRIVER_JSON_RESPONSE);
+        setGetResponseStub(GET_PASSENGER_REQUEST_URL, givenPassengerId, PASSENGER_JSON_RESPONSE);
+        setGetResponseStub(GET_DRIVER_REQUEST_URL, givenDriverId, DRIVER_JSON_RESPONSE);
         setGetResponseStub(GET_CAR_REQUEST_URL, givenCarId.toString(), CAR_JSON_RESPONSE);
     }
 

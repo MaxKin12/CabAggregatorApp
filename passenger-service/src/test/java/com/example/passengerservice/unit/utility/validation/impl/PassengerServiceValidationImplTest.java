@@ -29,6 +29,8 @@ import com.example.passengerservice.model.Passenger;
 import com.example.passengerservice.repository.PassengerRepository;
 import com.example.passengerservice.utility.validation.impl.PassengerServiceValidationImpl;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -52,7 +54,7 @@ class PassengerServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_ValidId_ReturnsPassenger() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         Passenger passenger = PASSENGER;
 
         when(passengerRepository.findById(id)).thenReturn(Optional.of(passenger));
@@ -67,7 +69,7 @@ class PassengerServiceValidationImplTest {
 
     @Test
     void findByIdOrThrowTest_InvalidId_ThrowsException() {
-        Long id = PASSENGER_ID;
+        UUID id = PASSENGER_ID;
         String[] args = new String[] {id.toString()};
 
         when(passengerRepository.findById(id)).thenReturn(Optional.empty());

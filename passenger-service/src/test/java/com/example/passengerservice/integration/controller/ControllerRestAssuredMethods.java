@@ -16,10 +16,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.UUID;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ControllerRestAssuredMethods {
 
-    public static PassengerResponse getPassenger(Long id) {
+    public static PassengerResponse getPassenger(UUID id) {
         Response response = given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -27,7 +29,7 @@ public final class ControllerRestAssuredMethods {
         return getResponse(response, HttpStatus.OK, PassengerResponse.class);
     }
 
-    public static ExceptionHandlerResponse getPassengerException(Long id, HttpStatus httpStatus) {
+    public static ExceptionHandlerResponse getPassengerException(UUID id, HttpStatus httpStatus) {
         Response response = given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -72,7 +74,7 @@ public final class ControllerRestAssuredMethods {
         return getResponse(response, httpStatus, ExceptionHandlerResponse.class);
     }
 
-    public static PassengerResponse updatePassenger(PassengerRequest passengerRequest, Long id) {
+    public static PassengerResponse updatePassenger(PassengerRequest passengerRequest, UUID id) {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(passengerRequest)
@@ -83,7 +85,7 @@ public final class ControllerRestAssuredMethods {
     }
 
     public static ExceptionHandlerResponse updatePassengerException(PassengerRequest passengerRequest,
-                                                                    Long id, HttpStatus httpStatus) {
+                                                                    UUID id, HttpStatus httpStatus) {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(passengerRequest)
@@ -93,7 +95,7 @@ public final class ControllerRestAssuredMethods {
         return getResponse(response, httpStatus, ExceptionHandlerResponse.class);
     }
 
-    public static void deletePassenger(Long id) {
+    public static void deletePassenger(UUID id) {
         given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()
@@ -102,7 +104,7 @@ public final class ControllerRestAssuredMethods {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    public static ExceptionHandlerResponse deletePassengerException(Long id, HttpStatus httpStatus) {
+    public static ExceptionHandlerResponse deletePassengerException(UUID id, HttpStatus httpStatus) {
         Response response = given()
                 .pathParam(ID_PARAMETER_NAME, id)
                 .when()

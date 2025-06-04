@@ -5,8 +5,8 @@ import static com.example.ridesservice.utility.constants.InternationalizationExc
 import static com.example.ridesservice.utility.constants.InternationalizationExceptionVariablesConstants.RIDE_NOT_FOUND;
 
 import com.example.ridesservice.client.driver.DriverClient;
-import com.example.ridesservice.client.dto.DriverResponse;
-import com.example.ridesservice.client.exception.DriverNotContainsCarException;
+import com.example.ridesservice.dto.external.DriverResponse;
+import com.example.ridesservice.exception.external.DriverNotContainsCarException;
 import com.example.ridesservice.client.passenger.PassengerClient;
 import com.example.ridesservice.configuration.properties.RideServiceProperties;
 import com.example.ridesservice.dto.ride.request.RideDriverSettingRequest;
@@ -22,6 +22,7 @@ import com.example.ridesservice.mapper.RideStatusMapper;
 import com.example.ridesservice.model.Ride;
 import com.example.ridesservice.repository.RideRepository;
 import com.example.ridesservice.utility.validation.RideServiceValidation;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,13 +47,13 @@ public class RideServiceValidationImpl implements RideServiceValidation {
     }
 
     @Override
-    public Ride findByIdOrThrow(Long id) {
+    public Ride findByIdOrThrow(UUID id) {
         return rideRepository.findById(id)
                 .orElseThrow(() -> new RideNotFoundException(RIDE_NOT_FOUND, id.toString()));
     }
 
     @Override
-    public Page<Ride> findLastRidesPage(Long personId, PersonType personType, Integer limit) {
+    public Page<Ride> findLastRidesPage(UUID personId, PersonType personType, Integer limit) {
         return personType.equals(PersonType.PASSENGER)
                 ? rideRepository.findByPassengerId(
                         PageRequest.of(0, limit, Sort.by(Sort.Order.desc("id"))),
@@ -102,17 +103,17 @@ public class RideServiceValidationImpl implements RideServiceValidation {
     }
 
     @Override
-    public void checkPassengerExistence(Long id) {
+    public void checkPassengerExistence(UUID id) {
         passengerClient.getPassengerById(id);
     }
 
     @Override
-    public void checkCarExistence(Long id) {
+    public void checkCarExistence(UUID id) {
         driverClient.getCarById(id);
     }
 
     @Override
-    public void checkDriverExistenceAndCarOwning(Long driverId, Long carId) {
+    public void checkDriverExistenceAndCarOwning(UUID driverId, UUID carId) {
         DriverResponse driverResponse = driverClient.getDriverById(driverId);
         if (!driverResponse.carIds().contains(carId)) {
             throw new DriverNotContainsCarException(

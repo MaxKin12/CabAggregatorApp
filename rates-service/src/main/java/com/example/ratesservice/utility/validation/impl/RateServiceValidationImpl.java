@@ -9,12 +9,12 @@ import static com.example.ratesservice.utility.constants.InternationalizationExc
 import static com.example.ratesservice.utility.constants.InternationalizationExceptionPropertyVariablesConstants.RATE_NOT_FOUND;
 
 import com.example.ratesservice.client.driver.DriverClient;
-import com.example.ratesservice.client.dto.RidesResponse;
-import com.example.ratesservice.client.exception.InvalidRideContentException;
+import com.example.ratesservice.dto.external.RidesResponse;
+import com.example.ratesservice.exception.external.InvalidRideContentException;
 import com.example.ratesservice.client.passenger.PassengerClient;
 import com.example.ratesservice.client.rides.RidesClient;
 import com.example.ratesservice.configuration.properties.RateServiceProperties;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.exception.custom.DbModificationAttemptException;
 import com.example.ratesservice.exception.custom.RateAlreadyExistsException;
@@ -26,6 +26,7 @@ import com.example.ratesservice.repository.RateRepository;
 import com.example.ratesservice.utility.validation.RateServiceValidation;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -43,7 +44,7 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     private final RidesClient ridesClient;
 
     @Override
-    public Rate findByIdOrThrow(Long id) {
+    public Rate findByIdOrThrow(UUID id) {
         return rateRepository.findById(id)
                 .orElseThrow(() -> new RateNotFoundException(RATE_NOT_FOUND, id.toString()));
     }
@@ -66,24 +67,23 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     public void updateOrThrow(Rate rate, RateUpdateRequest rateUpdateRequest) {
         try {
             rateUpdateMapper.updateRateFromDto(rateUpdateRequest, rate);
-            rateRepository.flush();
         } catch (Exception e) {
             throw new DbModificationAttemptException(INVALID_ATTEMPT_CHANGE_RATE, "update", e.getMessage());
         }
     }
 
     @Override
-    public RidesResponse getRideById(Long id) {
+    public RidesResponse getRideById(UUID id) {
         return ridesClient.getRideById(id);
     }
 
     @Override
-    public void checkPassengerExistence(Long id) {
+    public void checkPassengerExistence(UUID id) {
         passengerClient.getPassengerById(id);
     }
 
     @Override
-    public void checkDriverExistence(Long id) {
+    public void checkDriverExistence(UUID id) {
         driverClient.getDriverById(id);
     }
 
@@ -106,7 +106,7 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     }
 
     @Override
-    public double countAverage(List<Rate> ratePage, Long personId, RecipientType recipientType) {
+    public double countAverage(List<Rate> ratePage, UUID personId, RecipientType recipientType) {
         return ratePage
                 .stream()
                 .mapToDouble(Rate::getValue)
@@ -117,7 +117,7 @@ public class RateServiceValidationImpl implements RateServiceValidation {
     }
 
     @Override
-    public List<Rate> getLastRatesPage(Long personId, RecipientType recipientType) {
+    public List<Rate> getLastRatesPage(UUID personId, RecipientType recipientType) {
         return recipientType.equals(RecipientType.PASSENGER)
                 ? rateRepository.findByPassengerIdAndRecipient(
                         PageRequest.of(0, properties.lastRidesCount(),

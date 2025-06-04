@@ -27,12 +27,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.example.ratesservice.client.dto.RidesResponse;
-import com.example.ratesservice.dto.rate.RateAverageResponse;
-import com.example.ratesservice.dto.rate.RatePageResponse;
-import com.example.ratesservice.dto.rate.RateRequest;
-import com.example.ratesservice.dto.rate.RateResponse;
-import com.example.ratesservice.dto.rate.RateUpdateRequest;
+import com.example.ratesservice.dto.external.RidesResponse;
+import com.example.ratesservice.dto.rate.response.RateAverageResponse;
+import com.example.ratesservice.dto.rate.response.RatePageResponse;
+import com.example.ratesservice.dto.rate.request.RateRequest;
+import com.example.ratesservice.dto.rate.response.RateResponse;
+import com.example.ratesservice.dto.rate.request.RateUpdateRequest;
 import com.example.ratesservice.enums.RecipientType;
 import com.example.ratesservice.exception.custom.RateListIsEmptyException;
 import com.example.ratesservice.exception.custom.RateNotFoundException;
@@ -48,6 +48,8 @@ import com.example.ratesservice.utility.validation.RateServiceValidation;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -82,7 +84,7 @@ class RateServiceImplTest {
 
     @Test
     void findById_ValidId_ReturnsRateResponse() {
-        Long id = RATE_ID;
+        UUID id = RATE_ID;
         Rate rate = RATE;
         RateResponse rateResponse = RATE_RESPONSE;
 
@@ -100,7 +102,7 @@ class RateServiceImplTest {
 
     @Test
     void findById_InvalidId_ThrowsException() {
-        Long id = INVALID_RATE_ID;
+        UUID id = INVALID_RATE_ID;
         String[] args = new String[]{id.toString()};
 
         when(validation.findByIdOrThrow(id)).thenThrow(new RateNotFoundException(RATE_NOT_FOUND, args));
@@ -138,7 +140,7 @@ class RateServiceImplTest {
 
     @Test
     void findAverageRate_ValidParameters_ReturnsRateAverageResponse() {
-        Long personId = DRIVER_ID;
+        UUID personId = DRIVER_ID;
         RecipientType recipientType = RecipientType.DRIVER;
         List<Rate> rateList = Collections.singletonList(new Rate());
         BigDecimal averageDecimal = AVERAGE_RATE;
@@ -160,7 +162,7 @@ class RateServiceImplTest {
 
     @Test
     void findAverageRate_EmptyRateList_ThrowsRateListIsEmptyException() {
-        Long personId = DRIVER_ID;
+        UUID personId = DRIVER_ID;
         RecipientType recipientType = RecipientType.DRIVER;
         String[] args = new String[]{personId.toString()};
 
@@ -203,7 +205,7 @@ class RateServiceImplTest {
 
     @Test
     void update_ValidRateUpdateRequest_ReturnsRateResponse() {
-        Long id = RATE_ID;
+        UUID id = RATE_ID;
         RateUpdateRequest rateUpdateRequest = RATE_REQUEST_UPDATED;
         Rate rate = RATE;
         RateResponse rateResponse = RATE_RESPONSE;
@@ -223,7 +225,7 @@ class RateServiceImplTest {
 
     @Test
     void delete_ValidId_ReturnsRateResponse() {
-        Long id = RATE_ID;
+        UUID id = RATE_ID;
         Rate rate = RATE;
         RateResponse rateResponse = RATE_RESPONSE;
 
@@ -270,7 +272,7 @@ class RateServiceImplTest {
 
     @Test
     void deleteTest_ValidId_DeletesRide() {
-        Long id = RATE_ID;
+        UUID id = RATE_ID;
 
         when(validation.findByIdOrThrow(id)).thenReturn(RATE);
         doNothing().when(rateRepository).deleteById(id);
@@ -283,7 +285,7 @@ class RateServiceImplTest {
 
     @Test
     void deleteTest_InvalidId_ThrowsException() {
-        Long id = INVALID_RATE_ID;
+        UUID id = INVALID_RATE_ID;
         String[] args = new String[]{id.toString()};
 
         when(validation.findByIdOrThrow(id))

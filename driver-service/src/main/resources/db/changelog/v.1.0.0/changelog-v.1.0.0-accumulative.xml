@@ -11,5 +11,7 @@
     <include file="2025-01-28-create-tables.xml" relativeToChangelogFile="true"/>
     <include file="2025-01-28-insert-initial-data.xml" relativeToChangelogFile="true"/>
     <include file="2025-02-19-add-rate-column.xml" relativeToChangelogFile="true"/>
+    <include file="2025-04-15-edit-driver-id-columns.xml" relativeToChangelogFile="true"/>
+    <include file="2025-04-15-insert-modified-initial-data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

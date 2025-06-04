@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="delete-initial-data" author="MaxKin12">
+        <delete tableName="cars"/>
+        <delete tableName="drivers"/>
+    </changeSet>
+
+    <changeSet id="change-drivers-column-type-drop-foreignkey" author="MaxKin12">
+        <dropForeignKeyConstraint
+                baseTableName="cars"
+                constraintName="fk_driver_id"/>
+    </changeSet>
+
+    <changeSet id="change-drivers-column-type-bigint-to-varchar" author="MaxKin12">
+        <modifyDataType
+                tableName="drivers"
+                columnName="id"
+                newDataType="varchar(100)"/>
+    </changeSet>
+
+    <changeSet id="change-cars-columns-type-bigint-to-varchar" author="MaxKin12">
+        <modifyDataType
+                tableName="cars"
+                columnName="id"
+                newDataType="varchar(100)"/>
+        <modifyDataType
+                tableName="cars"
+                columnName="driver_id"
+                newDataType="varchar(100)"/>
+    </changeSet>
+
+    <changeSet id="change-drivers-column-type-recreate-foreignkey" author="MaxKin12">
+        <addForeignKeyConstraint
+                baseTableName="cars"
+                baseColumnNames="driver_id"
+                constraintName="fk_driver_id"
+                referencedTableName="drivers"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                onUpdate="RESTRICT"/>
+    </changeSet>
+
+</databaseChangeLog>
